@@ -1,6 +1,9 @@
 //!  Main Rust Application for BL602 Firmware
 #![no_std]  //  Use the Rust Core Library instead of the Rust Standard Library, which is not compatible with embedded systems
 
+use bl602_macros::safe_wrap;
+pub mod gpio;
+
 //  Import the Rust Core Library
 use core::{
     panic::PanicInfo,  //  For `PanicInfo` type used by `panic` function

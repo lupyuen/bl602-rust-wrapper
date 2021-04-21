@@ -49,9 +49,9 @@ function generate_bindings() {
     local whitelist="$@" # Whitelist Options: --raw-line, --blacklist-item, --whitelist-function, --whitelist-type, --whitelist-var
     echo "whitelist=$whitelist"
 
-    local expandpath=./$modname_$submodname.rs
+    local expandpath=bl602-sdk/src/$modname_$submodname.rs
     # Previously src/$modname/$submodname.rs
-    local tmpexpandpath=./$modname_$submodname.tmp
+    local tmpexpandpath=bl602-sdk/src/$modname_$submodname.tmp
     # Previously src/$modname/$submodname.tmp
 
     #  Generate Rust bindings
