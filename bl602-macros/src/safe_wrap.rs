@@ -39,9 +39,8 @@ use syn::{
 
 /// Given a function name like `os_task_init`, return true if we should create the wrapper
 fn function_is_whitelisted(fname: &str) -> bool {
-    //  LVGL Functions starting with `lv_` are whitelisted.
-
-    if fname.starts_with("lv_") { return true; }
+    //  Functions starting with `bl_gpio_` are whitelisted.
+    if fname.starts_with("bl_gpio_") { return true; }
 
     match fname {  //  If match found, then it's whitelisted.
         //  kernel/os
@@ -206,7 +205,7 @@ pub fn wrap_function(foreign_fn: &ForeignItemFn) -> proc_macro2::TokenStream {
                 sanity_itvl: os_time_t,
                 stack_bottom: Out<[os_stack_t]>,  //  Previously: *mut os_stack_t
                 stack_size: usize,                //  Previously: u16 */
-        ) -> #declare_result_tokens {             //  e.g. MynewtResult<()> or MynewtResult<* mut os_eventq>
+        ) -> #declare_result_tokens {             //  e.g. BlResult<()> or BlResult<* mut os_eventq>
             "----------Insert Extern Decl: `extern C { pub fn ... }`----------";
             extern "C" { #foreign_item_tokens }
             "----------Insert Validation: `Strn::validate_bytestr(name.bytestr)`----------";
@@ -380,7 +379,7 @@ fn transform_arg(arg: &PatType) -> TransformedArg {
     }
 }
 
-/// Transform the extern return type e.g. `:: cty :: c_int` becomes `MynewtResult< () >`
+/// Transform the extern return type e.g. `:: cty :: c_int` becomes `BlResult< () >`
 fn transform_return_type(output: &ReturnType) -> TransformedReturnType {
     let extern_type = quote! { output }.to_string();
     let type_span = output.span();
@@ -393,7 +392,7 @@ fn transform_return_type(output: &ReturnType) -> TransformedReturnType {
     //  println!("wrap_type: {:#?}", wrap_type);
 
     #[cfg(feature = "mynewt_os")]  //  If building for Mynewt...
-    let result_token = quote! { MynewtResult };  //  Result type is MynewtResult
+    let result_token = quote! { BlResult };  //  Result type is BlResult
 
     #[cfg(feature = "riot_os")]    //  If building for RIOT OS...
     let result_token = quote! { LvglResult };    //  Result type is LvglResult
@@ -428,7 +427,7 @@ fn transform_return_type(output: &ReturnType) -> TransformedReturnType {
             ":: cty :: c_int" => {  
                 quote! {                         
                     if result_value == 0 { Ok( () ) }
-                    else { Err( MynewtError::from(result_value) ) }
+                    else { Err( BlError::from(result_value) ) }
                 }
             }
             //  Return string wrapped as `Strn`
@@ -505,7 +504,7 @@ struct TransformedReturnType {
     extern_type: Box<String>,
     /// Wrapped type to be exposed e.g. `:: cty :: c_int` or `* mut os_eventq`
     wrap_type: Box<String>,
-    /// Declare the result type e.g. `MynewtResult< * mut os_eventq >`
+    /// Declare the result type e.g. `BlResult< * mut os_eventq >`
     declare_result_tokens: Box<proc_macro2::TokenStream>,
     /// Assign the result e.g. `let result_value = `
     get_result_tokens: Box<proc_macro2::TokenStream>,

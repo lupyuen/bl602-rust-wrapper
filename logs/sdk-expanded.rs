@@ -10,6 +10,7 @@ extern crate compiler_builtins;
 //  Use the Rust Core Library instead of the Rust Standard Library, which is not compatible with embedded systems
 
 use bl602_macros::safe_wrap;
+use result::*;
 pub mod gpio {
 
     //  Import the Rust Core Library
@@ -48,7 +49,7 @@ pub mod gpio {
 
     //  `!` means that panic handler will never return
     //  TODO: Implement the complete panic handler like this:
-    //  https://github.com/lupyuen/pinetime-rust-mynewt/blob/master/rust/app/src/lib.rs#L115-L146
+    //  https://github.com/lupyuen/pinetime-rust-BL602/blob/master/rust/app/src/lib.rs#L115-L146
 
     //  For now we display a message
 
@@ -120,44 +121,17 @@ pub mod gpio {
     //  Flag this code as unsafe because we're calling a C function
 
 
-    /* Output Log
-    
-    # help
-    ====Build-in Commands====
-    ====Support 4 cmds once, seperate by ; ====
-    help                     : print this
-    p                        : print memory
-    m                        : modify memory
-    echo                     : echo for command
-    exit                     : close CLI
-    devname                  : print device name
-    sysver                   : system version
-    reboot                   : reboot system
-    poweroff                 : poweroff system
-    reset                    : system reset
-    time                     : system time
-    ota                      : system ota
-    ps                       : thread dump
-    ls                       : file list
-    hexdump                  : dump file
-    cat                      : cat file
-    
-    ====User Commands====
-    rust_main                : Run Rust code
-    blogset                  : blog pri set level
-    blogdump                 : blog info dump
-    bl_sys_time_now          : sys time now
-    
-    # rust_main
-    Hello from Rust!
-    
-    # rust_main
-    Hello from Rust!
-    
-    # rust_main
-    Hello from Rust!
-    
-    */
+    ///////////////////////////////////////////////////////////////////////////////
+    //  BL602 Types
+
+
+
+    //  Allow type names to have non-camel case
+
+
+
+
+    //  TODO
     use super::*;
     #[repr(C)]
     pub struct _gpio_ctx_desc {
@@ -194,35 +168,133 @@ pub mod gpio {
         fn default() -> Self { unsafe { ::core::mem::zeroed() } }
     }
     pub type gpio_ctx_t = _gpio_ctx_desc;
-    extern "C" {
-        pub fn bl_gpio_enable_output(pin: u8, pullup: u8, pulldown: u8)
-        -> ::cty::c_int;
+    pub fn gpio_enable_output(pin: u8, pullup: u8, pulldown: u8)
+     -> BlResult<()> {
+        "----------Insert Extern Decl: `extern C { pub fn ... }`----------";
+        extern "C" {
+            pub fn bl_gpio_enable_output(pin: u8, pullup: u8, pulldown: u8)
+            -> ::cty::c_int;
+        }
+        "----------Insert Validation: `Strn::validate_bytestr(name.bytestr)`----------";
+        unsafe {
+            "----------Insert Call: `let result_value = os_task_init(`----------";
+            let result_value =
+                bl_gpio_enable_output(pin as u8, pullup as u8,
+                                      pulldown as u8);
+            "----------Insert Result: `Ok(Strn::from_cstr(result_value))`----------";
+            if result_value == 0 {
+                Ok(())
+            } else { Err(BlError::from(result_value)) }
+        }
     }
-    extern "C" {
-        pub fn bl_gpio_enable_input(pin: u8, pullup: u8, pulldown: u8)
-        -> ::cty::c_int;
+    pub fn gpio_enable_input(pin: u8, pullup: u8, pulldown: u8)
+     -> BlResult<()> {
+        "----------Insert Extern Decl: `extern C { pub fn ... }`----------";
+        extern "C" {
+            pub fn bl_gpio_enable_input(pin: u8, pullup: u8, pulldown: u8)
+            -> ::cty::c_int;
+        }
+        "----------Insert Validation: `Strn::validate_bytestr(name.bytestr)`----------";
+        unsafe {
+            "----------Insert Call: `let result_value = os_task_init(`----------";
+            let result_value =
+                bl_gpio_enable_input(pin as u8, pullup as u8, pulldown as u8);
+            "----------Insert Result: `Ok(Strn::from_cstr(result_value))`----------";
+            if result_value == 0 {
+                Ok(())
+            } else { Err(BlError::from(result_value)) }
+        }
     }
-    extern "C" {
-        pub fn bl_gpio_output_set(pin: u8, value: u8)
-        -> ::cty::c_int;
+    pub fn gpio_output_set(pin: u8, value: u8) -> BlResult<()> {
+        "----------Insert Extern Decl: `extern C { pub fn ... }`----------";
+        extern "C" {
+            pub fn bl_gpio_output_set(pin: u8, value: u8)
+            -> ::cty::c_int;
+        }
+        "----------Insert Validation: `Strn::validate_bytestr(name.bytestr)`----------";
+        unsafe {
+            "----------Insert Call: `let result_value = os_task_init(`----------";
+            let result_value = bl_gpio_output_set(pin as u8, value as u8);
+            "----------Insert Result: `Ok(Strn::from_cstr(result_value))`----------";
+            if result_value == 0 {
+                Ok(())
+            } else { Err(BlError::from(result_value)) }
+        }
     }
-    extern "C" {
-        pub fn bl_gpio_input_get(pin: u8, value: *mut u8)
-        -> ::cty::c_int;
+    pub fn gpio_input_get(pin: u8, value: *mut u8) -> BlResult<()> {
+        "----------Insert Extern Decl: `extern C { pub fn ... }`----------";
+        extern "C" {
+            pub fn bl_gpio_input_get(pin: u8, value: *mut u8)
+            -> ::cty::c_int;
+        }
+        "----------Insert Validation: `Strn::validate_bytestr(name.bytestr)`----------";
+        unsafe {
+            "----------Insert Call: `let result_value = os_task_init(`----------";
+            let result_value = bl_gpio_input_get(pin as u8, value as *mut u8);
+            "----------Insert Result: `Ok(Strn::from_cstr(result_value))`----------";
+            if result_value == 0 {
+                Ok(())
+            } else { Err(BlError::from(result_value)) }
+        }
     }
-    extern "C" {
-        pub fn bl_gpio_input_get_value(pin: u8)
-        -> ::cty::c_int;
+    pub fn gpio_input_get_value(pin: u8) -> BlResult<()> {
+        "----------Insert Extern Decl: `extern C { pub fn ... }`----------";
+        extern "C" {
+            pub fn bl_gpio_input_get_value(pin: u8)
+            -> ::cty::c_int;
+        }
+        "----------Insert Validation: `Strn::validate_bytestr(name.bytestr)`----------";
+        unsafe {
+            "----------Insert Call: `let result_value = os_task_init(`----------";
+            let result_value = bl_gpio_input_get_value(pin as u8);
+            "----------Insert Result: `Ok(Strn::from_cstr(result_value))`----------";
+            if result_value == 0 {
+                Ok(())
+            } else { Err(BlError::from(result_value)) }
+        }
     }
-    extern "C" {
-        pub fn bl_gpio_int_clear(gpioPin: u8, intClear: u8)
-        -> ::cty::c_int;
+    pub fn gpio_int_clear(gpioPin: u8, intClear: u8) -> BlResult<()> {
+        "----------Insert Extern Decl: `extern C { pub fn ... }`----------";
+        extern "C" {
+            pub fn bl_gpio_int_clear(gpioPin: u8, intClear: u8)
+            -> ::cty::c_int;
+        }
+        "----------Insert Validation: `Strn::validate_bytestr(name.bytestr)`----------";
+        unsafe {
+            "----------Insert Call: `let result_value = os_task_init(`----------";
+            let result_value =
+                bl_gpio_int_clear(gpioPin as u8, intClear as u8);
+            "----------Insert Result: `Ok(Strn::from_cstr(result_value))`----------";
+            if result_value == 0 {
+                Ok(())
+            } else { Err(BlError::from(result_value)) }
+        }
     }
-    extern "C" {
-        pub fn bl_gpio_intmask(gpiopin: u8, mask: u8);
+    pub fn gpio_intmask(gpiopin: u8, mask: u8) -> BlResult<()> {
+        "----------Insert Extern Decl: `extern C { pub fn ... }`----------";
+        extern "C" {
+            pub fn bl_gpio_intmask(gpiopin: u8, mask: u8);
+        }
+        "----------Insert Validation: `Strn::validate_bytestr(name.bytestr)`----------";
+        unsafe {
+            "----------Insert Call: `let result_value = os_task_init(`----------";
+            bl_gpio_intmask(gpiopin as u8, mask as u8);
+            "----------Insert Result: `Ok(Strn::from_cstr(result_value))`----------";
+            Ok(())
+        }
     }
-    extern "C" {
-        pub fn bl_gpio_register(pstnode: *mut gpio_ctx_t);
+    pub fn gpio_register(pstnode: *mut gpio_ctx_t) -> BlResult<()> {
+        "----------Insert Extern Decl: `extern C { pub fn ... }`----------";
+        extern "C" {
+            pub fn bl_gpio_register(pstnode: *mut gpio_ctx_t);
+        }
+        "----------Insert Validation: `Strn::validate_bytestr(name.bytestr)`----------";
+        unsafe {
+            "----------Insert Call: `let result_value = os_task_init(`----------";
+            bl_gpio_register(pstnode as *mut gpio_ctx_t);
+            "----------Insert Result: `Ok(Strn::from_cstr(result_value))`----------";
+            Ok(())
+        }
     }
 }
 use core::{panic::PanicInfo, str::FromStr};
@@ -303,3 +375,61 @@ fn time_delay(ticks: u32) {
 }
 /// Limit Strings to 64 chars, similar to `char[64]` in C
 type String = heapless::String<heapless::consts::U64>;
+/// Return type and error codes for BL602 API
+pub mod result {
+    /// Common return type for BL602 API.  If no error, returns `Ok(val)` where val has type T.
+    /// Upon error, returns `Err(err)` where err is the BlError error code.
+    pub type BlResult<T> = ::core::result::Result<T, BlError>;
+    /// Error codes for BL602 API
+    #[repr(i32)]
+    #[allow(non_camel_case_types)]
+    pub enum BlError {
+
+        /// Error code 0 means no error.
+        SYS_EOK = 0,
+        SYS_UNKNOWN = -1,
+    }
+    #[allow(non_camel_case_types)]
+    impl ::core::marker::StructuralPartialEq for BlError { }
+    #[automatically_derived]
+    #[allow(unused_qualifications)]
+    #[allow(non_camel_case_types)]
+    impl ::core::cmp::PartialEq for BlError {
+        #[inline]
+        fn eq(&self, other: &BlError) -> bool {
+            {
+                let __self_vi =
+                    ::core::intrinsics::discriminant_value(&*self);
+                let __arg_1_vi =
+                    ::core::intrinsics::discriminant_value(&*other);
+                if true && __self_vi == __arg_1_vi {
+                    match (&*self, &*other) { _ => true, }
+                } else { false }
+            }
+        }
+    }
+    /// Cast `BlError` to `i32`
+    impl From<BlError> for i32 {
+        /// Cast `BlError` to `i32`
+        fn from(err: BlError) -> Self { err as i32 }
+    }
+    /// Cast `i32` to `BlError`
+    impl From<i32> for BlError {
+        /// Cast `i32` to `BlError`
+        fn from(num: i32) -> Self {
+            unsafe { ::core::mem::transmute::<i32, BlError>(num) }
+        }
+    }
+    /// Cast `()` to `BlError`
+    impl From<()> for BlError {
+        /// Cast `()` to `BlError`
+        fn from(_: ()) -> Self { BlError::SYS_UNKNOWN }
+    }
+    /// Implement formatted output for BlError
+    impl core::fmt::Debug for BlError {
+        fn fmt(&self, _fmt: &mut ::core::fmt::Formatter<'_>)
+         -> ::core::fmt::Result {
+            Ok(())
+        }
+    }
+}

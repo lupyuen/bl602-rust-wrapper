@@ -16,7 +16,8 @@ popd
 pushd bl602-sdk
 cargo rustc \
     $rust_build_options \
-    -- -Z unstable-options \
+    -- \
+    -Z unstable-options \
     --pretty expanded \
     > ../logs/sdk-expanded.rs
 

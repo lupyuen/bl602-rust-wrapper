@@ -2,6 +2,7 @@
 #![no_std]  //  Use the Rust Core Library instead of the Rust Standard Library, which is not compatible with embedded systems
 
 use bl602_macros::safe_wrap;
+use result::*;
 pub mod gpio;
 
 //  Import the Rust Core Library
@@ -50,7 +51,7 @@ extern "C" fn rust_main(  //  Declare `extern "C"` because it will be called by 
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {  //  `!` means that panic handler will never return
     //  TODO: Implement the complete panic handler like this:
-    //  https://github.com/lupyuen/pinetime-rust-mynewt/blob/master/rust/app/src/lib.rs#L115-L146
+    //  https://github.com/lupyuen/pinetime-rust-BL602/blob/master/rust/app/src/lib.rs#L115-L146
 
     //  For now we display a message
     puts("TODO: Rust panic"); 
@@ -182,41 +183,59 @@ fn time_delay(
 /// Limit Strings to 64 chars, similar to `char[64]` in C
 type String = heapless::String::<heapless::consts::U64>;
 
-/* Output Log
+///////////////////////////////////////////////////////////////////////////////
+//  BL602 Types
 
-# help
-====Build-in Commands====
-====Support 4 cmds once, seperate by ; ====
-help                     : print this
-p                        : print memory
-m                        : modify memory
-echo                     : echo for command
-exit                     : close CLI
-devname                  : print device name
-sysver                   : system version
-reboot                   : reboot system
-poweroff                 : poweroff system
-reset                    : system reset
-time                     : system time
-ota                      : system ota
-ps                       : thread dump
-ls                       : file list
-hexdump                  : dump file
-cat                      : cat file
+/// Return type and error codes for BL602 API
+pub mod result {
 
-====User Commands====
-rust_main                : Run Rust code
-blogset                  : blog pri set level
-blogdump                 : blog info dump
-bl_sys_time_now          : sys time now
+    /// Common return type for BL602 API.  If no error, returns `Ok(val)` where val has type T.
+    /// Upon error, returns `Err(err)` where err is the BlError error code.
+    pub type BlResult<T> = ::core::result::Result<T, BlError>;
 
-# rust_main
-Hello from Rust!
+    /// Error codes for BL602 API
+    #[repr(i32)]
+    #[derive(PartialEq)]
+    #[allow(non_camel_case_types)]    //  Allow type names to have non-camel case
+    pub enum BlError {
+        /// Error code 0 means no error.
+        SYS_EOK         = 0,
+        SYS_UNKNOWN     = -1,
+    }
 
-# rust_main
-Hello from Rust!
+    /// Cast `BlError` to `i32`
+    impl From<BlError> for i32 {
+        /// Cast `BlError` to `i32`
+        fn from(err: BlError) -> Self {
+            err as i32
+        }
+    }
 
-# rust_main
-Hello from Rust!
+    /// Cast `i32` to `BlError`
+    impl From<i32> for BlError {
+        /// Cast `i32` to `BlError`
+        fn from(num: i32) -> Self {
+            unsafe { 
+                ::core::mem::transmute::
+                    <i32, BlError>
+                    (num)
+            }  
+        }
+    }
 
-*/
+    /// Cast `()` to `BlError`
+    impl From<()> for BlError {
+        /// Cast `()` to `BlError`
+        fn from(_: ()) -> Self {
+            BlError::SYS_UNKNOWN
+        }
+    }
+
+    /// Implement formatted output for BlError
+    impl core::fmt::Debug for BlError {
+        fn fmt(&self, _fmt: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+            //  TODO
+            Ok(())
+        }
+    }
+}
