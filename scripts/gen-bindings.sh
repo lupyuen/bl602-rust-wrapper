@@ -72,7 +72,7 @@ function generate_bindings() {
         $CCFLAGS_BINDGEN
 
     # Change extern "C"
-    # to     #[safe_wrap(attr)] extern "C"
+    # to     #[safe_wrap(_)] extern "C"
     # Change #[doc = " @param dev The device to open"]
     # to     #[doc = " - __`dev`__: The device to open"]
     # Change @return to Return
@@ -87,7 +87,7 @@ function generate_bindings() {
     # Change pub const LV_LABEL_LONG_BREAK: _bindgen_ty_32 = 1;
     # to     pub const LV_LABEL_LONG_BREAK: lv_label_long_mode_t = 1;
     cat $tmpexpandpath \
-        | sed 's/^extern "C" /#[safe_wrap(attr)] extern "C" /' \
+        | sed 's/^extern "C" /#[safe_wrap(_)] extern "C" /' \
         | sed 's/@param \([^ ][^ ]*\) /- __`\1`__: /' \
         | sed 's/@return /Return: /' \
         | sed 's/@code{.c}/```c/' \

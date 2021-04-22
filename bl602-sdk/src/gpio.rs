@@ -19,27 +19,27 @@ impl Default for _gpio_ctx_desc {
     }
 }
 pub type gpio_ctx_t = _gpio_ctx_desc;
-#[safe_wrap(attr)] extern "C" {
+#[safe_wrap(_)] extern "C" {
     pub fn bl_gpio_enable_output(pin: u8, pullup: u8, pulldown: u8) -> ::cty::c_int;
 }
-#[safe_wrap(attr)] extern "C" {
+#[safe_wrap(_)] extern "C" {
     pub fn bl_gpio_enable_input(pin: u8, pullup: u8, pulldown: u8) -> ::cty::c_int;
 }
-#[safe_wrap(attr)] extern "C" {
+#[safe_wrap(_)] extern "C" {
     pub fn bl_gpio_output_set(pin: u8, value: u8) -> ::cty::c_int;
 }
-#[safe_wrap(attr)] extern "C" {
+#[safe_wrap(_)] extern "C" {
     pub fn bl_gpio_input_get(pin: u8, value: *mut u8) -> ::cty::c_int;
 }
-#[safe_wrap(attr)] extern "C" {
+#[safe_wrap(_)] extern "C" {
     pub fn bl_gpio_input_get_value(pin: u8) -> ::cty::c_int;
 }
-#[safe_wrap(attr)] extern "C" {
+#[safe_wrap(_)] extern "C" {
     pub fn bl_gpio_int_clear(gpioPin: u8, intClear: u8) -> ::cty::c_int;
 }
-#[safe_wrap(attr)] extern "C" {
+#[safe_wrap(_)] extern "C" {
     pub fn bl_gpio_intmask(gpiopin: u8, mask: u8);
 }
-#[safe_wrap(attr)] extern "C" {
+#[safe_wrap(_)] extern "C" {
     pub fn bl_gpio_register(pstnode: *mut gpio_ctx_t);
 }
