@@ -28,7 +28,7 @@ extern "C" fn rust_main(  //  Declare `extern "C"` because it will be called by 
     const LED_GPIO: u8 = 11;  //  `u8` is 8-bit unsigned integer
 
     //  Configure the LED GPIO for output (instead of input)
-    gpio::gpio_enable_output(LED_GPIO, 0, 0)      //  No pullup, no pulldown
+    gpio::gpio_enable_output(LED_GPIO, 0, 0)   //  No pullup, no pulldown
         .expect("GPIO enable output failed");  //  Halt on error
 
     //  Blink the LED 5 times
@@ -36,8 +36,8 @@ extern "C" fn rust_main(  //  Declare `extern "C"` because it will be called by 
 
         //  Toggle the LED GPIO between 0 (on) and 1 (off)
         gpio::gpio_output_set(  //  Set the GPIO output (from BL602 GPIO HAL)
-            LED_GPIO,        //  GPIO pin number
-            i % 2            //  0 for low, 1 for high
+            LED_GPIO,           //  GPIO pin number
+            i % 2               //  0 for low, 1 for high
         ).expect("GPIO output failed");  //  Halt on error
 
         //  Sleep 1 second
