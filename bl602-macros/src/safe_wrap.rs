@@ -190,11 +190,11 @@ pub fn wrap_function(foreign_fn: &ForeignItemFn) -> proc_macro2::TokenStream {
 
     //  Compose the wrapper code as tokens.
     let expanded = quote! {
-        //  "----------Insert Doc: `#[doc]`----------";
+        //  "----------Doc----------";
         #doc_tokens
-        //  "----------Insert Func Name: `pub fn task_init() -> ... {`----------";
+        //  "----------Func Decl----------";
         pub fn #fname_without_namespace_token(
-            //  "----------Insert Wrapped Decl----------";
+            //  "----------Wrapped Decl----------";
             #wrap_tokens
             /* Like this:
                 t: Out<os_task>,  //  Previously: *mut os_task
@@ -206,14 +206,14 @@ pub fn wrap_function(foreign_fn: &ForeignItemFn) -> proc_macro2::TokenStream {
                 stack_bottom: Out<[os_stack_t]>,  //  Previously: *mut os_stack_t
                 stack_size: usize,                //  Previously: u16 */
         ) -> #declare_result_tokens {             //  e.g. BlResult<()> or BlResult<* mut os_eventq>
-            "----------Insert Extern Decl: `extern C { pub fn ... }`----------";
+            "----------Extern Decl----------";
             extern "C" { #foreign_item_tokens }
-            "----------Insert Validation: `Strn::validate_bytestr(name.bytestr)`----------";
+            "----------Validation----------";
             #validation_tokens
             unsafe {
-                "----------Insert Call: `let result_value = os_task_init(`----------";
+                "----------Call----------";
                 #get_result_tokens #fname_token(
-                    //  "----------Insert Call Expr----------";
+                    //  "----------Call Expr----------";
                     #call_tokens
                     /* Like this:
                         t,
@@ -225,7 +225,7 @@ pub fn wrap_function(foreign_fn: &ForeignItemFn) -> proc_macro2::TokenStream {
                         stack_bottom.as_ptr() as *mut os_stack_t,  //  Converted to pointer
                         stack_size as u16  */
                 );
-                "----------Insert Result: `Ok(Strn::from_cstr(result_value))`----------";
+                "----------Result----------";
                 #return_result_tokens
             }
         }
@@ -416,7 +416,7 @@ fn transform_return_type(output: &ReturnType) -> TransformedReturnType {
     let get_result_tokens =
         match wrap_type.as_str() {
             "" => { quote! {} }  //  No return type, so no result.
-            _  => { quote! { let result_value = } }
+            _  => { quote! { let res = } }
         };
     //  Return the result or error.
     let return_result_tokens = 
@@ -425,19 +425,21 @@ fn transform_return_type(output: &ReturnType) -> TransformedReturnType {
             "" => { quote! { Ok( () ) } }
             //  Return Mynewt error code
             ":: cty :: c_int" => {  
-                quote! {                         
-                    if result_value == 0 { Ok( () ) }
-                    else { Err( BlError::from(result_value) ) }
+                quote! {
+                    match res {
+                        0 => Ok(()),
+                        _ => Err(BlError::from(res))
+                    }
                 }
             }
             //  Return string wrapped as `Strn`
             "* const :: cty :: c_char" => { 
                 quote! { 
-                    Ok( Strn::from_cstr(result_value as *const u8) )
+                    Ok(Strn::from_cstr(res as *const u8))
                 } 
             }
             //  Return specified type e.g. `* mut os_eventq`
-            _ => { quote! { Ok( result_value ) } }
+            _ => { quote! { Ok(res) } }
         };
     //  Return the transformed return type.
     TransformedReturnType {
@@ -506,9 +508,9 @@ struct TransformedReturnType {
     wrap_type: Box<String>,
     /// Declare the result type e.g. `BlResult< * mut os_eventq >`
     declare_result_tokens: Box<proc_macro2::TokenStream>,
-    /// Assign the result e.g. `let result_value = `
+    /// Assign the result e.g. `let res = `
     get_result_tokens: Box<proc_macro2::TokenStream>,
-    /// Return the result or error e.g. `Ok( result_value )`
+    /// Return the result or error e.g. `Ok( res )`
     return_result_tokens: Box<proc_macro2::TokenStream>,
     /// Span of the type (file location)
     type_span: Box<Span>,

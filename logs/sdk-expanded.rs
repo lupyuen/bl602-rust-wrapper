@@ -145,129 +145,116 @@ pub mod gpio {
     pub type gpio_ctx_t = _gpio_ctx_desc;
     pub fn gpio_enable_output(pin: u8, pullup: u8, pulldown: u8)
      -> BlResult<()> {
-        "----------Insert Extern Decl: `extern C { pub fn ... }`----------";
+        "----------Extern Decl----------";
         extern "C" {
             pub fn bl_gpio_enable_output(pin: u8, pullup: u8, pulldown: u8)
             -> ::cty::c_int;
         }
-        "----------Insert Validation: `Strn::validate_bytestr(name.bytestr)`----------";
+        "----------Validation----------";
         unsafe {
-            "----------Insert Call: `let result_value = os_task_init(`----------";
-            let result_value =
+            "----------Call----------";
+            let res =
                 bl_gpio_enable_output(pin as u8, pullup as u8,
                                       pulldown as u8);
-            "----------Insert Result: `Ok(Strn::from_cstr(result_value))`----------";
-            if result_value == 0 {
-                Ok(())
-            } else { Err(BlError::from(result_value)) }
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
     pub fn gpio_enable_input(pin: u8, pullup: u8, pulldown: u8)
      -> BlResult<()> {
-        "----------Insert Extern Decl: `extern C { pub fn ... }`----------";
+        "----------Extern Decl----------";
         extern "C" {
             pub fn bl_gpio_enable_input(pin: u8, pullup: u8, pulldown: u8)
             -> ::cty::c_int;
         }
-        "----------Insert Validation: `Strn::validate_bytestr(name.bytestr)`----------";
+        "----------Validation----------";
         unsafe {
-            "----------Insert Call: `let result_value = os_task_init(`----------";
-            let result_value =
+            "----------Call----------";
+            let res =
                 bl_gpio_enable_input(pin as u8, pullup as u8, pulldown as u8);
-            "----------Insert Result: `Ok(Strn::from_cstr(result_value))`----------";
-            if result_value == 0 {
-                Ok(())
-            } else { Err(BlError::from(result_value)) }
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
     pub fn gpio_output_set(pin: u8, value: u8) -> BlResult<()> {
-        "----------Insert Extern Decl: `extern C { pub fn ... }`----------";
+        "----------Extern Decl----------";
         extern "C" {
             pub fn bl_gpio_output_set(pin: u8, value: u8)
             -> ::cty::c_int;
         }
-        "----------Insert Validation: `Strn::validate_bytestr(name.bytestr)`----------";
+        "----------Validation----------";
         unsafe {
-            "----------Insert Call: `let result_value = os_task_init(`----------";
-            let result_value = bl_gpio_output_set(pin as u8, value as u8);
-            "----------Insert Result: `Ok(Strn::from_cstr(result_value))`----------";
-            if result_value == 0 {
-                Ok(())
-            } else { Err(BlError::from(result_value)) }
+            "----------Call----------";
+            let res = bl_gpio_output_set(pin as u8, value as u8);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
     pub fn gpio_input_get(pin: u8, value: *mut u8) -> BlResult<()> {
-        "----------Insert Extern Decl: `extern C { pub fn ... }`----------";
+        "----------Extern Decl----------";
         extern "C" {
             pub fn bl_gpio_input_get(pin: u8, value: *mut u8)
             -> ::cty::c_int;
         }
-        "----------Insert Validation: `Strn::validate_bytestr(name.bytestr)`----------";
+        "----------Validation----------";
         unsafe {
-            "----------Insert Call: `let result_value = os_task_init(`----------";
-            let result_value = bl_gpio_input_get(pin as u8, value as *mut u8);
-            "----------Insert Result: `Ok(Strn::from_cstr(result_value))`----------";
-            if result_value == 0 {
-                Ok(())
-            } else { Err(BlError::from(result_value)) }
+            "----------Call----------";
+            let res = bl_gpio_input_get(pin as u8, value as *mut u8);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
     pub fn gpio_input_get_value(pin: u8) -> BlResult<()> {
-        "----------Insert Extern Decl: `extern C { pub fn ... }`----------";
+        "----------Extern Decl----------";
         extern "C" {
             pub fn bl_gpio_input_get_value(pin: u8)
             -> ::cty::c_int;
         }
-        "----------Insert Validation: `Strn::validate_bytestr(name.bytestr)`----------";
+        "----------Validation----------";
         unsafe {
-            "----------Insert Call: `let result_value = os_task_init(`----------";
-            let result_value = bl_gpio_input_get_value(pin as u8);
-            "----------Insert Result: `Ok(Strn::from_cstr(result_value))`----------";
-            if result_value == 0 {
-                Ok(())
-            } else { Err(BlError::from(result_value)) }
+            "----------Call----------";
+            let res = bl_gpio_input_get_value(pin as u8);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
     pub fn gpio_int_clear(gpioPin: u8, intClear: u8) -> BlResult<()> {
-        "----------Insert Extern Decl: `extern C { pub fn ... }`----------";
+        "----------Extern Decl----------";
         extern "C" {
             pub fn bl_gpio_int_clear(gpioPin: u8, intClear: u8)
             -> ::cty::c_int;
         }
-        "----------Insert Validation: `Strn::validate_bytestr(name.bytestr)`----------";
+        "----------Validation----------";
         unsafe {
-            "----------Insert Call: `let result_value = os_task_init(`----------";
-            let result_value =
-                bl_gpio_int_clear(gpioPin as u8, intClear as u8);
-            "----------Insert Result: `Ok(Strn::from_cstr(result_value))`----------";
-            if result_value == 0 {
-                Ok(())
-            } else { Err(BlError::from(result_value)) }
+            "----------Call----------";
+            let res = bl_gpio_int_clear(gpioPin as u8, intClear as u8);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
     pub fn gpio_intmask(gpiopin: u8, mask: u8) -> BlResult<()> {
-        "----------Insert Extern Decl: `extern C { pub fn ... }`----------";
+        "----------Extern Decl----------";
         extern "C" {
             pub fn bl_gpio_intmask(gpiopin: u8, mask: u8);
         }
-        "----------Insert Validation: `Strn::validate_bytestr(name.bytestr)`----------";
+        "----------Validation----------";
         unsafe {
-            "----------Insert Call: `let result_value = os_task_init(`----------";
+            "----------Call----------";
             bl_gpio_intmask(gpiopin as u8, mask as u8);
-            "----------Insert Result: `Ok(Strn::from_cstr(result_value))`----------";
+            "----------Result----------";
             Ok(())
         }
     }
     pub fn gpio_register(pstnode: *mut gpio_ctx_t) -> BlResult<()> {
-        "----------Insert Extern Decl: `extern C { pub fn ... }`----------";
+        "----------Extern Decl----------";
         extern "C" {
             pub fn bl_gpio_register(pstnode: *mut gpio_ctx_t);
         }
-        "----------Insert Validation: `Strn::validate_bytestr(name.bytestr)`----------";
+        "----------Validation----------";
         unsafe {
-            "----------Insert Call: `let result_value = os_task_init(`----------";
+            "----------Call----------";
             bl_gpio_register(pstnode as *mut gpio_ctx_t);
-            "----------Insert Result: `Ok(Strn::from_cstr(result_value))`----------";
+            "----------Result----------";
             Ok(())
         }
     }
