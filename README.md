@@ -4,6 +4,13 @@ Read the article...
 
 -   ["Run Rust RISC-V Firmware with BL602 IoT SDK"](https://lupyuen.github.io/articles/rust)
 
+To install [`bindgen`](https://rust-lang.github.io/rust-bindgen/requirements.html)...
+
+```bash
+cargo install bindgen
+sudo apt install llvm-dev libclang-dev clang
+```
+
 This script reads the BL602 IoT SDK Header File [`bl_gpio.h`](https://github.com/lupyuen/bl_iot_sdk/blob/master/components/hal_drv/bl602_hal/bl_gpio.h)...
 
 -   [`scripts/gen-bindings.sh`](scripts/gen-bindings.sh)

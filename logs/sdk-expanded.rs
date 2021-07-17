@@ -108,6 +108,7 @@ pub mod gpio {
 
     //  TODO
     use super::*;
+    pub type __uint8_t = ::cty::c_uchar;
     #[repr(C)]
     pub struct _gpio_ctx_desc {
         pub next: *mut _gpio_ctx_desc,
@@ -275,7 +276,7 @@ extern "C" fn rust_main(_buf: *const u8, _len: i32, _argc: i32,
 }
 /// This function is called on panic, like an assertion failure
 #[panic_handler]
-fn panic(_info: &PanicInfo) -> ! { puts("TODO: Rust panic"); loop  { } }
+fn panic(_info: &PanicInfo) -> ! { puts("TODO: Rust panic"); loop { } }
 /// Print a message to the serial console.
 /// TODO: Auto-generate this wrapper with `bindgen` from the C declaration
 fn puts(s: &str) -> i32 {

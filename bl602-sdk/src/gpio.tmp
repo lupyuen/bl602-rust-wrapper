@@ -3,6 +3,7 @@
 use
 super::*;
 
+pub type __uint8_t = ::cty::c_uchar;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct _gpio_ctx_desc {
