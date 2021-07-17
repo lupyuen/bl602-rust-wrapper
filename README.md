@@ -106,87 +106,45 @@ Build the project with this script...
 ```text
 + export RUST_BACKTRACE=1
 + RUST_BACKTRACE=1
-+ rust_build_options='     --target riscv32imacf-unknown-none-elf.json     -Z build-std=core '
++ rust_build_options='     --target riscv32imacf-unknown-none-elf.json     -Z build-std=core '       
 + pushd bl602-macros
-~/pinecone/bl602-rust-wrapper/bl602-macros ~/pinecone/bl602-rust-wrapper
+/mnt/c/pinecone/bl602-rust-wrapper/bl602-macros /mnt/c/pinecone/bl602-rust-wrapper
 + cargo build
-   Compiling proc-macro2 v1.0.26
-   Compiling memchr v2.3.4
-   Compiling unicode-xid v0.2.1
-   Compiling syn v1.0.69
+   Compiling proc-macro2 v1.0.27
+   Compiling unicode-xid v0.2.2
+   Compiling memchr v2.4.0
+   Compiling syn v1.0.73
    Compiling cty v0.2.1
-   Compiling lazy_static v1.4.0
    Compiling rustc-serialize v0.3.24
-   Compiling cstr_core v0.2.3
+   Compiling lazy_static v1.4.0
+   Compiling cstr_core v0.2.4
    Compiling quote v1.0.9
-   Compiling bl602-macros v2.0.0 (/Users/Luppy/pinecone/bl602-rust-wrapper/bl602-macros)
-    Finished dev [unoptimized + debuginfo] target(s) in 21.92s
+   Compiling bl602-macros v2.0.0 (/mnt/c/pinecone/bl602-rust-wrapper/bl602-macros)
+    Finished dev [unoptimized + debuginfo] target(s) in 1m 17s
 + popd
-~/pinecone/bl602-rust-wrapper
+/mnt/c/pinecone/bl602-rust-wrapper
 + pushd bl602-sdk
-~/pinecone/bl602-rust-wrapper/bl602-sdk ~/pinecone/bl602-rust-wrapper
+/mnt/c/pinecone/bl602-rust-wrapper/bl602-sdk /mnt/c/pinecone/bl602-rust-wrapper
 + cargo rustc --target riscv32imacf-unknown-none-elf.json -Z build-std=core -- -Z unstable-options --pretty expanded
-    Updating crates.io index
-   Compiling compiler_builtins v0.1.39
-   Compiling core v0.0.0 (/Users/Luppy/.rustup/toolchains/nightly-x86_64-apple-darwin/lib/rustlib/src/rust/library/core)
+   Compiling compiler_builtins v0.1.47
+   Compiling core v0.0.0 (/home/user/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core)
    Compiling typenum v1.13.0
    Compiling version_check v0.9.3
    Compiling heapless v0.6.1
    Compiling generic-array v0.14.4
-   Compiling rustc-std-workspace-core v1.99.0 (/Users/Luppy/.rustup/toolchains/nightly-x86_64-apple-darwin/lib/rustlib/src/rust/library/rustc-std-workspace-core)
+   Compiling rustc-std-workspace-core v1.99.0 (/home/user/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/rustc-std-workspace-core)
    Compiling stable_deref_trait v1.2.0
    Compiling byteorder v1.4.3
    Compiling cty v0.2.1
    Compiling hash32 v0.1.1
-   Compiling generic-array v0.12.4
    Compiling generic-array v0.13.3
+   Compiling generic-array v0.12.4
    Compiling as-slice v0.1.5
-   Compiling app v0.0.1 (/Users/Luppy/pinecone/bl602-rust-wrapper/bl602-sdk)
-warning: type `gpio_ctx_t` should have an upper camel case name
-  --> bl602-sdk/src/gpio.rs:21:10
-   |
-21 | pub type gpio_ctx_t = _gpio_ctx_desc;
-   |          ^^^^^^^^^^ help: convert the identifier to upper camel case: `GpioCtxT`
-   |
-   = note: `#[warn(non_camel_case_types)]` on by default
-
-warning: 1 warning emitted
-
-    Finished dev [unoptimized + debuginfo] target(s) in 25.47s
+   Compiling app v0.0.1 (/mnt/c/pinecone/bl602-rust-wrapper/bl602-sdk)
+    Finished dev [unoptimized + debuginfo] target(s) in 43.80s
 + cargo build --target riscv32imacf-unknown-none-elf.json -Z build-std=core
-    Updating crates.io index
-   Compiling app v0.0.1 (/Users/Luppy/pinecone/bl602-rust-wrapper/bl602-sdk)
-warning: type `gpio_ctx_t` should have an upper camel case name
-  --> bl602-sdk/src/gpio.rs:21:10
-   |
-21 | pub type gpio_ctx_t = _gpio_ctx_desc;
-   |          ^^^^^^^^^^ help: convert the identifier to upper camel case: `GpioCtxT`
-   |
-   = note: `#[warn(non_camel_case_types)]` on by default
-
-warning: structure field `gpioPin` should have a snake case name
-  --> bl602-sdk/src/gpio.rs:12:9
-   |
-12 |     pub gpioPin: u8,
-   |         ^^^^^^^ help: convert the identifier to snake case: `gpio_pin`
-   |
-   = note: `#[warn(non_snake_case)]` on by default
-
-warning: structure field `intCtrlMod` should have a snake case name
-  --> bl602-sdk/src/gpio.rs:13:9
-   |
-13 |     pub intCtrlMod: u8,
-   |         ^^^^^^^^^^ help: convert the identifier to snake case: `int_ctrl_mod`
-
-warning: structure field `intTrgMod` should have a snake case name
-  --> bl602-sdk/src/gpio.rs:14:9
-   |
-14 |     pub intTrgMod: u8,
-   |         ^^^^^^^^^ help: convert the identifier to snake case: `int_trg_mod`
-
-warning: 4 warnings emitted
-
-    Finished dev [unoptimized + debuginfo] target(s) in 3.80s
+   Compiling app v0.0.1 (/mnt/c/pinecone/bl602-rust-wrapper/bl602-sdk)
+    Finished dev [unoptimized + debuginfo] target(s) in 4.85s
 + popd
-~/pinecone/bl602-rust-wrapper
+/mnt/c/pinecone/bl602-rust-wrapper
 ```
