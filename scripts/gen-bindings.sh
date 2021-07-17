@@ -164,6 +164,10 @@ EOF
 #  components/hal_drv/bl602_hal/bl_gpio.h
 generate_bindings_core gpio
 
+#  Generate bindings for
+#  components/hal_drv/bl602_hal/bl_pwm.h
+generate_bindings_core pwm
+
 #  Expand the safe wrapper macros
 ##cargo rustc -- -Z unstable-options --pretty expanded >logs/expanded.rs
 

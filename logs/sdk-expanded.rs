@@ -17,6 +17,7 @@ use result::*;
 #[allow(non_snake_case)]
 pub mod gpio {
 
+
     //  Import the Rust Core Library
     //  For `PanicInfo` type used by `panic` function
     //  For converting `str` to `String`
@@ -261,6 +262,11 @@ pub mod gpio {
             Ok(())
         }
     }
+}
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub mod pwm {
+    use super::*;
 }
 use core::{panic::PanicInfo, str::FromStr};
 /// `rust_main` will be called by the BL602 command-line interface

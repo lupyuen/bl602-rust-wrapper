@@ -9,6 +9,10 @@ use result::*;
 #[allow(non_snake_case)]
 pub mod gpio;
 
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub mod pwm;
+
 //  Import the Rust Core Library
 use core::{
     panic::PanicInfo,  //  For `PanicInfo` type used by `panic` function
