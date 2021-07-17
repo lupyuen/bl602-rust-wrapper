@@ -37,28 +37,14 @@ use syn::{
     token::Comma,
 };
 
-/// Given a function name like `os_task_init`, return true if we should create the wrapper
+/// Given a function name like `bl_gpio_output_set`, return true if we should create the wrapper
 fn function_is_whitelisted(fname: &str) -> bool {
-    //  Functions starting with `bl_gpio_` are whitelisted.
-    if fname.starts_with("bl_gpio_") { return true; }
+    //  Functions starting with `bl_` are whitelisted.
+    if fname.starts_with("bl_") { return true; }
 
     match fname {  //  If match found, then it's whitelisted.
-        //  kernel/os
-        "os_eventq_dflt_get"        => { true }
-        "os_eventq_run"             => { true }
-        "os_task_init"              => { true }
-
-        //  hw/sensor
-        "sensor_mgr_find_next_bydevname"    => { true }
-        "sensor_read"                       => { true }
-        "sensor_set_poll_rate_ms"           => { true }
-
-        //  libs/sensor_network
-        "do_server_post"                    => { true }
-        "get_device_id"                     => { true }
-        "init_server_post"                  => { true }
-        "sensor_network_prepare_post"       => { true }
-        "start_server_transport"            => { true }
+        //  TODO
+        "os_eventq_dflt_get" => { true }
 
         _ => { false }  //  Else not whitelisted.
     }
