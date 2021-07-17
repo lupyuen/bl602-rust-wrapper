@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 #  Generate Rust bindings for BL602 IoT SDK. Install "bindgen" before running:
-#  cargo install bindgen
+#    cargo install bindgen
+#    sudo apt install llvm-dev libclang-dev clang
 #  Also install rustfmt when prompted
 #  Ignore any "unused option" errors
 #    unused option: --whitelist-function (?i)...
@@ -15,7 +16,6 @@ export RUST_BACKTRACE=1  #  Show Rust errors.
 #  Define the library name
 libname=bl602
 headerprefix=HEADERPREFIX 
-# Previously pinetime_lvgl_mynewt
 
 #  TODO: Sync gcc options with make.log
 CCFLAGS=" -g \
@@ -261,6 +261,10 @@ EOF
         rm $headerfile
     fi
 }
+
+#  Generate bindings for
+#  components/hal_drv/bl602_hal/bl_i2c.h
+generate_bindings_core i2c
 
 #  Generate bindings for
 #  components/hal_drv/bl602_hal/bl_gpio.h
