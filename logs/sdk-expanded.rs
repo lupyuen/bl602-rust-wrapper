@@ -267,6 +267,96 @@ pub mod gpio {
 #[allow(non_snake_case)]
 pub mod pwm {
     use super::*;
+    pub const BL_PWM_XTAL_CLK: u32 = 40000000;
+    pub const BL_PWM_BUS_BCLK: u32 = 80000000;
+    pub const BL_PWM_CLK: u32 = 40000000;
+    pub type __uint8_t = ::cty::c_uchar;
+    pub type __int32_t = ::cty::c_int;
+    pub type __uint32_t = ::cty::c_uint;
+    pub fn pwm_init(id: u8, pin: u8, freq: u32) -> BlResult<i32> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn bl_pwm_init(id: u8, pin: u8, freq: u32)
+            -> i32;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = bl_pwm_init(id as u8, pin as u8, freq as u32);
+            "----------Result----------";
+            Ok(res)
+        }
+    }
+    pub fn pwm_start(id: u8) -> BlResult<i32> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn bl_pwm_start(id: u8)
+            -> i32;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = bl_pwm_start(id as u8);
+            "----------Result----------";
+            Ok(res)
+        }
+    }
+    pub fn pwm_stop(id: u8) -> BlResult<i32> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn bl_pwm_stop(id: u8)
+            -> i32;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = bl_pwm_stop(id as u8);
+            "----------Result----------";
+            Ok(res)
+        }
+    }
+    pub fn pwm_set_freq(id: u8, freq: u32) -> BlResult<i32> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn bl_pwm_set_freq(id: u8, freq: u32)
+            -> i32;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = bl_pwm_set_freq(id as u8, freq as u32);
+            "----------Result----------";
+            Ok(res)
+        }
+    }
+    pub fn pwm_set_duty(id: u8, duty: f32) -> BlResult<i32> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn bl_pwm_set_duty(id: u8, duty: f32)
+            -> i32;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = bl_pwm_set_duty(id as u8, duty as f32);
+            "----------Result----------";
+            Ok(res)
+        }
+    }
+    pub fn pwm_get_duty(id: u8, p_duty: *mut f32) -> BlResult<i32> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn bl_pwm_get_duty(id: u8, p_duty: *mut f32)
+            -> i32;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = bl_pwm_get_duty(id as u8, p_duty as *mut f32);
+            "----------Result----------";
+            Ok(res)
+        }
+    }
 }
 use core::{panic::PanicInfo, str::FromStr};
 /// `rust_main` will be called by the BL602 command-line interface

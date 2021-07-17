@@ -3,4 +3,27 @@
 use
 super::*;
 
-
+pub const BL_PWM_XTAL_CLK: u32 = 40000000;
+pub const BL_PWM_BUS_BCLK: u32 = 80000000;
+pub const BL_PWM_CLK: u32 = 40000000;
+pub type __uint8_t = ::cty::c_uchar;
+pub type __int32_t = ::cty::c_int;
+pub type __uint32_t = ::cty::c_uint;
+#[safe_wrap(_)] extern "C" {
+    pub fn bl_pwm_init(id: u8, pin: u8, freq: u32) -> i32;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn bl_pwm_start(id: u8) -> i32;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn bl_pwm_stop(id: u8) -> i32;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn bl_pwm_set_freq(id: u8, freq: u32) -> i32;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn bl_pwm_set_duty(id: u8, duty: f32) -> i32;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn bl_pwm_get_duty(id: u8, p_duty: *mut f32) -> i32;
+}
