@@ -201,10 +201,13 @@ function generate_bindings() {
     ####rm $tmpexpandpath
 }
 
+#  Generate bindings for BL602 HAL e.g.
+#  components/hal_drv/bl602_hal/hal_spi.h
+#  components/hal_drv/bl602_hal/bl_gpio.h
 function generate_bindings_core() {
     #  Add allowlist and blocklist
-    local modname=MODNAME
-    local submodname=$1  # Submodule name e.g. gpio
+    local modname=$1     # Module name: bl or hal
+    local submodname=$2  # Submodule name e.g. gpio
     if [ "$submodname" == 'style' ]; then
         #  TODO: Combine lv_style.h, lv_obj.h and lv_obj_style_dec.h for processing, because lv_obj_style_dec.h contains macros that define functions like "lv_style_set_text_font"
         local headerfile=$headerprefix/src/lv_$modname/combined.h
@@ -215,8 +218,7 @@ function generate_bindings_core() {
             >$headerfile
     else
         # components/hal_drv/bl602_hal/bl_gpio.h
-        # TODO: local headerfile=$headerprefix/src/lv_$modname/lv_$submodname.h
-        local headerfile=../bl_iot_sdk/components/hal_drv/bl602_hal/bl_$submodname.h
+        local headerfile=../bl_iot_sdk/components/hal_drv/bl602_hal/${modname}_${submodname}.h
     fi
     local allowlistname=$submodname # e.g. gpio, i2c
     # Previously lv_$submodname
@@ -264,17 +266,23 @@ EOF
     fi
 }
 
-#  Generate bindings for
+#  Generate bindings for I2C
 #  components/hal_drv/bl602_hal/bl_i2c.h
-generate_bindings_core i2c
+generate_bindings_core bl i2c
 
-#  Generate bindings for
+#  Generate bindings for GPIO
 #  components/hal_drv/bl602_hal/bl_gpio.h
-generate_bindings_core gpio
+generate_bindings_core bl gpio
 
-#  Generate bindings for
+#  Generate bindings for PWM
 #  components/hal_drv/bl602_hal/bl_pwm.h
-generate_bindings_core pwm
+generate_bindings_core bl pwm
+
+#  Generate bindings for SPI
+#  components/hal_drv/bl602_hal/hal_spi.h
+#  components/fs/vfs/include/hal/soc/spi.h
+#  generate_bindings_core hal spi
+#  generate_bindings_fs spi
 
 #  Expand the safe wrapper macros
 ##cargo rustc -- -Z unstable-options --pretty expanded >logs/expanded.rs
