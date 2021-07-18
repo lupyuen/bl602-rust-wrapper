@@ -218,10 +218,10 @@ function generate_bindings_core() {
         # TODO: local headerfile=$headerprefix/src/lv_$modname/lv_$submodname.h
         local headerfile=../bl_iot_sdk/components/hal_drv/bl602_hal/bl_$submodname.h
     fi
-    local whitelistname=bl_$submodname # e.g. bl_gpio
+    local whitelistname=$submodname # e.g. gpio, i2c
     # Previously lv_$submodname
     if [ "$submodname" == 'obj' ]; then
-        # For lv_obj.c, include the core constants and the core types
+        # TODO: For lv_obj.c, include the core constants and the core types
         local whitelisttypes=`cat << EOF
         --whitelist-var      LV_ALIGN_.* \
         --whitelist-type     lv_.*
@@ -229,7 +229,7 @@ EOF
 `
         local blacklist=
     else
-        # For files other than lv_obj.c, exclude the core types.
+        # TODO: For files other than lv_obj.c, exclude the core types.
         # lv_indev_drv_* functions should be defined under lv_hal. 
         local whitelisttypes=
         local blacklist=`cat << EOF
@@ -240,23 +240,25 @@ EOF
 EOF
 `
     fi
-    #  TODO: Fix returned string lifetime for lv_obj_get_style_value_str.
-    #  This function is probably not essential because our Rust app should already have the string.
+    # For submodname=i2c or gpio, whitelist i2c* and bl_gpio*
     local whitelist=`cat << EOF
         --raw-line use \
         --raw-line super::*; \
         --whitelist-function (?i)${whitelistname}.* \
         --whitelist-type     (?i)${whitelistname}.* \
         --whitelist-var      (?i)${whitelistname}.* \
+        --whitelist-function (?i)bl_${whitelistname}.* \
+        --whitelist-type     (?i)bl_${whitelistname}.* \
+        --whitelist-var      (?i)bl_${whitelistname}.* \
         ${whitelisttypes} \
         --blacklist-item     lv_obj_get_style_value_str \
         ${blacklist}
 EOF
 `    
-    #  Generate the bindings for lv_core/lv_obj: libname, modname, submodname, headerfile, whitelist
+    #  TODO: Generate the bindings for lv_core/lv_obj: libname, modname, submodname, headerfile, whitelist
     generate_bindings $libname $modname $submodname $headerfile $whitelist
 
-    #  Delete the combined lv_style.h and lv_obj_style_dec.h
+    #  TODO: Delete the combined lv_style.h and lv_obj_style_dec.h
     if [ "$submodname" == 'style' ]; then
         rm $headerfile
     fi

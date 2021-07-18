@@ -42,6 +42,9 @@ fn function_is_whitelisted(fname: &str) -> bool {
     //  Functions starting with `bl_` are whitelisted.
     if fname.starts_with("bl_") { return true; }
 
+    //  Functions starting with `i2c_` are whitelisted.
+    if fname.starts_with("i2c_") { return true; }
+
     match fname {  //  If match found, then it's whitelisted.
         //  TODO
         "os_eventq_dflt_get" => { true }

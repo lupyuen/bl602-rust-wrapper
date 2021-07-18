@@ -3,12 +3,3215 @@
 use
 super::*;
 
+#[repr(C)]
+#[derive(Copy, Clone, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub struct __BindgenBitfieldUnit<Storage> {
+    storage: Storage,
+}
+impl<Storage> __BindgenBitfieldUnit<Storage> {
+    #[inline]
+    pub const fn new(storage: Storage) -> Self {
+        Self { storage }
+    }
+}
+impl<Storage> __BindgenBitfieldUnit<Storage>
+where
+    Storage: AsRef<[u8]> + AsMut<[u8]>,
+{
+    #[inline]
+    pub fn get_bit(&self, index: usize) -> bool {
+        debug_assert!(index / 8 < self.storage.as_ref().len());
+        let byte_index = index / 8;
+        let byte = self.storage.as_ref()[byte_index];
+        let bit_index = if cfg!(target_endian = "big") {
+            7 - (index % 8)
+        } else {
+            index % 8
+        };
+        let mask = 1 << bit_index;
+        byte & mask == mask
+    }
+    #[inline]
+    pub fn set_bit(&mut self, index: usize, val: bool) {
+        debug_assert!(index / 8 < self.storage.as_ref().len());
+        let byte_index = index / 8;
+        let byte = &mut self.storage.as_mut()[byte_index];
+        let bit_index = if cfg!(target_endian = "big") {
+            7 - (index % 8)
+        } else {
+            index % 8
+        };
+        let mask = 1 << bit_index;
+        if val {
+            *byte |= mask;
+        } else {
+            *byte &= !mask;
+        }
+    }
+    #[inline]
+    pub fn get(&self, bit_offset: usize, bit_width: u8) -> u64 {
+        debug_assert!(bit_width <= 64);
+        debug_assert!(bit_offset / 8 < self.storage.as_ref().len());
+        debug_assert!((bit_offset + (bit_width as usize)) / 8 <= self.storage.as_ref().len());
+        let mut val = 0;
+        for i in 0..(bit_width as usize) {
+            if self.get_bit(i + bit_offset) {
+                let index = if cfg!(target_endian = "big") {
+                    bit_width as usize - 1 - i
+                } else {
+                    i
+                };
+                val |= 1 << index;
+            }
+        }
+        val
+    }
+    #[inline]
+    pub fn set(&mut self, bit_offset: usize, bit_width: u8, val: u64) {
+        debug_assert!(bit_width <= 64);
+        debug_assert!(bit_offset / 8 < self.storage.as_ref().len());
+        debug_assert!((bit_offset + (bit_width as usize)) / 8 <= self.storage.as_ref().len());
+        for i in 0..(bit_width as usize) {
+            let mask = 1 << i;
+            let val_bit_is_set = val & mask == mask;
+            let index = if cfg!(target_endian = "big") {
+                bit_width as usize - 1 - i
+            } else {
+                i
+            };
+            self.set_bit(index + bit_offset, val_bit_is_set);
+        }
+    }
+}
+pub const PWM_INT_CONFIG_OFFSET: u32 = 0;
+pub const PWM_INTERRUPT_STS_POS: u32 = 0;
+pub const PWM_INTERRUPT_STS_LEN: u32 = 6;
+pub const PWM_INTERRUPT_STS_MSK: u32 = 63;
+pub const PWM_INTERRUPT_STS_UMSK: i32 = -64;
+pub const PWM_INT_CLEAR_POS: u32 = 8;
+pub const PWM_INT_CLEAR_LEN: u32 = 6;
+pub const PWM_INT_CLEAR_MSK: u32 = 16128;
+pub const PWM_INT_CLEAR_UMSK: i32 = -16129;
+pub const PWM0_CLKDIV_OFFSET: u32 = 32;
+pub const PWM_CLK_DIV_POS: u32 = 0;
+pub const PWM_CLK_DIV_LEN: u32 = 16;
+pub const PWM_CLK_DIV_MSK: u32 = 65535;
+pub const PWM_CLK_DIV_UMSK: i32 = -65536;
+pub const PWM0_THRE1_OFFSET: u32 = 36;
+pub const PWM_THRE1_POS: u32 = 0;
+pub const PWM_THRE1_LEN: u32 = 16;
+pub const PWM_THRE1_MSK: u32 = 65535;
+pub const PWM_THRE1_UMSK: i32 = -65536;
+pub const PWM0_THRE2_OFFSET: u32 = 40;
+pub const PWM_THRE2_POS: u32 = 0;
+pub const PWM_THRE2_LEN: u32 = 16;
+pub const PWM_THRE2_MSK: u32 = 65535;
+pub const PWM_THRE2_UMSK: i32 = -65536;
+pub const PWM0_PERIOD_OFFSET: u32 = 44;
+pub const PWM_PERIOD_POS: u32 = 0;
+pub const PWM_PERIOD_LEN: u32 = 16;
+pub const PWM_PERIOD_MSK: u32 = 65535;
+pub const PWM_PERIOD_UMSK: i32 = -65536;
+pub const PWM0_CONFIG_OFFSET: u32 = 48;
+pub const PWM_REG_CLK_SEL_POS: u32 = 0;
+pub const PWM_REG_CLK_SEL_LEN: u32 = 2;
+pub const PWM_REG_CLK_SEL_MSK: u32 = 3;
+pub const PWM_REG_CLK_SEL_UMSK: i32 = -4;
+pub const PWM_OUT_INV_POS: u32 = 2;
+pub const PWM_OUT_INV_LEN: u32 = 1;
+pub const PWM_OUT_INV_MSK: u32 = 4;
+pub const PWM_OUT_INV_UMSK: i32 = -5;
+pub const PWM_STOP_MODE_POS: u32 = 3;
+pub const PWM_STOP_MODE_LEN: u32 = 1;
+pub const PWM_STOP_MODE_MSK: u32 = 8;
+pub const PWM_STOP_MODE_UMSK: i32 = -9;
+pub const PWM_SW_FORCE_VAL_POS: u32 = 4;
+pub const PWM_SW_FORCE_VAL_LEN: u32 = 1;
+pub const PWM_SW_FORCE_VAL_MSK: u32 = 16;
+pub const PWM_SW_FORCE_VAL_UMSK: i32 = -17;
+pub const PWM_SW_MODE_POS: u32 = 5;
+pub const PWM_SW_MODE_LEN: u32 = 1;
+pub const PWM_SW_MODE_MSK: u32 = 32;
+pub const PWM_SW_MODE_UMSK: i32 = -33;
+pub const PWM_STOP_EN_POS: u32 = 6;
+pub const PWM_STOP_EN_LEN: u32 = 1;
+pub const PWM_STOP_EN_MSK: u32 = 64;
+pub const PWM_STOP_EN_UMSK: i32 = -65;
+pub const PWM_STS_TOP_POS: u32 = 7;
+pub const PWM_STS_TOP_LEN: u32 = 1;
+pub const PWM_STS_TOP_MSK: u32 = 128;
+pub const PWM_STS_TOP_UMSK: i32 = -129;
+pub const PWM0_INTERRUPT_OFFSET: u32 = 52;
+pub const PWM_INT_PERIOD_CNT_POS: u32 = 0;
+pub const PWM_INT_PERIOD_CNT_LEN: u32 = 16;
+pub const PWM_INT_PERIOD_CNT_MSK: u32 = 65535;
+pub const PWM_INT_PERIOD_CNT_UMSK: i32 = -65536;
+pub const PWM_INT_ENABLE_POS: u32 = 16;
+pub const PWM_INT_ENABLE_LEN: u32 = 1;
+pub const PWM_INT_ENABLE_MSK: u32 = 65536;
+pub const PWM_INT_ENABLE_UMSK: i32 = -65537;
+pub const PWM1_CLKDIV_OFFSET: u32 = 64;
+pub const PWM1_THRE1_OFFSET: u32 = 68;
+pub const PWM1_THRE2_OFFSET: u32 = 72;
+pub const PWM1_PERIOD_OFFSET: u32 = 76;
+pub const PWM1_CONFIG_OFFSET: u32 = 80;
+pub const PWM1_INTERRUPT_OFFSET: u32 = 84;
+pub const PWM2_CLKDIV_OFFSET: u32 = 96;
+pub const PWM2_THRE1_OFFSET: u32 = 100;
+pub const PWM2_THRE2_OFFSET: u32 = 104;
+pub const PWM2_PERIOD_OFFSET: u32 = 108;
+pub const PWM2_CONFIG_OFFSET: u32 = 112;
+pub const PWM2_INTERRUPT_OFFSET: u32 = 116;
+pub const PWM3_CLKDIV_OFFSET: u32 = 128;
+pub const PWM3_THRE1_OFFSET: u32 = 132;
+pub const PWM3_THRE2_OFFSET: u32 = 136;
+pub const PWM3_PERIOD_OFFSET: u32 = 140;
+pub const PWM3_CONFIG_OFFSET: u32 = 144;
+pub const PWM3_INTERRUPT_OFFSET: u32 = 148;
+pub const PWM4_CLKDIV_OFFSET: u32 = 160;
+pub const PWM4_THRE1_OFFSET: u32 = 164;
+pub const PWM4_THRE2_OFFSET: u32 = 168;
+pub const PWM4_PERIOD_OFFSET: u32 = 172;
+pub const PWM4_CONFIG_OFFSET: u32 = 176;
+pub const PWM4_INTERRUPT_OFFSET: u32 = 180;
+pub const PWM_CLKDIV_OFFSET: u32 = 0;
+pub const PWM_THRE1_OFFSET: u32 = 4;
+pub const PWM_THRE2_OFFSET: u32 = 8;
+pub const PWM_PERIOD_OFFSET: u32 = 12;
+pub const PWM_CONFIG_OFFSET: u32 = 16;
+pub const PWM_INTERRUPT_OFFSET: u32 = 20;
+pub const PWM_CHANNEL_OFFSET: u32 = 32;
 pub const BL_PWM_XTAL_CLK: u32 = 40000000;
 pub const BL_PWM_BUS_BCLK: u32 = 80000000;
 pub const BL_PWM_CLK: u32 = 40000000;
 pub type __uint8_t = ::cty::c_uchar;
+pub type __uint16_t = ::cty::c_ushort;
 pub type __int32_t = ::cty::c_int;
 pub type __uint32_t = ::cty::c_uint;
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct pwm_reg {
+    pub pwm_int_config: pwm_reg__bindgen_ty_1,
+    pub RESERVED0x4: [u8; 28usize],
+    pub pwm0_clkdiv: pwm_reg__bindgen_ty_2,
+    pub pwm0_thre1: pwm_reg__bindgen_ty_3,
+    pub pwm0_thre2: pwm_reg__bindgen_ty_4,
+    pub pwm0_period: pwm_reg__bindgen_ty_5,
+    pub pwm0_config: pwm_reg__bindgen_ty_6,
+    pub pwm0_interrupt: pwm_reg__bindgen_ty_7,
+    pub RESERVED0x38: [u8; 8usize],
+    pub pwm1_clkdiv: pwm_reg__bindgen_ty_8,
+    pub pwm1_thre1: pwm_reg__bindgen_ty_9,
+    pub pwm1_thre2: pwm_reg__bindgen_ty_10,
+    pub pwm1_period: pwm_reg__bindgen_ty_11,
+    pub pwm1_config: pwm_reg__bindgen_ty_12,
+    pub pwm1_interrupt: pwm_reg__bindgen_ty_13,
+    pub RESERVED0x58: [u8; 8usize],
+    pub pwm2_clkdiv: pwm_reg__bindgen_ty_14,
+    pub pwm2_thre1: pwm_reg__bindgen_ty_15,
+    pub pwm2_thre2: pwm_reg__bindgen_ty_16,
+    pub pwm2_period: pwm_reg__bindgen_ty_17,
+    pub pwm2_config: pwm_reg__bindgen_ty_18,
+    pub pwm2_interrupt: pwm_reg__bindgen_ty_19,
+    pub RESERVED0x78: [u8; 8usize],
+    pub pwm3_clkdiv: pwm_reg__bindgen_ty_20,
+    pub pwm3_thre1: pwm_reg__bindgen_ty_21,
+    pub pwm3_thre2: pwm_reg__bindgen_ty_22,
+    pub pwm3_period: pwm_reg__bindgen_ty_23,
+    pub pwm3_config: pwm_reg__bindgen_ty_24,
+    pub pwm3_interrupt: pwm_reg__bindgen_ty_25,
+    pub RESERVED0x98: [u8; 8usize],
+    pub pwm4_clkdiv: pwm_reg__bindgen_ty_26,
+    pub pwm4_thre1: pwm_reg__bindgen_ty_27,
+    pub pwm4_thre2: pwm_reg__bindgen_ty_28,
+    pub pwm4_period: pwm_reg__bindgen_ty_29,
+    pub pwm4_config: pwm_reg__bindgen_ty_30,
+    pub pwm4_interrupt: pwm_reg__bindgen_ty_31,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_reg__bindgen_ty_1 {
+    pub BF: pwm_reg__bindgen_ty_1__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_reg__bindgen_ty_1__bindgen_ty_1 {
+    pub _bitfield_align_1: [u32; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_reg__bindgen_ty_1__bindgen_ty_1 {
+    #[inline]
+    pub fn pwm_interrupt_sts(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 6u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_interrupt_sts(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 6u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_6_7(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(6usize, 2u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_6_7(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(6usize, 2u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_int_clear(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(8usize, 6u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_int_clear(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(8usize, 6u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_14_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(14usize, 18u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_14_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(14usize, 18u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        pwm_interrupt_sts: u32,
+        reserved_6_7: u32,
+        pwm_int_clear: u32,
+        reserved_14_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 6u8, {
+            let pwm_interrupt_sts: u32 = unsafe { ::core::mem::transmute(pwm_interrupt_sts) };
+            pwm_interrupt_sts as u64
+        });
+        __bindgen_bitfield_unit.set(6usize, 2u8, {
+            let reserved_6_7: u32 = unsafe { ::core::mem::transmute(reserved_6_7) };
+            reserved_6_7 as u64
+        });
+        __bindgen_bitfield_unit.set(8usize, 6u8, {
+            let pwm_int_clear: u32 = unsafe { ::core::mem::transmute(pwm_int_clear) };
+            pwm_int_clear as u64
+        });
+        __bindgen_bitfield_unit.set(14usize, 18u8, {
+            let reserved_14_31: u32 = unsafe { ::core::mem::transmute(reserved_14_31) };
+            reserved_14_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_reg__bindgen_ty_1 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_reg__bindgen_ty_2 {
+    pub BF: pwm_reg__bindgen_ty_2__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_reg__bindgen_ty_2__bindgen_ty_1 {
+    pub _bitfield_align_1: [u16; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_reg__bindgen_ty_2__bindgen_ty_1 {
+    #[inline]
+    pub fn pwm_clk_div(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_clk_div(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_16_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(16usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_16_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(16usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        pwm_clk_div: u32,
+        reserved_16_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 16u8, {
+            let pwm_clk_div: u32 = unsafe { ::core::mem::transmute(pwm_clk_div) };
+            pwm_clk_div as u64
+        });
+        __bindgen_bitfield_unit.set(16usize, 16u8, {
+            let reserved_16_31: u32 = unsafe { ::core::mem::transmute(reserved_16_31) };
+            reserved_16_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_reg__bindgen_ty_2 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_reg__bindgen_ty_3 {
+    pub BF: pwm_reg__bindgen_ty_3__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_reg__bindgen_ty_3__bindgen_ty_1 {
+    pub _bitfield_align_1: [u16; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_reg__bindgen_ty_3__bindgen_ty_1 {
+    #[inline]
+    pub fn pwm_thre1(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_thre1(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_16_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(16usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_16_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(16usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        pwm_thre1: u32,
+        reserved_16_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 16u8, {
+            let pwm_thre1: u32 = unsafe { ::core::mem::transmute(pwm_thre1) };
+            pwm_thre1 as u64
+        });
+        __bindgen_bitfield_unit.set(16usize, 16u8, {
+            let reserved_16_31: u32 = unsafe { ::core::mem::transmute(reserved_16_31) };
+            reserved_16_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_reg__bindgen_ty_3 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_reg__bindgen_ty_4 {
+    pub BF: pwm_reg__bindgen_ty_4__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_reg__bindgen_ty_4__bindgen_ty_1 {
+    pub _bitfield_align_1: [u16; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_reg__bindgen_ty_4__bindgen_ty_1 {
+    #[inline]
+    pub fn pwm_thre2(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_thre2(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_16_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(16usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_16_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(16usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        pwm_thre2: u32,
+        reserved_16_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 16u8, {
+            let pwm_thre2: u32 = unsafe { ::core::mem::transmute(pwm_thre2) };
+            pwm_thre2 as u64
+        });
+        __bindgen_bitfield_unit.set(16usize, 16u8, {
+            let reserved_16_31: u32 = unsafe { ::core::mem::transmute(reserved_16_31) };
+            reserved_16_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_reg__bindgen_ty_4 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_reg__bindgen_ty_5 {
+    pub BF: pwm_reg__bindgen_ty_5__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_reg__bindgen_ty_5__bindgen_ty_1 {
+    pub _bitfield_align_1: [u16; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_reg__bindgen_ty_5__bindgen_ty_1 {
+    #[inline]
+    pub fn pwm_period(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_period(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_16_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(16usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_16_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(16usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        pwm_period: u32,
+        reserved_16_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 16u8, {
+            let pwm_period: u32 = unsafe { ::core::mem::transmute(pwm_period) };
+            pwm_period as u64
+        });
+        __bindgen_bitfield_unit.set(16usize, 16u8, {
+            let reserved_16_31: u32 = unsafe { ::core::mem::transmute(reserved_16_31) };
+            reserved_16_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_reg__bindgen_ty_5 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_reg__bindgen_ty_6 {
+    pub BF: pwm_reg__bindgen_ty_6__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_reg__bindgen_ty_6__bindgen_ty_1 {
+    pub _bitfield_align_1: [u32; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_reg__bindgen_ty_6__bindgen_ty_1 {
+    #[inline]
+    pub fn reg_clk_sel(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 2u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reg_clk_sel(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 2u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_out_inv(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(2usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_out_inv(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(2usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_stop_mode(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(3usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_stop_mode(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(3usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_sw_force_val(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(4usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_sw_force_val(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(4usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_sw_mode(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(5usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_sw_mode(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(5usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_stop_en(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(6usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_stop_en(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(6usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_sts_top(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(7usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_sts_top(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(7usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_8_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(8usize, 24u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_8_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(8usize, 24u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        reg_clk_sel: u32,
+        pwm_out_inv: u32,
+        pwm_stop_mode: u32,
+        pwm_sw_force_val: u32,
+        pwm_sw_mode: u32,
+        pwm_stop_en: u32,
+        pwm_sts_top: u32,
+        reserved_8_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 2u8, {
+            let reg_clk_sel: u32 = unsafe { ::core::mem::transmute(reg_clk_sel) };
+            reg_clk_sel as u64
+        });
+        __bindgen_bitfield_unit.set(2usize, 1u8, {
+            let pwm_out_inv: u32 = unsafe { ::core::mem::transmute(pwm_out_inv) };
+            pwm_out_inv as u64
+        });
+        __bindgen_bitfield_unit.set(3usize, 1u8, {
+            let pwm_stop_mode: u32 = unsafe { ::core::mem::transmute(pwm_stop_mode) };
+            pwm_stop_mode as u64
+        });
+        __bindgen_bitfield_unit.set(4usize, 1u8, {
+            let pwm_sw_force_val: u32 = unsafe { ::core::mem::transmute(pwm_sw_force_val) };
+            pwm_sw_force_val as u64
+        });
+        __bindgen_bitfield_unit.set(5usize, 1u8, {
+            let pwm_sw_mode: u32 = unsafe { ::core::mem::transmute(pwm_sw_mode) };
+            pwm_sw_mode as u64
+        });
+        __bindgen_bitfield_unit.set(6usize, 1u8, {
+            let pwm_stop_en: u32 = unsafe { ::core::mem::transmute(pwm_stop_en) };
+            pwm_stop_en as u64
+        });
+        __bindgen_bitfield_unit.set(7usize, 1u8, {
+            let pwm_sts_top: u32 = unsafe { ::core::mem::transmute(pwm_sts_top) };
+            pwm_sts_top as u64
+        });
+        __bindgen_bitfield_unit.set(8usize, 24u8, {
+            let reserved_8_31: u32 = unsafe { ::core::mem::transmute(reserved_8_31) };
+            reserved_8_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_reg__bindgen_ty_6 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_reg__bindgen_ty_7 {
+    pub BF: pwm_reg__bindgen_ty_7__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_reg__bindgen_ty_7__bindgen_ty_1 {
+    pub _bitfield_align_1: [u16; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_reg__bindgen_ty_7__bindgen_ty_1 {
+    #[inline]
+    pub fn pwm_int_period_cnt(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_int_period_cnt(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_int_enable(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(16usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_int_enable(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(16usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_17_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(17usize, 15u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_17_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(17usize, 15u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        pwm_int_period_cnt: u32,
+        pwm_int_enable: u32,
+        reserved_17_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 16u8, {
+            let pwm_int_period_cnt: u32 = unsafe { ::core::mem::transmute(pwm_int_period_cnt) };
+            pwm_int_period_cnt as u64
+        });
+        __bindgen_bitfield_unit.set(16usize, 1u8, {
+            let pwm_int_enable: u32 = unsafe { ::core::mem::transmute(pwm_int_enable) };
+            pwm_int_enable as u64
+        });
+        __bindgen_bitfield_unit.set(17usize, 15u8, {
+            let reserved_17_31: u32 = unsafe { ::core::mem::transmute(reserved_17_31) };
+            reserved_17_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_reg__bindgen_ty_7 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_reg__bindgen_ty_8 {
+    pub BF: pwm_reg__bindgen_ty_8__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_reg__bindgen_ty_8__bindgen_ty_1 {
+    pub _bitfield_align_1: [u16; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_reg__bindgen_ty_8__bindgen_ty_1 {
+    #[inline]
+    pub fn pwm_clk_div(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_clk_div(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_16_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(16usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_16_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(16usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        pwm_clk_div: u32,
+        reserved_16_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 16u8, {
+            let pwm_clk_div: u32 = unsafe { ::core::mem::transmute(pwm_clk_div) };
+            pwm_clk_div as u64
+        });
+        __bindgen_bitfield_unit.set(16usize, 16u8, {
+            let reserved_16_31: u32 = unsafe { ::core::mem::transmute(reserved_16_31) };
+            reserved_16_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_reg__bindgen_ty_8 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_reg__bindgen_ty_9 {
+    pub BF: pwm_reg__bindgen_ty_9__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_reg__bindgen_ty_9__bindgen_ty_1 {
+    pub _bitfield_align_1: [u16; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_reg__bindgen_ty_9__bindgen_ty_1 {
+    #[inline]
+    pub fn pwm_thre1(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_thre1(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_16_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(16usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_16_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(16usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        pwm_thre1: u32,
+        reserved_16_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 16u8, {
+            let pwm_thre1: u32 = unsafe { ::core::mem::transmute(pwm_thre1) };
+            pwm_thre1 as u64
+        });
+        __bindgen_bitfield_unit.set(16usize, 16u8, {
+            let reserved_16_31: u32 = unsafe { ::core::mem::transmute(reserved_16_31) };
+            reserved_16_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_reg__bindgen_ty_9 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_reg__bindgen_ty_10 {
+    pub BF: pwm_reg__bindgen_ty_10__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_reg__bindgen_ty_10__bindgen_ty_1 {
+    pub _bitfield_align_1: [u16; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_reg__bindgen_ty_10__bindgen_ty_1 {
+    #[inline]
+    pub fn pwm_thre2(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_thre2(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_16_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(16usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_16_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(16usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        pwm_thre2: u32,
+        reserved_16_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 16u8, {
+            let pwm_thre2: u32 = unsafe { ::core::mem::transmute(pwm_thre2) };
+            pwm_thre2 as u64
+        });
+        __bindgen_bitfield_unit.set(16usize, 16u8, {
+            let reserved_16_31: u32 = unsafe { ::core::mem::transmute(reserved_16_31) };
+            reserved_16_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_reg__bindgen_ty_10 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_reg__bindgen_ty_11 {
+    pub BF: pwm_reg__bindgen_ty_11__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_reg__bindgen_ty_11__bindgen_ty_1 {
+    pub _bitfield_align_1: [u16; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_reg__bindgen_ty_11__bindgen_ty_1 {
+    #[inline]
+    pub fn pwm_period(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_period(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_16_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(16usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_16_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(16usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        pwm_period: u32,
+        reserved_16_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 16u8, {
+            let pwm_period: u32 = unsafe { ::core::mem::transmute(pwm_period) };
+            pwm_period as u64
+        });
+        __bindgen_bitfield_unit.set(16usize, 16u8, {
+            let reserved_16_31: u32 = unsafe { ::core::mem::transmute(reserved_16_31) };
+            reserved_16_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_reg__bindgen_ty_11 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_reg__bindgen_ty_12 {
+    pub BF: pwm_reg__bindgen_ty_12__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_reg__bindgen_ty_12__bindgen_ty_1 {
+    pub _bitfield_align_1: [u32; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_reg__bindgen_ty_12__bindgen_ty_1 {
+    #[inline]
+    pub fn reg_clk_sel(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 2u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reg_clk_sel(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 2u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_out_inv(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(2usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_out_inv(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(2usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_stop_mode(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(3usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_stop_mode(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(3usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_sw_force_val(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(4usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_sw_force_val(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(4usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_sw_mode(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(5usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_sw_mode(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(5usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_stop_en(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(6usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_stop_en(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(6usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_sts_top(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(7usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_sts_top(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(7usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_8_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(8usize, 24u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_8_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(8usize, 24u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        reg_clk_sel: u32,
+        pwm_out_inv: u32,
+        pwm_stop_mode: u32,
+        pwm_sw_force_val: u32,
+        pwm_sw_mode: u32,
+        pwm_stop_en: u32,
+        pwm_sts_top: u32,
+        reserved_8_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 2u8, {
+            let reg_clk_sel: u32 = unsafe { ::core::mem::transmute(reg_clk_sel) };
+            reg_clk_sel as u64
+        });
+        __bindgen_bitfield_unit.set(2usize, 1u8, {
+            let pwm_out_inv: u32 = unsafe { ::core::mem::transmute(pwm_out_inv) };
+            pwm_out_inv as u64
+        });
+        __bindgen_bitfield_unit.set(3usize, 1u8, {
+            let pwm_stop_mode: u32 = unsafe { ::core::mem::transmute(pwm_stop_mode) };
+            pwm_stop_mode as u64
+        });
+        __bindgen_bitfield_unit.set(4usize, 1u8, {
+            let pwm_sw_force_val: u32 = unsafe { ::core::mem::transmute(pwm_sw_force_val) };
+            pwm_sw_force_val as u64
+        });
+        __bindgen_bitfield_unit.set(5usize, 1u8, {
+            let pwm_sw_mode: u32 = unsafe { ::core::mem::transmute(pwm_sw_mode) };
+            pwm_sw_mode as u64
+        });
+        __bindgen_bitfield_unit.set(6usize, 1u8, {
+            let pwm_stop_en: u32 = unsafe { ::core::mem::transmute(pwm_stop_en) };
+            pwm_stop_en as u64
+        });
+        __bindgen_bitfield_unit.set(7usize, 1u8, {
+            let pwm_sts_top: u32 = unsafe { ::core::mem::transmute(pwm_sts_top) };
+            pwm_sts_top as u64
+        });
+        __bindgen_bitfield_unit.set(8usize, 24u8, {
+            let reserved_8_31: u32 = unsafe { ::core::mem::transmute(reserved_8_31) };
+            reserved_8_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_reg__bindgen_ty_12 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_reg__bindgen_ty_13 {
+    pub BF: pwm_reg__bindgen_ty_13__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_reg__bindgen_ty_13__bindgen_ty_1 {
+    pub _bitfield_align_1: [u16; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_reg__bindgen_ty_13__bindgen_ty_1 {
+    #[inline]
+    pub fn pwm_int_period_cnt(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_int_period_cnt(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_int_enable(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(16usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_int_enable(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(16usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_17_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(17usize, 15u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_17_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(17usize, 15u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        pwm_int_period_cnt: u32,
+        pwm_int_enable: u32,
+        reserved_17_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 16u8, {
+            let pwm_int_period_cnt: u32 = unsafe { ::core::mem::transmute(pwm_int_period_cnt) };
+            pwm_int_period_cnt as u64
+        });
+        __bindgen_bitfield_unit.set(16usize, 1u8, {
+            let pwm_int_enable: u32 = unsafe { ::core::mem::transmute(pwm_int_enable) };
+            pwm_int_enable as u64
+        });
+        __bindgen_bitfield_unit.set(17usize, 15u8, {
+            let reserved_17_31: u32 = unsafe { ::core::mem::transmute(reserved_17_31) };
+            reserved_17_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_reg__bindgen_ty_13 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_reg__bindgen_ty_14 {
+    pub BF: pwm_reg__bindgen_ty_14__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_reg__bindgen_ty_14__bindgen_ty_1 {
+    pub _bitfield_align_1: [u16; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_reg__bindgen_ty_14__bindgen_ty_1 {
+    #[inline]
+    pub fn pwm_clk_div(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_clk_div(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_16_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(16usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_16_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(16usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        pwm_clk_div: u32,
+        reserved_16_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 16u8, {
+            let pwm_clk_div: u32 = unsafe { ::core::mem::transmute(pwm_clk_div) };
+            pwm_clk_div as u64
+        });
+        __bindgen_bitfield_unit.set(16usize, 16u8, {
+            let reserved_16_31: u32 = unsafe { ::core::mem::transmute(reserved_16_31) };
+            reserved_16_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_reg__bindgen_ty_14 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_reg__bindgen_ty_15 {
+    pub BF: pwm_reg__bindgen_ty_15__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_reg__bindgen_ty_15__bindgen_ty_1 {
+    pub _bitfield_align_1: [u16; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_reg__bindgen_ty_15__bindgen_ty_1 {
+    #[inline]
+    pub fn pwm_thre1(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_thre1(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_16_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(16usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_16_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(16usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        pwm_thre1: u32,
+        reserved_16_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 16u8, {
+            let pwm_thre1: u32 = unsafe { ::core::mem::transmute(pwm_thre1) };
+            pwm_thre1 as u64
+        });
+        __bindgen_bitfield_unit.set(16usize, 16u8, {
+            let reserved_16_31: u32 = unsafe { ::core::mem::transmute(reserved_16_31) };
+            reserved_16_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_reg__bindgen_ty_15 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_reg__bindgen_ty_16 {
+    pub BF: pwm_reg__bindgen_ty_16__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_reg__bindgen_ty_16__bindgen_ty_1 {
+    pub _bitfield_align_1: [u16; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_reg__bindgen_ty_16__bindgen_ty_1 {
+    #[inline]
+    pub fn pwm_thre2(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_thre2(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_16_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(16usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_16_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(16usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        pwm_thre2: u32,
+        reserved_16_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 16u8, {
+            let pwm_thre2: u32 = unsafe { ::core::mem::transmute(pwm_thre2) };
+            pwm_thre2 as u64
+        });
+        __bindgen_bitfield_unit.set(16usize, 16u8, {
+            let reserved_16_31: u32 = unsafe { ::core::mem::transmute(reserved_16_31) };
+            reserved_16_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_reg__bindgen_ty_16 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_reg__bindgen_ty_17 {
+    pub BF: pwm_reg__bindgen_ty_17__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_reg__bindgen_ty_17__bindgen_ty_1 {
+    pub _bitfield_align_1: [u16; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_reg__bindgen_ty_17__bindgen_ty_1 {
+    #[inline]
+    pub fn pwm_period(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_period(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_16_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(16usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_16_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(16usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        pwm_period: u32,
+        reserved_16_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 16u8, {
+            let pwm_period: u32 = unsafe { ::core::mem::transmute(pwm_period) };
+            pwm_period as u64
+        });
+        __bindgen_bitfield_unit.set(16usize, 16u8, {
+            let reserved_16_31: u32 = unsafe { ::core::mem::transmute(reserved_16_31) };
+            reserved_16_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_reg__bindgen_ty_17 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_reg__bindgen_ty_18 {
+    pub BF: pwm_reg__bindgen_ty_18__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_reg__bindgen_ty_18__bindgen_ty_1 {
+    pub _bitfield_align_1: [u32; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_reg__bindgen_ty_18__bindgen_ty_1 {
+    #[inline]
+    pub fn reg_clk_sel(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 2u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reg_clk_sel(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 2u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_out_inv(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(2usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_out_inv(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(2usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_stop_mode(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(3usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_stop_mode(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(3usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_sw_force_val(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(4usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_sw_force_val(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(4usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_sw_mode(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(5usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_sw_mode(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(5usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_stop_en(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(6usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_stop_en(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(6usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_sts_top(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(7usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_sts_top(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(7usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_8_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(8usize, 24u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_8_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(8usize, 24u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        reg_clk_sel: u32,
+        pwm_out_inv: u32,
+        pwm_stop_mode: u32,
+        pwm_sw_force_val: u32,
+        pwm_sw_mode: u32,
+        pwm_stop_en: u32,
+        pwm_sts_top: u32,
+        reserved_8_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 2u8, {
+            let reg_clk_sel: u32 = unsafe { ::core::mem::transmute(reg_clk_sel) };
+            reg_clk_sel as u64
+        });
+        __bindgen_bitfield_unit.set(2usize, 1u8, {
+            let pwm_out_inv: u32 = unsafe { ::core::mem::transmute(pwm_out_inv) };
+            pwm_out_inv as u64
+        });
+        __bindgen_bitfield_unit.set(3usize, 1u8, {
+            let pwm_stop_mode: u32 = unsafe { ::core::mem::transmute(pwm_stop_mode) };
+            pwm_stop_mode as u64
+        });
+        __bindgen_bitfield_unit.set(4usize, 1u8, {
+            let pwm_sw_force_val: u32 = unsafe { ::core::mem::transmute(pwm_sw_force_val) };
+            pwm_sw_force_val as u64
+        });
+        __bindgen_bitfield_unit.set(5usize, 1u8, {
+            let pwm_sw_mode: u32 = unsafe { ::core::mem::transmute(pwm_sw_mode) };
+            pwm_sw_mode as u64
+        });
+        __bindgen_bitfield_unit.set(6usize, 1u8, {
+            let pwm_stop_en: u32 = unsafe { ::core::mem::transmute(pwm_stop_en) };
+            pwm_stop_en as u64
+        });
+        __bindgen_bitfield_unit.set(7usize, 1u8, {
+            let pwm_sts_top: u32 = unsafe { ::core::mem::transmute(pwm_sts_top) };
+            pwm_sts_top as u64
+        });
+        __bindgen_bitfield_unit.set(8usize, 24u8, {
+            let reserved_8_31: u32 = unsafe { ::core::mem::transmute(reserved_8_31) };
+            reserved_8_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_reg__bindgen_ty_18 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_reg__bindgen_ty_19 {
+    pub BF: pwm_reg__bindgen_ty_19__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_reg__bindgen_ty_19__bindgen_ty_1 {
+    pub _bitfield_align_1: [u16; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_reg__bindgen_ty_19__bindgen_ty_1 {
+    #[inline]
+    pub fn pwm_int_period_cnt(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_int_period_cnt(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_int_enable(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(16usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_int_enable(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(16usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_17_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(17usize, 15u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_17_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(17usize, 15u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        pwm_int_period_cnt: u32,
+        pwm_int_enable: u32,
+        reserved_17_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 16u8, {
+            let pwm_int_period_cnt: u32 = unsafe { ::core::mem::transmute(pwm_int_period_cnt) };
+            pwm_int_period_cnt as u64
+        });
+        __bindgen_bitfield_unit.set(16usize, 1u8, {
+            let pwm_int_enable: u32 = unsafe { ::core::mem::transmute(pwm_int_enable) };
+            pwm_int_enable as u64
+        });
+        __bindgen_bitfield_unit.set(17usize, 15u8, {
+            let reserved_17_31: u32 = unsafe { ::core::mem::transmute(reserved_17_31) };
+            reserved_17_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_reg__bindgen_ty_19 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_reg__bindgen_ty_20 {
+    pub BF: pwm_reg__bindgen_ty_20__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_reg__bindgen_ty_20__bindgen_ty_1 {
+    pub _bitfield_align_1: [u16; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_reg__bindgen_ty_20__bindgen_ty_1 {
+    #[inline]
+    pub fn pwm_clk_div(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_clk_div(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_16_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(16usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_16_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(16usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        pwm_clk_div: u32,
+        reserved_16_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 16u8, {
+            let pwm_clk_div: u32 = unsafe { ::core::mem::transmute(pwm_clk_div) };
+            pwm_clk_div as u64
+        });
+        __bindgen_bitfield_unit.set(16usize, 16u8, {
+            let reserved_16_31: u32 = unsafe { ::core::mem::transmute(reserved_16_31) };
+            reserved_16_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_reg__bindgen_ty_20 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_reg__bindgen_ty_21 {
+    pub BF: pwm_reg__bindgen_ty_21__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_reg__bindgen_ty_21__bindgen_ty_1 {
+    pub _bitfield_align_1: [u16; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_reg__bindgen_ty_21__bindgen_ty_1 {
+    #[inline]
+    pub fn pwm_thre1(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_thre1(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_16_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(16usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_16_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(16usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        pwm_thre1: u32,
+        reserved_16_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 16u8, {
+            let pwm_thre1: u32 = unsafe { ::core::mem::transmute(pwm_thre1) };
+            pwm_thre1 as u64
+        });
+        __bindgen_bitfield_unit.set(16usize, 16u8, {
+            let reserved_16_31: u32 = unsafe { ::core::mem::transmute(reserved_16_31) };
+            reserved_16_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_reg__bindgen_ty_21 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_reg__bindgen_ty_22 {
+    pub BF: pwm_reg__bindgen_ty_22__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_reg__bindgen_ty_22__bindgen_ty_1 {
+    pub _bitfield_align_1: [u16; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_reg__bindgen_ty_22__bindgen_ty_1 {
+    #[inline]
+    pub fn pwm_thre2(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_thre2(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_16_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(16usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_16_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(16usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        pwm_thre2: u32,
+        reserved_16_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 16u8, {
+            let pwm_thre2: u32 = unsafe { ::core::mem::transmute(pwm_thre2) };
+            pwm_thre2 as u64
+        });
+        __bindgen_bitfield_unit.set(16usize, 16u8, {
+            let reserved_16_31: u32 = unsafe { ::core::mem::transmute(reserved_16_31) };
+            reserved_16_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_reg__bindgen_ty_22 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_reg__bindgen_ty_23 {
+    pub BF: pwm_reg__bindgen_ty_23__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_reg__bindgen_ty_23__bindgen_ty_1 {
+    pub _bitfield_align_1: [u16; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_reg__bindgen_ty_23__bindgen_ty_1 {
+    #[inline]
+    pub fn pwm_period(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_period(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_16_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(16usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_16_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(16usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        pwm_period: u32,
+        reserved_16_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 16u8, {
+            let pwm_period: u32 = unsafe { ::core::mem::transmute(pwm_period) };
+            pwm_period as u64
+        });
+        __bindgen_bitfield_unit.set(16usize, 16u8, {
+            let reserved_16_31: u32 = unsafe { ::core::mem::transmute(reserved_16_31) };
+            reserved_16_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_reg__bindgen_ty_23 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_reg__bindgen_ty_24 {
+    pub BF: pwm_reg__bindgen_ty_24__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_reg__bindgen_ty_24__bindgen_ty_1 {
+    pub _bitfield_align_1: [u32; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_reg__bindgen_ty_24__bindgen_ty_1 {
+    #[inline]
+    pub fn reg_clk_sel(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 2u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reg_clk_sel(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 2u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_out_inv(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(2usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_out_inv(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(2usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_stop_mode(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(3usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_stop_mode(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(3usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_sw_force_val(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(4usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_sw_force_val(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(4usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_sw_mode(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(5usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_sw_mode(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(5usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_stop_en(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(6usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_stop_en(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(6usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_sts_top(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(7usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_sts_top(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(7usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_8_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(8usize, 24u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_8_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(8usize, 24u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        reg_clk_sel: u32,
+        pwm_out_inv: u32,
+        pwm_stop_mode: u32,
+        pwm_sw_force_val: u32,
+        pwm_sw_mode: u32,
+        pwm_stop_en: u32,
+        pwm_sts_top: u32,
+        reserved_8_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 2u8, {
+            let reg_clk_sel: u32 = unsafe { ::core::mem::transmute(reg_clk_sel) };
+            reg_clk_sel as u64
+        });
+        __bindgen_bitfield_unit.set(2usize, 1u8, {
+            let pwm_out_inv: u32 = unsafe { ::core::mem::transmute(pwm_out_inv) };
+            pwm_out_inv as u64
+        });
+        __bindgen_bitfield_unit.set(3usize, 1u8, {
+            let pwm_stop_mode: u32 = unsafe { ::core::mem::transmute(pwm_stop_mode) };
+            pwm_stop_mode as u64
+        });
+        __bindgen_bitfield_unit.set(4usize, 1u8, {
+            let pwm_sw_force_val: u32 = unsafe { ::core::mem::transmute(pwm_sw_force_val) };
+            pwm_sw_force_val as u64
+        });
+        __bindgen_bitfield_unit.set(5usize, 1u8, {
+            let pwm_sw_mode: u32 = unsafe { ::core::mem::transmute(pwm_sw_mode) };
+            pwm_sw_mode as u64
+        });
+        __bindgen_bitfield_unit.set(6usize, 1u8, {
+            let pwm_stop_en: u32 = unsafe { ::core::mem::transmute(pwm_stop_en) };
+            pwm_stop_en as u64
+        });
+        __bindgen_bitfield_unit.set(7usize, 1u8, {
+            let pwm_sts_top: u32 = unsafe { ::core::mem::transmute(pwm_sts_top) };
+            pwm_sts_top as u64
+        });
+        __bindgen_bitfield_unit.set(8usize, 24u8, {
+            let reserved_8_31: u32 = unsafe { ::core::mem::transmute(reserved_8_31) };
+            reserved_8_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_reg__bindgen_ty_24 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_reg__bindgen_ty_25 {
+    pub BF: pwm_reg__bindgen_ty_25__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_reg__bindgen_ty_25__bindgen_ty_1 {
+    pub _bitfield_align_1: [u16; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_reg__bindgen_ty_25__bindgen_ty_1 {
+    #[inline]
+    pub fn pwm_int_period_cnt(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_int_period_cnt(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_int_enable(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(16usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_int_enable(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(16usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_17_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(17usize, 15u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_17_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(17usize, 15u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        pwm_int_period_cnt: u32,
+        pwm_int_enable: u32,
+        reserved_17_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 16u8, {
+            let pwm_int_period_cnt: u32 = unsafe { ::core::mem::transmute(pwm_int_period_cnt) };
+            pwm_int_period_cnt as u64
+        });
+        __bindgen_bitfield_unit.set(16usize, 1u8, {
+            let pwm_int_enable: u32 = unsafe { ::core::mem::transmute(pwm_int_enable) };
+            pwm_int_enable as u64
+        });
+        __bindgen_bitfield_unit.set(17usize, 15u8, {
+            let reserved_17_31: u32 = unsafe { ::core::mem::transmute(reserved_17_31) };
+            reserved_17_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_reg__bindgen_ty_25 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_reg__bindgen_ty_26 {
+    pub BF: pwm_reg__bindgen_ty_26__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_reg__bindgen_ty_26__bindgen_ty_1 {
+    pub _bitfield_align_1: [u16; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_reg__bindgen_ty_26__bindgen_ty_1 {
+    #[inline]
+    pub fn pwm_clk_div(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_clk_div(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_16_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(16usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_16_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(16usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        pwm_clk_div: u32,
+        reserved_16_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 16u8, {
+            let pwm_clk_div: u32 = unsafe { ::core::mem::transmute(pwm_clk_div) };
+            pwm_clk_div as u64
+        });
+        __bindgen_bitfield_unit.set(16usize, 16u8, {
+            let reserved_16_31: u32 = unsafe { ::core::mem::transmute(reserved_16_31) };
+            reserved_16_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_reg__bindgen_ty_26 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_reg__bindgen_ty_27 {
+    pub BF: pwm_reg__bindgen_ty_27__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_reg__bindgen_ty_27__bindgen_ty_1 {
+    pub _bitfield_align_1: [u16; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_reg__bindgen_ty_27__bindgen_ty_1 {
+    #[inline]
+    pub fn pwm_thre1(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_thre1(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_16_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(16usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_16_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(16usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        pwm_thre1: u32,
+        reserved_16_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 16u8, {
+            let pwm_thre1: u32 = unsafe { ::core::mem::transmute(pwm_thre1) };
+            pwm_thre1 as u64
+        });
+        __bindgen_bitfield_unit.set(16usize, 16u8, {
+            let reserved_16_31: u32 = unsafe { ::core::mem::transmute(reserved_16_31) };
+            reserved_16_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_reg__bindgen_ty_27 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_reg__bindgen_ty_28 {
+    pub BF: pwm_reg__bindgen_ty_28__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_reg__bindgen_ty_28__bindgen_ty_1 {
+    pub _bitfield_align_1: [u16; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_reg__bindgen_ty_28__bindgen_ty_1 {
+    #[inline]
+    pub fn pwm_thre2(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_thre2(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_16_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(16usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_16_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(16usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        pwm_thre2: u32,
+        reserved_16_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 16u8, {
+            let pwm_thre2: u32 = unsafe { ::core::mem::transmute(pwm_thre2) };
+            pwm_thre2 as u64
+        });
+        __bindgen_bitfield_unit.set(16usize, 16u8, {
+            let reserved_16_31: u32 = unsafe { ::core::mem::transmute(reserved_16_31) };
+            reserved_16_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_reg__bindgen_ty_28 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_reg__bindgen_ty_29 {
+    pub BF: pwm_reg__bindgen_ty_29__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_reg__bindgen_ty_29__bindgen_ty_1 {
+    pub _bitfield_align_1: [u16; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_reg__bindgen_ty_29__bindgen_ty_1 {
+    #[inline]
+    pub fn pwm_period(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_period(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_16_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(16usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_16_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(16usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        pwm_period: u32,
+        reserved_16_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 16u8, {
+            let pwm_period: u32 = unsafe { ::core::mem::transmute(pwm_period) };
+            pwm_period as u64
+        });
+        __bindgen_bitfield_unit.set(16usize, 16u8, {
+            let reserved_16_31: u32 = unsafe { ::core::mem::transmute(reserved_16_31) };
+            reserved_16_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_reg__bindgen_ty_29 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_reg__bindgen_ty_30 {
+    pub BF: pwm_reg__bindgen_ty_30__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_reg__bindgen_ty_30__bindgen_ty_1 {
+    pub _bitfield_align_1: [u32; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_reg__bindgen_ty_30__bindgen_ty_1 {
+    #[inline]
+    pub fn reg_clk_sel(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 2u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reg_clk_sel(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 2u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_out_inv(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(2usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_out_inv(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(2usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_stop_mode(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(3usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_stop_mode(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(3usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_sw_force_val(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(4usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_sw_force_val(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(4usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_sw_mode(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(5usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_sw_mode(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(5usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_stop_en(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(6usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_stop_en(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(6usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_sts_top(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(7usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_sts_top(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(7usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_8_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(8usize, 24u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_8_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(8usize, 24u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        reg_clk_sel: u32,
+        pwm_out_inv: u32,
+        pwm_stop_mode: u32,
+        pwm_sw_force_val: u32,
+        pwm_sw_mode: u32,
+        pwm_stop_en: u32,
+        pwm_sts_top: u32,
+        reserved_8_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 2u8, {
+            let reg_clk_sel: u32 = unsafe { ::core::mem::transmute(reg_clk_sel) };
+            reg_clk_sel as u64
+        });
+        __bindgen_bitfield_unit.set(2usize, 1u8, {
+            let pwm_out_inv: u32 = unsafe { ::core::mem::transmute(pwm_out_inv) };
+            pwm_out_inv as u64
+        });
+        __bindgen_bitfield_unit.set(3usize, 1u8, {
+            let pwm_stop_mode: u32 = unsafe { ::core::mem::transmute(pwm_stop_mode) };
+            pwm_stop_mode as u64
+        });
+        __bindgen_bitfield_unit.set(4usize, 1u8, {
+            let pwm_sw_force_val: u32 = unsafe { ::core::mem::transmute(pwm_sw_force_val) };
+            pwm_sw_force_val as u64
+        });
+        __bindgen_bitfield_unit.set(5usize, 1u8, {
+            let pwm_sw_mode: u32 = unsafe { ::core::mem::transmute(pwm_sw_mode) };
+            pwm_sw_mode as u64
+        });
+        __bindgen_bitfield_unit.set(6usize, 1u8, {
+            let pwm_stop_en: u32 = unsafe { ::core::mem::transmute(pwm_stop_en) };
+            pwm_stop_en as u64
+        });
+        __bindgen_bitfield_unit.set(7usize, 1u8, {
+            let pwm_sts_top: u32 = unsafe { ::core::mem::transmute(pwm_sts_top) };
+            pwm_sts_top as u64
+        });
+        __bindgen_bitfield_unit.set(8usize, 24u8, {
+            let reserved_8_31: u32 = unsafe { ::core::mem::transmute(reserved_8_31) };
+            reserved_8_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_reg__bindgen_ty_30 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_reg__bindgen_ty_31 {
+    pub BF: pwm_reg__bindgen_ty_31__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_reg__bindgen_ty_31__bindgen_ty_1 {
+    pub _bitfield_align_1: [u16; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_reg__bindgen_ty_31__bindgen_ty_1 {
+    #[inline]
+    pub fn pwm_int_period_cnt(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_int_period_cnt(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_int_enable(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(16usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_int_enable(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(16usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_17_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(17usize, 15u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_17_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(17usize, 15u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        pwm_int_period_cnt: u32,
+        pwm_int_enable: u32,
+        reserved_17_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 16u8, {
+            let pwm_int_period_cnt: u32 = unsafe { ::core::mem::transmute(pwm_int_period_cnt) };
+            pwm_int_period_cnt as u64
+        });
+        __bindgen_bitfield_unit.set(16usize, 1u8, {
+            let pwm_int_enable: u32 = unsafe { ::core::mem::transmute(pwm_int_enable) };
+            pwm_int_enable as u64
+        });
+        __bindgen_bitfield_unit.set(17usize, 15u8, {
+            let reserved_17_31: u32 = unsafe { ::core::mem::transmute(reserved_17_31) };
+            reserved_17_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_reg__bindgen_ty_31 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+impl Default for pwm_reg {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+pub type pwm_reg_t = pwm_reg;
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct pwm_channel_reg {
+    pub pwm_clkdiv: pwm_channel_reg__bindgen_ty_1,
+    pub pwm_thre1: pwm_channel_reg__bindgen_ty_2,
+    pub pwm_thre2: pwm_channel_reg__bindgen_ty_3,
+    pub pwm_period: pwm_channel_reg__bindgen_ty_4,
+    pub pwm_config: pwm_channel_reg__bindgen_ty_5,
+    pub pwm_interrupt: pwm_channel_reg__bindgen_ty_6,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_channel_reg__bindgen_ty_1 {
+    pub BF: pwm_channel_reg__bindgen_ty_1__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_channel_reg__bindgen_ty_1__bindgen_ty_1 {
+    pub _bitfield_align_1: [u16; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_channel_reg__bindgen_ty_1__bindgen_ty_1 {
+    #[inline]
+    pub fn pwm_clk_div(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_clk_div(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_16_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(16usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_16_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(16usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        pwm_clk_div: u32,
+        reserved_16_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 16u8, {
+            let pwm_clk_div: u32 = unsafe { ::core::mem::transmute(pwm_clk_div) };
+            pwm_clk_div as u64
+        });
+        __bindgen_bitfield_unit.set(16usize, 16u8, {
+            let reserved_16_31: u32 = unsafe { ::core::mem::transmute(reserved_16_31) };
+            reserved_16_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_channel_reg__bindgen_ty_1 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_channel_reg__bindgen_ty_2 {
+    pub BF: pwm_channel_reg__bindgen_ty_2__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_channel_reg__bindgen_ty_2__bindgen_ty_1 {
+    pub _bitfield_align_1: [u16; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_channel_reg__bindgen_ty_2__bindgen_ty_1 {
+    #[inline]
+    pub fn pwm_thre1(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_thre1(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_16_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(16usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_16_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(16usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        pwm_thre1: u32,
+        reserved_16_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 16u8, {
+            let pwm_thre1: u32 = unsafe { ::core::mem::transmute(pwm_thre1) };
+            pwm_thre1 as u64
+        });
+        __bindgen_bitfield_unit.set(16usize, 16u8, {
+            let reserved_16_31: u32 = unsafe { ::core::mem::transmute(reserved_16_31) };
+            reserved_16_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_channel_reg__bindgen_ty_2 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_channel_reg__bindgen_ty_3 {
+    pub BF: pwm_channel_reg__bindgen_ty_3__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_channel_reg__bindgen_ty_3__bindgen_ty_1 {
+    pub _bitfield_align_1: [u16; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_channel_reg__bindgen_ty_3__bindgen_ty_1 {
+    #[inline]
+    pub fn pwm_thre2(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_thre2(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_16_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(16usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_16_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(16usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        pwm_thre2: u32,
+        reserved_16_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 16u8, {
+            let pwm_thre2: u32 = unsafe { ::core::mem::transmute(pwm_thre2) };
+            pwm_thre2 as u64
+        });
+        __bindgen_bitfield_unit.set(16usize, 16u8, {
+            let reserved_16_31: u32 = unsafe { ::core::mem::transmute(reserved_16_31) };
+            reserved_16_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_channel_reg__bindgen_ty_3 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_channel_reg__bindgen_ty_4 {
+    pub BF: pwm_channel_reg__bindgen_ty_4__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_channel_reg__bindgen_ty_4__bindgen_ty_1 {
+    pub _bitfield_align_1: [u16; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_channel_reg__bindgen_ty_4__bindgen_ty_1 {
+    #[inline]
+    pub fn pwm_period(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_period(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_16_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(16usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_16_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(16usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        pwm_period: u32,
+        reserved_16_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 16u8, {
+            let pwm_period: u32 = unsafe { ::core::mem::transmute(pwm_period) };
+            pwm_period as u64
+        });
+        __bindgen_bitfield_unit.set(16usize, 16u8, {
+            let reserved_16_31: u32 = unsafe { ::core::mem::transmute(reserved_16_31) };
+            reserved_16_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_channel_reg__bindgen_ty_4 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_channel_reg__bindgen_ty_5 {
+    pub BF: pwm_channel_reg__bindgen_ty_5__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_channel_reg__bindgen_ty_5__bindgen_ty_1 {
+    pub _bitfield_align_1: [u32; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_channel_reg__bindgen_ty_5__bindgen_ty_1 {
+    #[inline]
+    pub fn reg_clk_sel(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 2u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reg_clk_sel(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 2u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_out_inv(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(2usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_out_inv(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(2usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_stop_mode(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(3usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_stop_mode(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(3usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_sw_force_val(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(4usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_sw_force_val(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(4usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_sw_mode(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(5usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_sw_mode(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(5usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_stop_en(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(6usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_stop_en(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(6usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_sts_top(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(7usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_sts_top(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(7usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_8_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(8usize, 24u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_8_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(8usize, 24u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        reg_clk_sel: u32,
+        pwm_out_inv: u32,
+        pwm_stop_mode: u32,
+        pwm_sw_force_val: u32,
+        pwm_sw_mode: u32,
+        pwm_stop_en: u32,
+        pwm_sts_top: u32,
+        reserved_8_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 2u8, {
+            let reg_clk_sel: u32 = unsafe { ::core::mem::transmute(reg_clk_sel) };
+            reg_clk_sel as u64
+        });
+        __bindgen_bitfield_unit.set(2usize, 1u8, {
+            let pwm_out_inv: u32 = unsafe { ::core::mem::transmute(pwm_out_inv) };
+            pwm_out_inv as u64
+        });
+        __bindgen_bitfield_unit.set(3usize, 1u8, {
+            let pwm_stop_mode: u32 = unsafe { ::core::mem::transmute(pwm_stop_mode) };
+            pwm_stop_mode as u64
+        });
+        __bindgen_bitfield_unit.set(4usize, 1u8, {
+            let pwm_sw_force_val: u32 = unsafe { ::core::mem::transmute(pwm_sw_force_val) };
+            pwm_sw_force_val as u64
+        });
+        __bindgen_bitfield_unit.set(5usize, 1u8, {
+            let pwm_sw_mode: u32 = unsafe { ::core::mem::transmute(pwm_sw_mode) };
+            pwm_sw_mode as u64
+        });
+        __bindgen_bitfield_unit.set(6usize, 1u8, {
+            let pwm_stop_en: u32 = unsafe { ::core::mem::transmute(pwm_stop_en) };
+            pwm_stop_en as u64
+        });
+        __bindgen_bitfield_unit.set(7usize, 1u8, {
+            let pwm_sts_top: u32 = unsafe { ::core::mem::transmute(pwm_sts_top) };
+            pwm_sts_top as u64
+        });
+        __bindgen_bitfield_unit.set(8usize, 24u8, {
+            let reserved_8_31: u32 = unsafe { ::core::mem::transmute(reserved_8_31) };
+            reserved_8_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_channel_reg__bindgen_ty_5 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union pwm_channel_reg__bindgen_ty_6 {
+    pub BF: pwm_channel_reg__bindgen_ty_6__bindgen_ty_1,
+    pub WORD: u32,
+}
+#[repr(C)]
+#[repr(align(4))]
+#[derive(Default, Copy, Clone)]
+pub struct pwm_channel_reg__bindgen_ty_6__bindgen_ty_1 {
+    pub _bitfield_align_1: [u16; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize]>,
+}
+impl pwm_channel_reg__bindgen_ty_6__bindgen_ty_1 {
+    #[inline]
+    pub fn pwm_int_period_cnt(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 16u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_int_period_cnt(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 16u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn pwm_int_enable(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(16usize, 1u8) as u32) }
+    }
+    #[inline]
+    pub fn set_pwm_int_enable(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(16usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn reserved_17_31(&self) -> u32 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(17usize, 15u8) as u32) }
+    }
+    #[inline]
+    pub fn set_reserved_17_31(&mut self, val: u32) {
+        unsafe {
+            let val: u32 = ::core::mem::transmute(val);
+            self._bitfield_1.set(17usize, 15u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        pwm_int_period_cnt: u32,
+        pwm_int_enable: u32,
+        reserved_17_31: u32,
+    ) -> __BindgenBitfieldUnit<[u8; 4usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 4usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 16u8, {
+            let pwm_int_period_cnt: u32 = unsafe { ::core::mem::transmute(pwm_int_period_cnt) };
+            pwm_int_period_cnt as u64
+        });
+        __bindgen_bitfield_unit.set(16usize, 1u8, {
+            let pwm_int_enable: u32 = unsafe { ::core::mem::transmute(pwm_int_enable) };
+            pwm_int_enable as u64
+        });
+        __bindgen_bitfield_unit.set(17usize, 15u8, {
+            let reserved_17_31: u32 = unsafe { ::core::mem::transmute(reserved_17_31) };
+            reserved_17_31 as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+impl Default for pwm_channel_reg__bindgen_ty_6 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+impl Default for pwm_channel_reg {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+pub type pwm_channel_reg_t = pwm_channel_reg;
+pub const BL_Err_Type_SUCCESS: BL_Err_Type = 0;
+pub const BL_Err_Type_ERROR: BL_Err_Type = 1;
+pub const BL_Err_Type_TIMEOUT: BL_Err_Type = 2;
+#[doc = " @brief Error type definition"]
+pub type BL_Err_Type = ::cty::c_uint;
+pub const BL_Mask_Type_UNMASK: BL_Mask_Type = 0;
+pub const BL_Mask_Type_MASK: BL_Mask_Type = 1;
+#[doc = " @brief Mask type definition"]
+pub type BL_Mask_Type = ::cty::c_uint;
+#[doc = "  @brief Interrupt callback function type"]
+pub type intCallback_Type = ::core::option::Option<unsafe extern "C" fn()>;
+#[doc = "< PWM Channel 0 define"]
+pub const PWM_CH_ID_Type_PWM_CH0: PWM_CH_ID_Type = 0;
+#[doc = "< PWM Channel 1 define"]
+pub const PWM_CH_ID_Type_PWM_CH1: PWM_CH_ID_Type = 1;
+#[doc = "< PWM Channel 2 define"]
+pub const PWM_CH_ID_Type_PWM_CH2: PWM_CH_ID_Type = 2;
+#[doc = "< PWM Channel 3 define"]
+pub const PWM_CH_ID_Type_PWM_CH3: PWM_CH_ID_Type = 3;
+#[doc = "< PWM Channel 4 define"]
+pub const PWM_CH_ID_Type_PWM_CH4: PWM_CH_ID_Type = 4;
+#[doc = "<"]
+pub const PWM_CH_ID_Type_PWM_CH_MAX: PWM_CH_ID_Type = 5;
+#[doc = "  @brief PWM No. type definition"]
+pub type PWM_CH_ID_Type = ::cty::c_uint;
+#[doc = "< PWM Clock source :XTAL CLK"]
+pub const PWM_Clk_Type_PWM_CLK_XCLK: PWM_Clk_Type = 0;
+#[doc = "< PWM Clock source :Bus CLK"]
+pub const PWM_Clk_Type_PWM_CLK_BCLK: PWM_Clk_Type = 1;
+#[doc = "< PWM Clock source :32K CLK"]
+pub const PWM_Clk_Type_PWM_CLK_32K: PWM_Clk_Type = 2;
+#[doc = "  @brief PWM Clock definition"]
+pub type PWM_Clk_Type = ::cty::c_uint;
+#[doc = "< PWM stop abrupt select define"]
+pub const PWM_Stop_Mode_Type_PWM_STOP_ABRUPT: PWM_Stop_Mode_Type = 0;
+#[doc = "< PWM stop graceful select define"]
+pub const PWM_Stop_Mode_Type_PWM_STOP_GRACEFUL: PWM_Stop_Mode_Type = 1;
+#[doc = "  @brief PWM Stop Mode definition"]
+pub type PWM_Stop_Mode_Type = ::cty::c_uint;
+#[doc = "< PWM normal polarity mode define"]
+pub const PWM_Polarity_Type_PWM_POL_NORMAL: PWM_Polarity_Type = 0;
+#[doc = "< PWM invert polarity mode define"]
+pub const PWM_Polarity_Type_PWM_POL_INVERT: PWM_Polarity_Type = 1;
+#[doc = "  @brief PWM mode type def"]
+pub type PWM_Polarity_Type = ::cty::c_uint;
+#[doc = "< PWM Pulse count interrupt define"]
+pub const PWM_INT_Type_PWM_INT_PULSE_CNT: PWM_INT_Type = 0;
+#[doc = "<"]
+pub const PWM_INT_Type_PWM_INT_ALL: PWM_INT_Type = 1;
+#[doc = "  @brief PWM interrupt type def"]
+pub type PWM_INT_Type = ::cty::c_uint;
+#[doc = "  @brief PWM configuration structure type definition"]
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct PWM_CH_CFG_Type {
+    #[doc = "< PWM channel"]
+    pub ch: PWM_CH_ID_Type,
+    #[doc = "< PWM Clock"]
+    pub clk: PWM_Clk_Type,
+    #[doc = "< PWM Stop Mode"]
+    pub stopMode: PWM_Stop_Mode_Type,
+    #[doc = "< PWM mode type"]
+    pub pol: PWM_Polarity_Type,
+    #[doc = "< PWM clkDiv num"]
+    pub clkDiv: u16,
+    #[doc = "< PWM period set"]
+    pub period: u16,
+    #[doc = "< PWM threshold1 num"]
+    pub threshold1: u16,
+    #[doc = "< PWM threshold2 num"]
+    pub threshold2: u16,
+    #[doc = "< PWM interrupt pulse count"]
+    pub intPulseCnt: u16,
+}
+impl Default for PWM_CH_CFG_Type {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn PWM_Channel_Init(chCfg: *mut PWM_CH_CFG_Type) -> BL_Err_Type;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn PWM_Channel_Update(ch: u8, period: u16, threshold1: u16, threshold2: u16);
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn PWM_Channel_Set_Div(ch: u8, div: u16);
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn PWM_Channel_Set_Threshold1(ch: u8, threshold1: u16);
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn PWM_Channel_Set_Threshold2(ch: u8, threshold2: u16);
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn PWM_Channel_Set_Period(ch: u8, period: u16);
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn PWM_Channel_Get(ch: u8, period: *mut u16, threshold1: *mut u16, threshold2: *mut u16);
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn PWM_IntMask(ch: u8, intType: PWM_INT_Type, intMask: BL_Mask_Type);
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn PWM_Channel_Enable(ch: u8);
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn PWM_Channel_Disable(ch: u8);
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn PWM_Int_Callback_Install(intType: u32, cbFun: intCallback_Type);
+}
 #[safe_wrap(_)] extern "C" {
     pub fn bl_pwm_init(id: u8, pin: u8, freq: u32) -> i32;
 }
