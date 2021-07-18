@@ -38,18 +38,18 @@ use syn::{
 };
 
 /// Given a function name like `bl_gpio_output_set`, return true if we should create the wrapper
-fn function_is_whitelisted(fname: &str) -> bool {
-    //  Functions starting with `bl_` are whitelisted.
+fn function_is_allowlisted(fname: &str) -> bool {
+    //  Functions starting with `bl_` are allowlisted.
     if fname.starts_with("bl_") { return true; }
 
-    //  Functions starting with `i2c_` are whitelisted.
+    //  Functions starting with `i2c_` are allowlisted.
     if fname.starts_with("i2c_") { return true; }
 
-    match fname {  //  If match found, then it's whitelisted.
+    match fname {  //  If match found, then it's allowlisted.
         //  TODO
         "os_eventq_dflt_get" => { true }
 
-        _ => { false }  //  Else not whitelisted.
+        _ => { false }  //  Else not allowlisted.
     }
 }
 
@@ -138,8 +138,8 @@ pub fn wrap_function(foreign_fn: &ForeignItemFn) -> proc_macro2::TokenStream {
         without_namespace_token: fname_without_namespace_token, .. 
     } = transformed_fname;
 
-    //  If function name is not whitelisted, return the extern tokens without wrapping.
-    if !function_is_whitelisted(&fname) { 
+    //  If function name is not allowlisted, return the extern tokens without wrapping.
+    if !function_is_allowlisted(&fname) { 
         return quote! { extern "C" { #foreign_item_tokens } }
     }
 

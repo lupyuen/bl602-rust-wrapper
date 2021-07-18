@@ -4,9 +4,9 @@
 #    sudo apt install llvm-dev libclang-dev clang
 #  Also install rustfmt when prompted
 #  Ignore any "unused option" errors
-#    unused option: --whitelist-function (?i)...
-#    unused option: --whitelist-var (?i)...
-#    unused option: --whitelist-type (?i)...
+#    unused option: --allowlist-function (?i)...
+#    unused option: --allowlist-var (?i)...
+#    unused option: --allowlist-type (?i)...
 #  TODO: Remove derive[Debug]
 
 set -e  #  Exit when any command fails.
@@ -148,8 +148,8 @@ function generate_bindings() {
     local headerfile=$4  # Header file e.g. components/hal_drv/bl602_hal/bl_gpio.h
     # Previously pinetime_lvgl_mynewt/src/lv_core/lv_obj.h
     shift 4
-    local whitelist="$@" # Whitelist Options: --raw-line, --blacklist-item, --whitelist-function, --whitelist-type, --whitelist-var
-    echo "whitelist=$whitelist"
+    local allowlist="$@" # Allowlist Options: --raw-line, --blocklist-item, --allowlist-function, --allowlist-type, --allowlist-var
+    echo "allowlist=$allowlist"
 
     local expandpath=bl602-sdk/src/$modname_$submodname.rs
     # Previously src/$modname/$submodname.rs
@@ -165,7 +165,7 @@ function generate_bindings() {
         --with-derive-default \
         --no-derive-debug \
         --no-layout-tests \
-        $whitelist \
+        $allowlist \
         -o $tmpexpandpath \
         $headerfile \
         -- \
@@ -202,7 +202,7 @@ function generate_bindings() {
 }
 
 function generate_bindings_core() {
-    #  Add whitelist and blacklist
+    #  Add allowlist and blocklist
     local modname=MODNAME
     local submodname=$1  # Submodule name e.g. gpio
     if [ "$submodname" == 'style' ]; then
@@ -218,45 +218,45 @@ function generate_bindings_core() {
         # TODO: local headerfile=$headerprefix/src/lv_$modname/lv_$submodname.h
         local headerfile=../bl_iot_sdk/components/hal_drv/bl602_hal/bl_$submodname.h
     fi
-    local whitelistname=$submodname # e.g. gpio, i2c
+    local allowlistname=$submodname # e.g. gpio, i2c
     # Previously lv_$submodname
     if [ "$submodname" == 'obj' ]; then
         # TODO: For lv_obj.c, include the core constants and the core types
-        local whitelisttypes=`cat << EOF
-        --whitelist-var      LV_ALIGN_.* \
-        --whitelist-type     lv_.*
+        local allowlisttypes=`cat << EOF
+        --allowlist-var      LV_ALIGN_.* \
+        --allowlist-type     lv_.*
 EOF
 `
-        local blacklist=
+        local blocklist=
     else
         # TODO: For files other than lv_obj.c, exclude the core types.
         # lv_indev_drv_* functions should be defined under lv_hal. 
-        local whitelisttypes=
-        local blacklist=`cat << EOF
-            --blacklist-item     _lv_.* \
-            --blacklist-item     lv_.*_t \
-            --blacklist-item     lv_indev_drv_init \
-            --blacklist-item     lv_indev_get_next
+        local allowlisttypes=
+        local blocklist=`cat << EOF
+            --blocklist-item     _lv_.* \
+            --blocklist-item     lv_.*_t \
+            --blocklist-item     lv_indev_drv_init \
+            --blocklist-item     lv_indev_get_next
 EOF
 `
     fi
-    # For submodname=i2c or gpio, whitelist i2c* and bl_gpio*
-    local whitelist=`cat << EOF
+    # For submodname=i2c or gpio, allowlist i2c* and bl_gpio*
+    local allowlist=`cat << EOF
         --raw-line use \
         --raw-line super::*; \
-        --whitelist-function (?i)${whitelistname}.* \
-        --whitelist-type     (?i)${whitelistname}.* \
-        --whitelist-var      (?i)${whitelistname}.* \
-        --whitelist-function (?i)bl_${whitelistname}.* \
-        --whitelist-type     (?i)bl_${whitelistname}.* \
-        --whitelist-var      (?i)bl_${whitelistname}.* \
-        ${whitelisttypes} \
-        --blacklist-item     lv_obj_get_style_value_str \
-        ${blacklist}
+        --allowlist-function (?i)${allowlistname}.* \
+        --allowlist-type     (?i)${allowlistname}.* \
+        --allowlist-var      (?i)${allowlistname}.* \
+        --allowlist-function (?i)bl_${allowlistname}.* \
+        --allowlist-type     (?i)bl_${allowlistname}.* \
+        --allowlist-var      (?i)bl_${allowlistname}.* \
+        ${allowlisttypes} \
+        --blocklist-item     lv_obj_get_style_value_str \
+        ${blocklist}
 EOF
 `    
-    #  TODO: Generate the bindings for lv_core/lv_obj: libname, modname, submodname, headerfile, whitelist
-    generate_bindings $libname $modname $submodname $headerfile $whitelist
+    #  TODO: Generate the bindings for lv_core/lv_obj: libname, modname, submodname, headerfile, allowlist
+    generate_bindings $libname $modname $submodname $headerfile $allowlist
 
     #  TODO: Delete the combined lv_style.h and lv_obj_style_dec.h
     if [ "$submodname" == 'style' ]; then
