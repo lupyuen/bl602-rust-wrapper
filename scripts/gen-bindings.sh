@@ -208,20 +208,20 @@ function generate_bindings_core() {
     #  Add allowlist and blocklist
     local modname=$1     # Module name: bl or hal
     local submodname=$2  # Submodule name e.g. gpio
-    if [ "$submodname" == 'style' ]; then
-        #  TODO: Combine lv_style.h, lv_obj.h and lv_obj_style_dec.h for processing, because lv_obj_style_dec.h contains macros that define functions like "lv_style_set_text_font"
-        local headerfile=$headerprefix/src/lv_$modname/combined.h
+    if [ "$submodname" == 'spi' ]; then
+        #  For SPI, combine the header files for processing
+        local headerfile=/tmp/gen-bindings-${submodname}.h
+        echo "#include <stdint.h>" >$headerfile
         cat \
-            $headerprefix/src/lv_$modname/lv_style.h \
-            $headerprefix/src/lv_$modname/lv_obj.h \
-            $headerprefix/src/lv_$modname/lv_obj_style_dec.h \
-            >$headerfile
+            ../bl_iot_sdk/components/fs/vfs/include/hal/soc/spi.h \
+            ../bl_iot_sdk/components/hal_drv/bl602_hal/hal_spi.h \
+            >>$headerfile
     else
-        # components/hal_drv/bl602_hal/bl_gpio.h
+        #  Header file e.g. components/hal_drv/bl602_hal/bl_gpio.h
         local headerfile=../bl_iot_sdk/components/hal_drv/bl602_hal/${modname}_${submodname}.h
     fi
-    local allowlistname=$submodname # e.g. gpio, i2c
-    # Previously lv_$submodname
+    #  Define allowlist by submodule e.g. gpio, i2c
+    local allowlistname=$submodname
     if [ "$submodname" == 'obj' ]; then
         # TODO: For lv_obj.c, include the core constants and the core types
         local allowlisttypes=`cat << EOF
@@ -281,8 +281,7 @@ generate_bindings_core bl pwm
 #  Generate bindings for SPI
 #  components/hal_drv/bl602_hal/hal_spi.h
 #  components/fs/vfs/include/hal/soc/spi.h
-#  generate_bindings_core hal spi
-#  generate_bindings_fs spi
+generate_bindings_core hal spi
 
 #  Expand the safe wrapper macros
 ##cargo rustc -- -Z unstable-options --pretty expanded >logs/expanded.rs

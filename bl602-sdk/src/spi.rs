@@ -23,7 +23,7 @@ impl Default for spi_dev_t {
         unsafe { ::core::mem::zeroed() }
     }
 }
-extern "C" {
+#[safe_wrap(_)] extern "C" {
     pub fn spi_init(
         spi: *mut spi_dev_t,
         port: u8,
