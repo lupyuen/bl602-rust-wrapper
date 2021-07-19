@@ -9,11 +9,14 @@ rust_build_options=" \
     -Z build-std=core \
 "
 
+#  Build the macros
 pushd bl602-macros
 cargo build
 popd
 
 pushd bl602-sdk
+
+#  Expand the safe wrapper macros
 cargo rustc \
     $rust_build_options \
     -- \
@@ -21,6 +24,12 @@ cargo rustc \
     --pretty expanded \
     > ../logs/sdk-expanded.rs
 
+#  Build the wrappers
 cargo build \
     $rust_build_options
+
+#  Generate the docs for inspection
+cargo doc \
+    $rust_build_options
+
 popd

@@ -286,15 +286,6 @@ generate_bindings_core bl pwm
 #  components/fs/vfs/include/hal/soc/spi.h
 generate_bindings_core hal spi
 
-#  Expand the safe wrapper macros
-##cargo rustc -- -Z unstable-options --pretty expanded >logs/expanded.rs
-
-#  Build the bindings
-##cargo build
-
-#  Generate the doc for inspection
-##cargo doc
-
 exit
 
 → bindgen --help
