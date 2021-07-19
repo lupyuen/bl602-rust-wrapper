@@ -19,6 +19,7 @@ pub mod i2c {
 
 
 
+
     //  Import the Rust Core Library
     //  For `PanicInfo` type used by `panic` function
     //  For converting `str` to `String`
@@ -6003,6 +6004,74 @@ pub mod pwm {
             "----------Result----------";
             Ok(res)
         }
+    }
+}
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub mod spi {
+    use super::*;
+    pub type __uint8_t = ::cty::c_uchar;
+    pub type __uint32_t = ::cty::c_uint;
+    #[repr(C)]
+    pub struct spi_config_t {
+        pub mode: u8,
+        pub freq: u32,
+    }
+    #[automatically_derived]
+    #[allow(unused_qualifications)]
+    impl ::core::default::Default for spi_config_t {
+        #[inline]
+        fn default() -> spi_config_t {
+            spi_config_t{mode: ::core::default::Default::default(),
+                         freq: ::core::default::Default::default(),}
+        }
+    }
+    #[automatically_derived]
+    #[allow(unused_qualifications)]
+    impl ::core::marker::Copy for spi_config_t { }
+    #[automatically_derived]
+    #[allow(unused_qualifications)]
+    impl ::core::clone::Clone for spi_config_t {
+        #[inline]
+        fn clone(&self) -> spi_config_t {
+            {
+                let _: ::core::clone::AssertParamIsClone<u8>;
+                let _: ::core::clone::AssertParamIsClone<u32>;
+                *self
+            }
+        }
+    }
+    #[repr(C)]
+    pub struct spi_dev_t {
+        pub port: u8,
+        pub config: spi_config_t,
+        pub priv_: *mut ::cty::c_void,
+    }
+    #[automatically_derived]
+    #[allow(unused_qualifications)]
+    impl ::core::marker::Copy for spi_dev_t { }
+    #[automatically_derived]
+    #[allow(unused_qualifications)]
+    impl ::core::clone::Clone for spi_dev_t {
+        #[inline]
+        fn clone(&self) -> spi_dev_t {
+            {
+                let _: ::core::clone::AssertParamIsClone<u8>;
+                let _: ::core::clone::AssertParamIsClone<spi_config_t>;
+                let _: ::core::clone::AssertParamIsClone<*mut ::cty::c_void>;
+                *self
+            }
+        }
+    }
+    impl Default for spi_dev_t {
+        fn default() -> Self { unsafe { ::core::mem::zeroed() } }
+    }
+    extern "C" {
+        pub fn spi_init(spi: *mut spi_dev_t, port: u8, mode: u8,
+                        polar_phase: u8, freq: u32, tx_dma_ch: u8,
+                        rx_dma_ch: u8, pin_clk: u8, pin_cs: u8, pin_mosi: u8,
+                        pin_miso: u8)
+        -> ::cty::c_int;
     }
 }
 use core::{panic::PanicInfo, str::FromStr};
