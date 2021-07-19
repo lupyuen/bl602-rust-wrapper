@@ -22,6 +22,11 @@ pub mod pwm;
 #[allow(non_snake_case)]
 pub mod spi;
 
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+#[allow(non_upper_case_globals)]
+pub mod uart;
+
 //  Import the Rust Core Library
 use core::{
     panic::PanicInfo,  //  For `PanicInfo` type used by `panic` function

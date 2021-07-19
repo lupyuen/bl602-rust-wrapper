@@ -33,3 +33,6 @@ cargo doc \
     $rust_build_options
 
 popd
+
+#  Copy the docs
+cp -r target/riscv32imacf-unknown-none-elf/doc/app docs

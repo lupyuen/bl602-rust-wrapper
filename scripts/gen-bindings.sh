@@ -198,7 +198,7 @@ function generate_bindings() {
         | sed 's/@note/__Note:__/' \
         | sed 's/\(pub const LV_ALIGN_[^ ][^ ]*\): _[^ ]* /\1: lv_align_t /' \
         >$expandpath
-    ####rm $tmpexpandpath
+    rm $tmpexpandpath
 }
 
 #  Generate bindings for BL602 HAL e.g.
@@ -285,6 +285,10 @@ generate_bindings_core bl pwm
 #  components/hal_drv/bl602_hal/hal_spi.h
 #  components/fs/vfs/include/hal/soc/spi.h
 generate_bindings_core hal spi
+
+#  Generate bindings for UART
+#  components/hal_drv/bl602_hal/bl_uart.h
+generate_bindings_core bl uart
 
 exit
 
