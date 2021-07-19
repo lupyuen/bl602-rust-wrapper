@@ -112,6 +112,7 @@ pub mod i2c {
 
 
     //  TODO
+
     use super::*;
     pub const I2C_M_READ: u32 = 1;
     pub const I2C_M_WRITE: u32 = 0;
@@ -6265,10 +6266,23 @@ pub mod spi {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
-    extern "C" {
-        pub fn hal_spi_transfer(spi_dev: *mut spi_dev_t,
-                                xfer: *mut ::cty::c_void, size: u8)
-        -> ::cty::c_int;
+    pub fn spi_transfer(spi_dev: *mut spi_dev_t, xfer: Ptr, size: u8)
+     -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn hal_spi_transfer(spi_dev: *mut spi_dev_t,
+                                    xfer: *mut ::cty::c_void, size: u8)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res =
+                hal_spi_transfer(spi_dev as *mut spi_dev_t,
+                                 xfer as *mut ::cty::c_void, size as u8);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
     extern "C" {
         pub fn spi_init(spi: *mut spi_dev_t, port: u8, mode: u8,
@@ -6390,3 +6404,5 @@ pub mod result {
         }
     }
 }
+///  Declare a `void *` pointer that will be passed to C functions
+pub type Ptr = *mut ::cty::c_void;

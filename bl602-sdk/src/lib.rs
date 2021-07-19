@@ -205,3 +205,6 @@ pub mod result {
         }
     }
 }
+
+///  Declare a `void *` pointer that will be passed to C functions
+pub type Ptr = *mut ::cty::c_void;

@@ -42,7 +42,6 @@ fn function_is_allowlisted(fname: &str) -> bool {
     //  Match allowlisted and blocklisted functions by name
     match fname {
         "hal_spi_init" => false,
-        "hal_spi_transfer" => false,  //  TODO
         _ => { 
             //  Functions starting with `bl_`, `hal_` and `i2c_` are allowlisted.
             if fname.starts_with("bl_")
