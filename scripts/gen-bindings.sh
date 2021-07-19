@@ -175,8 +175,8 @@ function generate_bindings() {
 
     # Change extern "C"
     # to     #[safe_wrap(_)] extern "C"
-    # Change #[doc = " @param dev The device to open"]
-    # to     #[doc = " - __`dev`__: The device to open"]
+    # Change #[doc = " @param[in]  spi      the spi device"]
+    # to     #[doc = " - __`spi`__: (in) the spi device"]
     # Change @return to Return
     # Change @code{.c} to ```c
     # Change @code{...} to ```
@@ -190,7 +190,7 @@ function generate_bindings() {
     # to     pub const LV_LABEL_LONG_BREAK: lv_label_long_mode_t = 1;
     cat $tmpexpandpath \
         | sed 's/^extern "C" /#[safe_wrap(_)] extern "C" /' \
-        | sed 's/@param \([^ ][^ ]*\) /- __`\1`__: /' \
+        | sed 's/@param\[\(.*\)\][ ][ ]*\([^ ][^ ]*\) /- __`\2`__: \(\1\) /' \
         | sed 's/@return /Return: /' \
         | sed 's/@code{.c}/```c/' \
         | sed 's/@code/```/' \

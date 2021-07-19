@@ -6074,7 +6074,7 @@ pub mod spi {
     extern "C" {
         #[doc = " Initialises the SPI interface for a given SPI device"]
         #[doc = ""]
-        #[doc = " @param[in]  spi  the spi device"]
+        #[doc = " - __`spi`__: (in)  the spi device"]
         #[doc = ""]
         #[doc =
           " Return:  0 : on success, EIO : if the SPI device could not be initialised"]
@@ -6083,11 +6083,11 @@ pub mod spi {
     }
     #[doc = " Spi send"]
     #[doc = ""]
-    #[doc = " @param[in]  spi      the spi device"]
-    #[doc = " @param[in]  data     spi send data"]
-    #[doc = " @param[in]  size     spi send data size"]
+    #[doc = " - __`spi`__: (in)      the spi device"]
+    #[doc = " - __`data`__: (in)     spi send data"]
+    #[doc = " - __`size`__: (in)     spi send data size"]
     #[doc =
-      " @param[in]  timeout  timeout in milisecond, set this value to HAL_WAIT_FOREVER"]
+      " - __`timeout`__: (in)  timeout in milisecond, set this value to HAL_WAIT_FOREVER"]
     #[doc = "                      if you want to wait forever"]
     #[doc = ""]
     #[doc =
@@ -6098,11 +6098,11 @@ pub mod spi {
         extern "C" {
             #[doc = " Spi send"]
             #[doc = ""]
-            #[doc = " @param[in]  spi      the spi device"]
-            #[doc = " @param[in]  data     spi send data"]
-            #[doc = " @param[in]  size     spi send data size"]
+            #[doc = " - __`spi`__: (in)      the spi device"]
+            #[doc = " - __`data`__: (in)     spi send data"]
+            #[doc = " - __`size`__: (in)     spi send data size"]
             #[doc =
-              " @param[in]  timeout  timeout in milisecond, set this value to HAL_WAIT_FOREVER"]
+              " - __`timeout`__: (in)  timeout in milisecond, set this value to HAL_WAIT_FOREVER"]
             #[doc = "                      if you want to wait forever"]
             #[doc = ""]
             #[doc =
@@ -6123,11 +6123,11 @@ pub mod spi {
     }
     #[doc = " spi_recv"]
     #[doc = ""]
-    #[doc = " @param[in]   spi      the spi device"]
-    #[doc = " @param[out]  data     spi recv data"]
-    #[doc = " @param[in]   size     spi recv data size"]
+    #[doc = " - __`spi`__: (in)      the spi device"]
+    #[doc = " - __`data`__: (out)     spi recv data"]
+    #[doc = " - __`size`__: (in)     spi recv data size"]
     #[doc =
-      " @param[in]  timeout   timeout in milisecond, set this value to HAL_WAIT_FOREVER"]
+      " - __`timeout`__: (in)   timeout in milisecond, set this value to HAL_WAIT_FOREVER"]
     #[doc = "                       if you want to wait forever"]
     #[doc = ""]
     #[doc =
@@ -6138,11 +6138,11 @@ pub mod spi {
         extern "C" {
             #[doc = " spi_recv"]
             #[doc = ""]
-            #[doc = " @param[in]   spi      the spi device"]
-            #[doc = " @param[out]  data     spi recv data"]
-            #[doc = " @param[in]   size     spi recv data size"]
+            #[doc = " - __`spi`__: (in)      the spi device"]
+            #[doc = " - __`data`__: (out)     spi recv data"]
+            #[doc = " - __`size`__: (in)     spi recv data size"]
             #[doc =
-              " @param[in]  timeout   timeout in milisecond, set this value to HAL_WAIT_FOREVER"]
+              " - __`timeout`__: (in)   timeout in milisecond, set this value to HAL_WAIT_FOREVER"]
             #[doc = "                       if you want to wait forever"]
             #[doc = ""]
             #[doc =
@@ -6163,12 +6163,12 @@ pub mod spi {
     }
     #[doc = " spi send data and recv"]
     #[doc = ""]
-    #[doc = " @param[in]  spi      the spi device"]
-    #[doc = " @param[in]  tx_data  spi send data"]
-    #[doc = " @param[in]  rx_data  spi recv data"]
-    #[doc = " @param[in]  size     spi data to be sent and recived"]
+    #[doc = " - __`spi`__: (in)      the spi device"]
+    #[doc = " - __`tx_data`__: (in)  spi send data"]
+    #[doc = " - __`rx_data`__: (in)  spi recv data"]
+    #[doc = " - __`size`__: (in)     spi data to be sent and recived"]
     #[doc =
-      " @param[in]  timeout  timeout in milisecond, set this value to HAL_WAIT_FOREVER"]
+      " - __`timeout`__: (in)  timeout in milisecond, set this value to HAL_WAIT_FOREVER"]
     #[doc = "                      if you want to wait forever"]
     #[doc = ""]
     #[doc =
@@ -6180,12 +6180,12 @@ pub mod spi {
         extern "C" {
             #[doc = " spi send data and recv"]
             #[doc = ""]
-            #[doc = " @param[in]  spi      the spi device"]
-            #[doc = " @param[in]  tx_data  spi send data"]
-            #[doc = " @param[in]  rx_data  spi recv data"]
-            #[doc = " @param[in]  size     spi data to be sent and recived"]
+            #[doc = " - __`spi`__: (in)      the spi device"]
+            #[doc = " - __`tx_data`__: (in)  spi send data"]
+            #[doc = " - __`rx_data`__: (in)  spi recv data"]
+            #[doc = " - __`size`__: (in)     spi data to be sent and recived"]
             #[doc =
-              " @param[in]  timeout  timeout in milisecond, set this value to HAL_WAIT_FOREVER"]
+              " - __`timeout`__: (in)  timeout in milisecond, set this value to HAL_WAIT_FOREVER"]
             #[doc = "                      if you want to wait forever"]
             #[doc = ""]
             #[doc =
@@ -6209,7 +6209,7 @@ pub mod spi {
     #[doc = " De-initialises a SPI interface"]
     #[doc = ""]
     #[doc = ""]
-    #[doc = " @param[in]  spi the SPI device to be de-initialised"]
+    #[doc = " - __`spi`__: (in) the SPI device to be de-initialised"]
     #[doc = ""]
     #[doc = " Return:  0 : on success, EIO : if an error occurred"]
     pub fn spi_finalize(spi: *mut spi_dev_t) -> BlResult<i32> {
@@ -6218,7 +6218,7 @@ pub mod spi {
             #[doc = " De-initialises a SPI interface"]
             #[doc = ""]
             #[doc = ""]
-            #[doc = " @param[in]  spi the SPI device to be de-initialised"]
+            #[doc = " - __`spi`__: (in) the SPI device to be de-initialised"]
             #[doc = ""]
             #[doc = " Return:  0 : on success, EIO : if an error occurred"]
             pub fn hal_spi_finalize(spi: *mut spi_dev_t)
