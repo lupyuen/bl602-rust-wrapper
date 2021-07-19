@@ -6,7 +6,7 @@ Read the article and Rust docs...
 
 -   [Rust Docs](https://lupyuen.github.io/bl602-rust-wrapper/)
 
-To install [`bindgen`](https://rust-lang.github.io/rust-bindgen/requirements.html)...
+Prerequisites: Install [`bindgen`](https://rust-lang.github.io/rust-bindgen/requirements.html) and `clang`...
 
 ```bash
 cargo install bindgen
@@ -114,13 +114,13 @@ Build the project with this script...
 ```text
 + export RUST_BACKTRACE=1
 + RUST_BACKTRACE=1
-+ rust_build_options='     --target riscv32imacf-unknown-none-elf.json     -Z build-std=core '       
++ rust_build_options='     --target riscv32imacf-unknown-none-elf.json     -Z build-std=core '
 + pushd bl602-macros
 /mnt/c/pinecone/bl602-rust-wrapper/bl602-macros /mnt/c/pinecone/bl602-rust-wrapper
 + cargo build
    Compiling proc-macro2 v1.0.27
-   Compiling unicode-xid v0.2.2
    Compiling memchr v2.4.0
+   Compiling unicode-xid v0.2.2
    Compiling syn v1.0.73
    Compiling cty v0.2.1
    Compiling rustc-serialize v0.3.24
@@ -128,12 +128,11 @@ Build the project with this script...
    Compiling cstr_core v0.2.4
    Compiling quote v1.0.9
    Compiling bl602-macros v2.0.0 (/mnt/c/pinecone/bl602-rust-wrapper/bl602-macros)
-    Finished dev [unoptimized + debuginfo] target(s) in 1m 17s
+    Finished dev [unoptimized + debuginfo] target(s) in 52.87s
 + popd
 /mnt/c/pinecone/bl602-rust-wrapper
 + pushd bl602-sdk
-/mnt/c/pinecone/bl602-rust-wrapper/bl602-sdk /mnt/c/pinecone/bl602-rust-wrapper
-+ cargo rustc --target riscv32imacf-unknown-none-elf.json -Z build-std=core -- -Z unstable-options --pretty expanded
+/mnt/c/pinecone/bl602-rust-wrapper/bl602-sdk /mnt/c/pinecone/bl602-rust-wrapper+ cargo rustc --target riscv32imacf-unknown-none-elf.json -Z build-std=core -- -Z unstable-options --pretty expanded
    Compiling compiler_builtins v0.1.47
    Compiling core v0.0.0 (/home/user/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core)
    Compiling typenum v1.13.0
@@ -141,18 +140,56 @@ Build the project with this script...
    Compiling heapless v0.6.1
    Compiling generic-array v0.14.4
    Compiling rustc-std-workspace-core v1.99.0 (/home/user/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/rustc-std-workspace-core)
-   Compiling stable_deref_trait v1.2.0
    Compiling byteorder v1.4.3
+   Compiling stable_deref_trait v1.2.0
    Compiling cty v0.2.1
    Compiling hash32 v0.1.1
    Compiling generic-array v0.13.3
    Compiling generic-array v0.12.4
    Compiling as-slice v0.1.5
    Compiling app v0.0.1 (/mnt/c/pinecone/bl602-rust-wrapper/bl602-sdk)
-    Finished dev [unoptimized + debuginfo] target(s) in 43.80s
+    Finished dev [unoptimized + debuginfo] target(s) in 35.17s
 + cargo build --target riscv32imacf-unknown-none-elf.json -Z build-std=core
    Compiling app v0.0.1 (/mnt/c/pinecone/bl602-rust-wrapper/bl602-sdk)
-    Finished dev [unoptimized + debuginfo] target(s) in 4.85s
+    Finished dev [unoptimized + debuginfo] target(s) in 3.36s
++ cargo doc --target riscv32imacf-unknown-none-elf.json -Z build-std=core
+    Checking unicode-xid v0.2.2
+ Documenting unicode-xid v0.2.2
+    Checking cty v0.2.1
+ Documenting cty v0.2.1
+    Checking lazy_static v1.4.0
+    Checking rustc-serialize v0.3.24
+ Documenting lazy_static v1.4.0
+ Documenting rustc-serialize v0.3.24
+    Checking memchr v2.4.0
+ Documenting memchr v2.4.0
+    Checking typenum v1.13.0
+    Checking stable_deref_trait v1.2.0
+    Checking byteorder v1.4.3
+ Documenting typenum v1.13.0
+ Documenting stable_deref_trait v1.2.0
+ Documenting byteorder v1.4.3
+    Checking proc-macro2 v1.0.27
+    Checking cstr_core v0.2.4
+ Documenting proc-macro2 v1.0.27
+    Checking hash32 v0.1.1
+ Documenting cstr_core v0.2.4
+    Checking generic-array v0.13.3
+    Checking generic-array v0.12.4
+    Checking generic-array v0.14.4
+ Documenting hash32 v0.1.1
+    Checking quote v1.0.9
+    Checking syn v1.0.73
+    Checking as-slice v0.1.5
+ Documenting quote v1.0.9
+    Checking heapless v0.6.1
+ Documenting syn v1.0.73
+ Documenting bl602-macros v2.0.0 (/mnt/c/pinecone/bl602-rust-wrapper/bl602-macros)
+ Documenting generic-array v0.14.4
+ Documenting as-slice v0.1.5
+ Documenting heapless v0.6.1
+ Documenting app v0.0.1 (/mnt/c/pinecone/bl602-rust-wrapper/bl602-sdk)
+    Finished dev [unoptimized + debuginfo] target(s) in 2m 07s
 + popd
 /mnt/c/pinecone/bl602-rust-wrapper
 ```
