@@ -6284,12 +6284,28 @@ pub mod spi {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
-    extern "C" {
-        pub fn spi_init(spi: *mut spi_dev_t, port: u8, mode: u8,
-                        polar_phase: u8, freq: u32, tx_dma_ch: u8,
-                        rx_dma_ch: u8, pin_clk: u8, pin_cs: u8, pin_mosi: u8,
-                        pin_miso: u8)
-        -> ::cty::c_int;
+    pub fn init(spi: *mut spi_dev_t, port: u8, mode: u8, polar_phase: u8,
+                freq: u32, tx_dma_ch: u8, rx_dma_ch: u8, pin_clk: u8,
+                pin_cs: u8, pin_mosi: u8, pin_miso: u8) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn spi_init(spi: *mut spi_dev_t, port: u8, mode: u8,
+                            polar_phase: u8, freq: u32, tx_dma_ch: u8,
+                            rx_dma_ch: u8, pin_clk: u8, pin_cs: u8,
+                            pin_mosi: u8, pin_miso: u8)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res =
+                spi_init(spi as *mut spi_dev_t, port as u8, mode as u8,
+                         polar_phase as u8, freq as u32, tx_dma_ch as u8,
+                         rx_dma_ch as u8, pin_clk as u8, pin_cs as u8,
+                         pin_mosi as u8, pin_miso as u8);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
 }
 use core::{panic::PanicInfo, str::FromStr};
