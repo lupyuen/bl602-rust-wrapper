@@ -3,7 +3,11 @@
 use
 super::*;
 
+pub const HAL_SPI_MODE_MASTER: u32 = 1;
+pub const HAL_SPI_MODE_SLAVE: u32 = 2;
 pub type __uint8_t = ::cty::c_uchar;
+pub type __uint16_t = ::cty::c_ushort;
+pub type __int32_t = ::cty::c_int;
 pub type __uint32_t = ::cty::c_uint;
 #[repr(C)]
 #[derive(Default, Copy, Clone)]
@@ -22,6 +26,79 @@ impl Default for spi_dev_t {
     fn default() -> Self {
         unsafe { ::core::mem::zeroed() }
     }
+}
+#[safe_wrap(_)] extern "C" {
+    #[doc = " Initialises the SPI interface for a given SPI device"]
+    #[doc = ""]
+    #[doc = " @param[in]  spi  the spi device"]
+    #[doc = ""]
+    #[doc = " Return:  0 : on success, EIO : if the SPI device could not be initialised"]
+    pub fn hal_spi_init(spi: *mut spi_dev_t) -> i32;
+}
+#[safe_wrap(_)] extern "C" {
+    #[doc = " Spi send"]
+    #[doc = ""]
+    #[doc = " @param[in]  spi      the spi device"]
+    #[doc = " @param[in]  data     spi send data"]
+    #[doc = " @param[in]  size     spi send data size"]
+    #[doc = " @param[in]  timeout  timeout in milisecond, set this value to HAL_WAIT_FOREVER"]
+    #[doc = "                      if you want to wait forever"]
+    #[doc = ""]
+    #[doc = " Return:  0 : on success, EIO : if the SPI device could not be initialised"]
+    pub fn hal_spi_send(spi: *mut spi_dev_t, data: *const u8, size: u16, timeout: u32) -> i32;
+}
+#[safe_wrap(_)] extern "C" {
+    #[doc = " spi_recv"]
+    #[doc = ""]
+    #[doc = " @param[in]   spi      the spi device"]
+    #[doc = " @param[out]  data     spi recv data"]
+    #[doc = " @param[in]   size     spi recv data size"]
+    #[doc = " @param[in]  timeout   timeout in milisecond, set this value to HAL_WAIT_FOREVER"]
+    #[doc = "                       if you want to wait forever"]
+    #[doc = ""]
+    #[doc = " Return:  0 : on success, EIO : if the SPI device could not be initialised"]
+    pub fn hal_spi_recv(spi: *mut spi_dev_t, data: *mut u8, size: u16, timeout: u32) -> i32;
+}
+#[safe_wrap(_)] extern "C" {
+    #[doc = " spi send data and recv"]
+    #[doc = ""]
+    #[doc = " @param[in]  spi      the spi device"]
+    #[doc = " @param[in]  tx_data  spi send data"]
+    #[doc = " @param[in]  rx_data  spi recv data"]
+    #[doc = " @param[in]  size     spi data to be sent and recived"]
+    #[doc = " @param[in]  timeout  timeout in milisecond, set this value to HAL_WAIT_FOREVER"]
+    #[doc = "                      if you want to wait forever"]
+    #[doc = ""]
+    #[doc = " Return:  0, on success;  EIO : if the SPI device could not be initialised"]
+    pub fn hal_spi_send_recv(
+        spi: *mut spi_dev_t,
+        tx_data: *mut u8,
+        rx_data: *mut u8,
+        size: u16,
+        timeout: u32,
+    ) -> i32;
+}
+#[safe_wrap(_)] extern "C" {
+    #[doc = " De-initialises a SPI interface"]
+    #[doc = ""]
+    #[doc = ""]
+    #[doc = " @param[in]  spi the SPI device to be de-initialised"]
+    #[doc = ""]
+    #[doc = " Return:  0 : on success, EIO : if an error occurred"]
+    pub fn hal_spi_finalize(spi: *mut spi_dev_t) -> i32;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn hal_spi_set_rwmode(spi_dev: *mut spi_dev_t, mode: ::cty::c_int) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn hal_spi_set_rwspeed(spi_dev: *mut spi_dev_t, speed: u32) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn hal_spi_transfer(
+        spi_dev: *mut spi_dev_t,
+        xfer: *mut ::cty::c_void,
+        size: u8,
+    ) -> ::cty::c_int;
 }
 #[safe_wrap(_)] extern "C" {
     pub fn spi_init(

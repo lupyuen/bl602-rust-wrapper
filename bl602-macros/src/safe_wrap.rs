@@ -39,17 +39,18 @@ use syn::{
 
 /// Given a function name like `bl_gpio_output_set`, return true if we should create the wrapper
 fn function_is_allowlisted(fname: &str) -> bool {
-    //  Functions starting with `bl_` are allowlisted.
-    if fname.starts_with("bl_") { return true; }
-
-    //  Functions starting with `i2c_` are allowlisted.
-    if fname.starts_with("i2c_") { return true; }
-
-    match fname {  //  If match found, then it's allowlisted.
-        //  TODO
-        "os_eventq_dflt_get" => { true }
-
-        _ => { false }  //  Else not allowlisted.
+    //  Match allowlisted and blocklisted functions by name
+    match fname {
+        "hal_spi_init" => false,
+        "hal_spi_transfer" => false,  //  TODO
+        _ => { 
+            //  Functions starting with `bl_`, `hal_` and `i2c_` are allowlisted.
+            if fname.starts_with("bl_")
+                || fname.starts_with("hal_")
+                || fname.starts_with("i2c_")    
+                { true }
+            else { false }
+        }
     }
 }
 

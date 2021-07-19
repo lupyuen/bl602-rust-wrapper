@@ -242,7 +242,7 @@ EOF
 EOF
 `
     fi
-    # For submodname=i2c or gpio, allowlist i2c* and bl_gpio*
+    # For submodname=i2c or gpio or spi, allowlist i2c*, bl_gpio* and hal_spi*
     local allowlist=`cat << EOF
         --raw-line use \
         --raw-line super::*; \
@@ -252,6 +252,9 @@ EOF
         --allowlist-function (?i)bl_${allowlistname}.* \
         --allowlist-type     (?i)bl_${allowlistname}.* \
         --allowlist-var      (?i)bl_${allowlistname}.* \
+        --allowlist-function (?i)hal_${allowlistname}.* \
+        --allowlist-type     (?i)hal_${allowlistname}.* \
+        --allowlist-var      (?i)hal_${allowlistname}.* \
         ${allowlisttypes} \
         --blocklist-item     lv_obj_get_style_value_str \
         ${blocklist}
