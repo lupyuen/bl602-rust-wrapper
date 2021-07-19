@@ -6,6 +6,8 @@ Read the article and Rust docs...
 
 -   [Rust Docs](https://lupyuen.github.io/bl602-rust-wrapper/)
 
+-   [Check this Twitter Thread for updates](https://twitter.com/MisterTechBlog/status/1416608940876435462)
+
 Prerequisites: Install [`bindgen`](https://rust-lang.github.io/rust-bindgen/requirements.html) and `clang`...
 
 ```bash
