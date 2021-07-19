@@ -1,0 +1,1 @@
+initSidebarItems({"constant":[["I2C_M_BLOCK",""],["I2C_M_NO_BLOCK",""],["I2C_M_READ",""],["I2C_M_WRITE",""]],"fn":[["clear_status",""],["gpio_init",""],["set_freq",""],["transfer_start",""]],"struct":[["i2c_msg",""]],"type":[["__uint16_t",""],["__uint32_t",""],["__uint8_t",""],["i2c_msg_t",""]]});

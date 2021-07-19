@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["BlError","Error codes for BL602 API"]],"type":[["BlResult","Common return type for BL602 API.  If no error, returns `Ok(val)` where val has type T. Upon error, returns `Err(err)` where err is the BlError error code."]]});

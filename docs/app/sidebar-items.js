@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["gpio",""],["i2c",""],["pwm",""],["result","Return type and error codes for BL602 API"],["spi",""]],"type":[["Ptr","Declare a `void *` pointer that will be passed to C functions"]]});
