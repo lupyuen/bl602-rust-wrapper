@@ -19,6 +19,7 @@ headerprefix=HEADERPREFIX
 
 #  TODO: Sync gcc options with make.log
 CCFLAGS=" -g \
+    -D __riscv_xlen=32 \
     -DconfigUSE_TICKLESS_IDLE=0 \
     -DFEATURE_WIFI_DISABLE=1 \
     -D BL_SDK_VER=\"0\" \
@@ -61,6 +62,7 @@ CCFLAGS=" -g \
     -I ../bl_iot_sdk/components/bl602/bl602_std/bl602_std/Common/xz \
     -I ../bl_iot_sdk/components/bl602/bl602_std/bl602_std/Common/cipher_suite/inc \
     -I ../bl_iot_sdk/components/bl602/bl602_std/bl602_std/Common/ring_buffer \
+    -I ../bl_iot_sdk/components/bl602/bl602_wifidrv/bl60x_wifi_driver \
     -I ../bl_iot_sdk/components/bl602/bl602 \
     -I ../bl_iot_sdk/components/bl602/bl602/include \
     -I ../bl_iot_sdk/components/stage/blfdt \
@@ -212,7 +214,16 @@ function generate_bindings_core() {
     #  Header file to be processed e.g. components/hal_drv/bl602_hal/bl_gpio.h
     local headerfile=../bl_iot_sdk/components/hal_drv/bl602_hal/${modname}_${submodname}.h
 
-    #  For SPI, combine the header files for processing
+    #  For ADC: Insert stdint into the header file
+    if [ "$submodname" == 'adc' ]; then
+        local headerfile=/tmp/gen-bindings-${submodname}.h
+        echo "#include <stdint.h>" >$headerfile
+        cat \
+            ../bl_iot_sdk/components/hal_drv/bl602_hal/bl_adc.h \
+            >>$headerfile
+    fi
+
+    #  For SPI: Combine the HAL and FS header files for processing
     if [ "$submodname" == 'spi' ]; then
         local headerfile=/tmp/gen-bindings-${submodname}.h
         echo "#include <stdint.h>" >$headerfile
@@ -222,12 +233,12 @@ function generate_bindings_core() {
             >>$headerfile
     fi
 
-    #  For ADC, insert stdint into the header file
-    if [ "$submodname" == 'adc' ]; then
+    #  For WiFi: Combine the HAL and WiFi Driver header files for processing
+    if [ "$submodname" == 'wifi' ]; then
         local headerfile=/tmp/gen-bindings-${submodname}.h
-        echo "#include <stdint.h>" >$headerfile
         cat \
-            ../bl_iot_sdk/components/hal_drv/bl602_hal/bl_adc.h \
+            ../bl_iot_sdk/components/hal_drv/bl602_hal/hal_wifi.h \
+            ../bl_iot_sdk/components/bl602/bl602_wifidrv/bl60x_wifi_driver/wifi_mgmr.h \
             >>$headerfile
     fi
 
@@ -296,7 +307,7 @@ generate_bindings_core bl i2c
 #  components/hal_drv/bl602_hal/bl_pwm.h
 generate_bindings_core bl pwm
 
-#  Generate bindings for SPI
+#  Generate bindings for SPI (HAL and FS)
 #  components/hal_drv/bl602_hal/hal_spi.h
 #  components/fs/vfs/include/hal/soc/spi.h
 generate_bindings_core hal spi
@@ -305,8 +316,7 @@ generate_bindings_core hal spi
 #  components/hal_drv/bl602_hal/bl_uart.h
 generate_bindings_core bl uart
 
-#  Generate bindings for WiFi
+#  Generate bindings for WiFi (HAL and WiFi Driver)
 #  components/hal_drv/bl602_hal/hal_wifi.h
 #  components/bl602/bl602_wifidrv/bl60x_wifi_driver/wifi_mgmr.h
-#  components/bl602/bl602_wifidrv/bl60x_wifi_driver/wifi_mgmr_ext.h
 generate_bindings_core hal wifi

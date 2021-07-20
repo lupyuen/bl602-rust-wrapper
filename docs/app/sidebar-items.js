@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["adc",""],["gpio",""],["i2c",""],["pwm",""],["result","Return type and error codes for BL602 API"],["spi",""],["uart",""]],"type":[["Ptr","Declare a `void *` pointer that will be passed to C functions"]]});
+initSidebarItems({"mod":[["adc",""],["gpio",""],["i2c",""],["pwm",""],["result","Return type and error codes for BL602 API"],["spi",""],["uart",""],["wifi",""]],"type":[["Ptr","Declare a `void *` pointer that will be passed to C functions"]]});

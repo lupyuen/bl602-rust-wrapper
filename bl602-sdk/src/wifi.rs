@@ -3,6 +3,1302 @@
 use
 super::*;
 
+#[repr(C)]
+#[derive(Copy, Clone, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub struct __BindgenBitfieldUnit<Storage> {
+    storage: Storage,
+}
+impl<Storage> __BindgenBitfieldUnit<Storage> {
+    #[inline]
+    pub const fn new(storage: Storage) -> Self {
+        Self { storage }
+    }
+}
+impl<Storage> __BindgenBitfieldUnit<Storage>
+where
+    Storage: AsRef<[u8]> + AsMut<[u8]>,
+{
+    #[inline]
+    pub fn get_bit(&self, index: usize) -> bool {
+        debug_assert!(index / 8 < self.storage.as_ref().len());
+        let byte_index = index / 8;
+        let byte = self.storage.as_ref()[byte_index];
+        let bit_index = if cfg!(target_endian = "big") {
+            7 - (index % 8)
+        } else {
+            index % 8
+        };
+        let mask = 1 << bit_index;
+        byte & mask == mask
+    }
+    #[inline]
+    pub fn set_bit(&mut self, index: usize, val: bool) {
+        debug_assert!(index / 8 < self.storage.as_ref().len());
+        let byte_index = index / 8;
+        let byte = &mut self.storage.as_mut()[byte_index];
+        let bit_index = if cfg!(target_endian = "big") {
+            7 - (index % 8)
+        } else {
+            index % 8
+        };
+        let mask = 1 << bit_index;
+        if val {
+            *byte |= mask;
+        } else {
+            *byte &= !mask;
+        }
+    }
+    #[inline]
+    pub fn get(&self, bit_offset: usize, bit_width: u8) -> u64 {
+        debug_assert!(bit_width <= 64);
+        debug_assert!(bit_offset / 8 < self.storage.as_ref().len());
+        debug_assert!((bit_offset + (bit_width as usize)) / 8 <= self.storage.as_ref().len());
+        let mut val = 0;
+        for i in 0..(bit_width as usize) {
+            if self.get_bit(i + bit_offset) {
+                let index = if cfg!(target_endian = "big") {
+                    bit_width as usize - 1 - i
+                } else {
+                    i
+                };
+                val |= 1 << index;
+            }
+        }
+        val
+    }
+    #[inline]
+    pub fn set(&mut self, bit_offset: usize, bit_width: u8, val: u64) {
+        debug_assert!(bit_width <= 64);
+        debug_assert!(bit_offset / 8 < self.storage.as_ref().len());
+        debug_assert!((bit_offset + (bit_width as usize)) / 8 <= self.storage.as_ref().len());
+        for i in 0..(bit_width as usize) {
+            let mask = 1 << i;
+            let val_bit_is_set = val & mask == mask;
+            let index = if cfg!(target_endian = "big") {
+                bit_width as usize - 1 - i
+            } else {
+                i
+            };
+            self.set_bit(index + bit_offset, val_bit_is_set);
+        }
+    }
+}
+#[repr(C)]
+#[derive(Default)]
+pub struct __IncompleteArrayField<T>(::core::marker::PhantomData<T>, [T; 0]);
+impl<T> __IncompleteArrayField<T> {
+    #[inline]
+    pub const fn new() -> Self {
+        __IncompleteArrayField(::core::marker::PhantomData, [])
+    }
+    #[inline]
+    pub fn as_ptr(&self) -> *const T {
+        self as *const _ as *const T
+    }
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut T {
+        self as *mut _ as *mut T
+    }
+    #[inline]
+    pub unsafe fn as_slice(&self, len: usize) -> &[T] {
+        ::core::slice::from_raw_parts(self.as_ptr(), len)
+    }
+    #[inline]
+    pub unsafe fn as_mut_slice(&mut self, len: usize) -> &mut [T] {
+        ::core::slice::from_raw_parts_mut(self.as_mut_ptr(), len)
+    }
+}
+impl<T> ::core::fmt::Debug for __IncompleteArrayField<T> {
+    fn fmt(&self, fmt: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+        fmt.write_str("__IncompleteArrayField")
+    }
+}
+pub const WIFI_MGMR_SCAN_ITEMS_MAX: u32 = 50;
+pub const WIFI_MGMR_PROFILES_MAX: u32 = 2;
+pub const WIFI_MGMR_MQ_MSG_SIZE: u32 = 224;
+pub const WIFI_MGMR_MQ_MSG_COUNT: u32 = 10;
+pub const WIFI_MGMR_CONNECT_IND_STAT_INFO_TYPE_IND_CONNECTION: u32 = 1;
+pub const WIFI_MGMR_CONNECT_IND_STAT_INFO_TYPE_IND_DISCONNECTION: u32 = 2;
+pub const WIFI_MGMR_PENDING_TASK_SCAN_BIT: u32 = 1;
+pub const WIFI_MGMR_FEATURES_SCAN_SAVE_HIDDEN_SSID: u32 = 1;
+pub const WIFI_MGMR_CONFIG_SCAN_ITEM_TIMEOUT: u32 = 15000;
+pub type size_t = ::cty::c_ulong;
+pub type __int8_t = ::cty::c_schar;
+pub type __uint8_t = ::cty::c_uchar;
+pub type __uint16_t = ::cty::c_ushort;
+pub type __int32_t = ::cty::c_int;
+pub type __uint32_t = ::cty::c_uint;
+pub type TaskFunction_t = ::core::option::Option<unsafe extern "C" fn(arg1: *mut ::cty::c_void)>;
+pub type UBaseType_t = u32;
+pub type TickType_t = u32;
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct xSTATIC_LIST_ITEM {
+    pub xDummy2: TickType_t,
+    pub pvDummy3: [*mut ::cty::c_void; 4usize],
+}
+impl Default for xSTATIC_LIST_ITEM {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+pub type StaticListItem_t = xSTATIC_LIST_ITEM;
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct xSTATIC_TIMER {
+    pub pvDummy1: *mut ::cty::c_void,
+    pub xDummy2: StaticListItem_t,
+    pub xDummy3: TickType_t,
+    pub pvDummy5: *mut ::cty::c_void,
+    pub pvDummy6: TaskFunction_t,
+    pub uxDummy7: UBaseType_t,
+    pub ucDummy8: u8,
+}
+impl Default for xSTATIC_TIMER {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+pub type StaticTimer_t = xSTATIC_TIMER;
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct xSTATIC_STREAM_BUFFER {
+    pub uxDummy1: [size_t; 4usize],
+    pub pvDummy2: [*mut ::cty::c_void; 3usize],
+    pub ucDummy3: u8,
+    pub uxDummy4: UBaseType_t,
+}
+impl Default for xSTATIC_STREAM_BUFFER {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+pub type StaticStreamBuffer_t = xSTATIC_STREAM_BUFFER;
+pub type StaticMessageBuffer_t = StaticStreamBuffer_t;
 #[safe_wrap(_)] extern "C" {
     pub fn hal_wifi_start_firmware_task() -> ::cty::c_int;
+}
+pub type u8_t = u8;
+pub type s8_t = i8;
+pub type u16_t = u16;
+pub type u32_t = u32;
+pub type err_t = s8_t;
+#[doc = " This is the aligned version of ip4_addr_t,"]
+#[doc = "used as local variable, on the stack, etc."]
+#[repr(C)]
+#[derive(Default, Copy, Clone)]
+pub struct ip4_addr {
+    pub addr: u32_t,
+}
+#[doc = " ip4_addr_t uses a struct for convenience only, so that the same defines can"]
+#[doc = " operate both on ip4_addr_t as well as on ip4_addr_p_t."]
+pub type ip4_addr_t = ip4_addr;
+pub type ip_addr_t = ip4_addr_t;
+#[doc = " Main packet buffer struct"]
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct pbuf {
+    #[doc = " next pbuf in singly linked pbuf chain"]
+    pub next: *mut pbuf,
+    #[doc = " pointer to the actual data in the buffer"]
+    pub payload: *mut ::cty::c_void,
+    #[doc = " total length of this buffer and all next buffers in chain"]
+    #[doc = " belonging to the same packet."]
+    #[doc = ""]
+    #[doc = " For non-queue packet chains this is the invariant:"]
+    #[doc = " p->tot_len == p->len + (p->next? p->next->tot_len: 0)"]
+    pub tot_len: u16_t,
+    #[doc = " length of this buffer"]
+    pub len: u16_t,
+    #[doc = " a bit field indicating pbuf type and allocation sources"]
+    #[doc = "(see PBUF_TYPE_FLAG_*, PBUF_ALLOC_FLAG_* and PBUF_TYPE_ALLOC_SRC_MASK)"]
+    pub type_internal: u8_t,
+    #[doc = " misc flags"]
+    pub flags: u8_t,
+    #[doc = " the reference count always equals the number of pointers"]
+    #[doc = " that refer to this pbuf. This can be pointers from an application,"]
+    #[doc = " the stack itself, or pbuf->next pointers from a chain."]
+    pub ref_: u8_t,
+    #[doc = " For incoming packets, this contains the input netif's index"]
+    pub if_idx: u8_t,
+}
+impl Default for pbuf {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[doc = " Delete a filter entry"]
+pub const netif_mac_filter_action_NETIF_DEL_MAC_FILTER: netif_mac_filter_action = 0;
+#[doc = " Add a filter entry"]
+pub const netif_mac_filter_action_NETIF_ADD_MAC_FILTER: netif_mac_filter_action = 1;
+#[doc = " MAC Filter Actions, these are passed to a netif's igmp_mac_filter or"]
+#[doc = " mld_mac_filter callback function."]
+pub type netif_mac_filter_action = ::cty::c_uint;
+#[doc = " Function prototype for netif->input functions. This function is saved as 'input'"]
+#[doc = " callback function in the netif struct. Call it when a packet has been received."]
+#[doc = ""]
+#[doc = " @param p The received packet, copied into a pbuf"]
+#[doc = " @param inp The netif which received the packet"]
+#[doc = " Return: ERR_OK if the packet was handled"]
+#[doc = "         != ERR_OK is the packet was NOT handled, in this case, the caller has"]
+#[doc = "                   to free the pbuf"]
+pub type netif_input_fn =
+    ::core::option::Option<unsafe extern "C" fn(p: *mut pbuf, inp: *mut netif) -> err_t>;
+#[doc = " Function prototype for netif->output functions. Called by lwIP when a packet"]
+#[doc = " shall be sent. For ethernet netif, set this to 'etharp_output' and set"]
+#[doc = " 'linkoutput'."]
+#[doc = ""]
+#[doc = " @param netif The netif which shall send a packet"]
+#[doc = " @param p The packet to send (p->payload points to IP header)"]
+#[doc = " @param ipaddr The IP address to which the packet shall be sent"]
+pub type netif_output_fn = ::core::option::Option<
+    unsafe extern "C" fn(netif: *mut netif, p: *mut pbuf, ipaddr: *const ip4_addr_t) -> err_t,
+>;
+#[doc = " Function prototype for netif->linkoutput functions. Only used for ethernet"]
+#[doc = " netifs. This function is called by ARP when a packet shall be sent."]
+#[doc = ""]
+#[doc = " @param netif The netif which shall send a packet"]
+#[doc = " @param p The packet to send (raw ethernet packet)"]
+pub type netif_linkoutput_fn =
+    ::core::option::Option<unsafe extern "C" fn(netif: *mut netif, p: *mut pbuf) -> err_t>;
+#[doc = " Function prototype for netif status- or link-callback functions."]
+pub type netif_status_callback_fn = ::core::option::Option<unsafe extern "C" fn(netif: *mut netif)>;
+#[doc = " Function prototype for netif igmp_mac_filter functions"]
+pub type netif_igmp_mac_filter_fn = ::core::option::Option<
+    unsafe extern "C" fn(
+        netif: *mut netif,
+        group: *const ip4_addr_t,
+        action: netif_mac_filter_action,
+    ) -> err_t,
+>;
+#[doc = " Generic data structure used for all lwIP network interfaces."]
+#[doc = "  The following fields should be filled in by the initialization"]
+#[doc = "  function for the device driver: hwaddr_len, hwaddr[], mtu, flags"]
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct netif {
+    #[doc = " pointer to next in linked list"]
+    pub next: *mut netif,
+    #[doc = " IP address configuration in network byte order"]
+    pub ip_addr: ip_addr_t,
+    pub netmask: ip_addr_t,
+    pub gw: ip_addr_t,
+    #[doc = " This function is called by the network device driver"]
+    #[doc = "  to pass a packet up the TCP/IP stack."]
+    pub input: netif_input_fn,
+    #[doc = " This function is called by the IP module when it wants"]
+    #[doc = "  to send a packet on the interface. This function typically"]
+    #[doc = "  first resolves the hardware address, then sends the packet."]
+    #[doc = "  For ethernet physical layer, this is usually etharp_output()"]
+    pub output: netif_output_fn,
+    #[doc = " This function is called by ethernet_output() when it wants"]
+    #[doc = "  to send a packet on the interface. This function outputs"]
+    #[doc = "  the pbuf as-is on the link medium."]
+    pub linkoutput: netif_linkoutput_fn,
+    #[doc = " This function is called when the netif state is set to up or down"]
+    pub status_callback: netif_status_callback_fn,
+    #[doc = " This function is called when the netif link is set to up or down"]
+    pub link_callback: netif_status_callback_fn,
+    #[doc = " This field can be set by the device driver and could point"]
+    #[doc = "  to state information for the device."]
+    pub state: *mut ::cty::c_void,
+    pub client_data: [*mut ::cty::c_void; 3usize],
+    pub hostname: *const ::cty::c_char,
+    #[doc = " maximum transfer unit (in bytes)"]
+    pub mtu: u16_t,
+    #[doc = " link level hardware address of this interface"]
+    pub hwaddr: [u8_t; 6usize],
+    #[doc = " number of bytes used in hwaddr"]
+    pub hwaddr_len: u8_t,
+    #[doc = " flags (@see @ref netif_flags)"]
+    pub flags: u8_t,
+    #[doc = " descriptive abbreviation"]
+    pub name: [::cty::c_char; 2usize],
+    #[doc = " number of this interface. Used for @ref if_api and @ref netifapi_netif,"]
+    #[doc = " as well as for IPv6 zones"]
+    pub num: u8_t,
+    #[doc = " Number of Router Solicitation messages that remain to be sent."]
+    pub rs_count: u8_t,
+    #[doc = " This function could be called to add or delete an entry in the multicast"]
+    #[doc = "filter table of the ethernet MAC."]
+    pub igmp_mac_filter: netif_igmp_mac_filter_fn,
+}
+impl Default for netif {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Default, Copy, Clone)]
+pub struct wifi_mgmr_ap_item {
+    pub ssid: [::cty::c_char; 32usize],
+    pub ssid_tail: [::cty::c_char; 1usize],
+    pub ssid_len: u32,
+    pub bssid: [u8; 6usize],
+    pub channel: u8,
+    pub auth: u8,
+    pub rssi: i8,
+}
+pub type wifi_mgmr_ap_item_t = wifi_mgmr_ap_item;
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct wifi_mgmr_sta_connect_ind_stat_info {
+    pub status_code: u16,
+    pub type_ind: u8,
+    pub ssid: [::cty::c_char; 32usize],
+    pub psk: [::cty::c_char; 65usize],
+    pub pmk: [::cty::c_char; 64usize],
+    pub bssid: [u8; 6usize],
+    pub chan_freq: u16,
+    pub chan_band: u8,
+}
+impl Default for wifi_mgmr_sta_connect_ind_stat_info {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+pub type wifi_mgmr_sta_connect_ind_stat_info_t = wifi_mgmr_sta_connect_ind_stat_info;
+#[repr(C)]
+#[derive(Default, Copy, Clone)]
+pub struct wifi_sta_basic_info {
+    pub sta_idx: u8,
+    pub is_used: u8,
+    pub sta_mac: [u8; 6usize],
+    pub tsfhi: u32,
+    pub tsflo: u32,
+    pub rssi: ::cty::c_int,
+    pub data_rate: u8,
+}
+pub type wifi_sta_basic_info_t = wifi_sta_basic_info;
+pub type wifi_interface_t = *mut ::cty::c_void;
+pub type sniffer_cb_t = ::core::option::Option<
+    unsafe extern "C" fn(env: *mut ::cty::c_void, pkt: *mut u8, len: ::cty::c_int),
+>;
+pub type scan_item_cb_t = ::core::option::Option<
+    unsafe extern "C" fn(
+        env: *mut wifi_mgmr_ap_item_t,
+        param1: *mut u32,
+        item: *mut wifi_mgmr_ap_item_t,
+    ),
+>;
+pub type scan_complete_cb_t = ::core::option::Option<
+    unsafe extern "C" fn(data: *mut ::cty::c_void, param: *mut ::cty::c_void),
+>;
+pub const WIFI_STATE_ENUM_LIST_WIFI_STATE_UNKNOWN: WIFI_STATE_ENUM_LIST = 0;
+pub const WIFI_STATE_ENUM_LIST_WIFI_STATE_IDLE: WIFI_STATE_ENUM_LIST = 1;
+pub const WIFI_STATE_ENUM_LIST_WIFI_STATE_CONNECTING: WIFI_STATE_ENUM_LIST = 2;
+pub const WIFI_STATE_ENUM_LIST_WIFI_STATE_CONNECTED_IP_GETTING: WIFI_STATE_ENUM_LIST = 3;
+pub const WIFI_STATE_ENUM_LIST_WIFI_STATE_CONNECTED_IP_GOT: WIFI_STATE_ENUM_LIST = 4;
+pub const WIFI_STATE_ENUM_LIST_WIFI_STATE_DISCONNECT: WIFI_STATE_ENUM_LIST = 5;
+pub const WIFI_STATE_ENUM_LIST_WIFI_STATE_WITH_AP_IDLE: WIFI_STATE_ENUM_LIST = 17;
+pub const WIFI_STATE_ENUM_LIST_WIFI_STATE_WITH_AP_CONNECTING: WIFI_STATE_ENUM_LIST = 18;
+pub const WIFI_STATE_ENUM_LIST_WIFI_STATE_WITH_AP_CONNECTED_IP_GETTING: WIFI_STATE_ENUM_LIST = 19;
+pub const WIFI_STATE_ENUM_LIST_WIFI_STATE_WITH_AP_CONNECTED_IP_GOT: WIFI_STATE_ENUM_LIST = 20;
+pub const WIFI_STATE_ENUM_LIST_WIFI_STATE_WITH_AP_DISCONNECT: WIFI_STATE_ENUM_LIST = 21;
+pub const WIFI_STATE_ENUM_LIST_WIFI_STATE_IFDOWN: WIFI_STATE_ENUM_LIST = 6;
+pub const WIFI_STATE_ENUM_LIST_WIFI_STATE_SNIFFER: WIFI_STATE_ENUM_LIST = 7;
+pub const WIFI_STATE_ENUM_LIST_WIFI_STATE_PSK_ERROR: WIFI_STATE_ENUM_LIST = 8;
+pub const WIFI_STATE_ENUM_LIST_WIFI_STATE_NO_AP_FOUND: WIFI_STATE_ENUM_LIST = 9;
+pub type WIFI_STATE_ENUM_LIST = ::cty::c_uint;
+pub const WIFI_SCAN_DONE_EVENT_TYPE_WIFI_SCAN_DONE_EVENT_OK: WIFI_SCAN_DONE_EVENT_TYPE = 0;
+pub const WIFI_SCAN_DONE_EVENT_TYPE_WIFI_SCAN_DONE_EVENT_BUSY: WIFI_SCAN_DONE_EVENT_TYPE = 1;
+pub type WIFI_SCAN_DONE_EVENT_TYPE = ::cty::c_uint;
+#[repr(C)]
+#[derive(Default, Copy, Clone)]
+pub struct wifi_conf {
+    pub country_code: [::cty::c_char; 3usize],
+    pub channel_nums: ::cty::c_int,
+}
+pub type wifi_conf_t = wifi_conf;
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_psk_cal(
+        password: *mut ::cty::c_char,
+        ssid: *mut ::cty::c_char,
+        ssid_len: ::cty::c_int,
+        output: *mut ::cty::c_char,
+    ) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_drv_init(conf: *mut wifi_conf_t) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_init() -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_start();
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_start_background(conf: *mut wifi_conf_t);
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_get_wifi_channel_conf(wifi_chan_conf: *mut wifi_conf_t);
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_sta_enable() -> wifi_interface_t;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_sta_disable(interface: *mut wifi_interface_t) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_sta_mac_set(mac: *mut u8) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_sta_mac_get(mac: *mut u8) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_sta_ip_get(ip: *mut u32, gw: *mut u32, mask: *mut u32) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_sta_ip_set(ip: u32, mask: u32, gw: u32, dns1: u32, dns2: u32) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_sta_dns_get(dns1: *mut u32, dns2: *mut u32) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_sta_ip_unset() -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_sta_connect(
+        wifi_interface: *mut wifi_interface_t,
+        ssid: *mut ::cty::c_char,
+        psk: *mut ::cty::c_char,
+        pmk: *mut ::cty::c_char,
+        mac: *mut u8,
+        band: u8,
+        freq: u16,
+    ) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_sta_disconnect() -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_sta_powersaving(ps: ::cty::c_int) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_sta_autoconnect_enable() -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_sta_autoconnect_disable() -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_sta_ssid_set(ssid: *mut ::cty::c_char);
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_sta_psk_set(psk: *mut ::cty::c_char);
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_sta_connect_ind_stat_get(
+        wifi_mgmr_ind_stat: *mut wifi_mgmr_sta_connect_ind_stat_info_t,
+    );
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_ap_enable() -> wifi_interface_t;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_ap_mac_set(mac: *mut u8) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_ap_mac_get(mac: *mut u8) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_ap_ip_get(ip: *mut u32, gw: *mut u32, mask: *mut u32) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_ap_stop(interface: *mut wifi_interface_t) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_ap_start(
+        interface: *mut wifi_interface_t,
+        ssid: *mut ::cty::c_char,
+        hidden_ssid: ::cty::c_int,
+        passwd: *mut ::cty::c_char,
+        channel: ::cty::c_int,
+    ) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_ap_sta_cnt_get(sta_cnt: *mut u8) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_ap_sta_info_get(sta_info: *mut wifi_sta_basic_info, idx: u8) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_ap_sta_delete(sta_idx: u8) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_ap_set_gateway(gateway: *mut ::cty::c_char) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_sniffer_enable() -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_sniffer_disable() -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_rate_config(config: u16) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_conf_max_sta(max_sta_supported: u8) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_sniffer_register(env: *mut ::cty::c_void, cb: sniffer_cb_t) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_sniffer_unregister(env: *mut ::cty::c_void) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_state_get(state: *mut ::cty::c_int) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_status_code_get(s_code: *mut ::cty::c_int) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_rssi_get(rssi: *mut ::cty::c_int) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_channel_get(channel: *mut ::cty::c_int) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_channel_set(channel: ::cty::c_int, use_40Mhz: ::cty::c_int) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_all_ap_scan(
+        ap_ary: *mut *mut wifi_mgmr_ap_item_t,
+        num: *mut u32,
+    ) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_scan_filter_hidden_ssid(filter: ::cty::c_int) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_scan(data: *mut ::cty::c_void, cb: scan_complete_cb_t) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_cfg_req(
+        ops: u32,
+        task: u32,
+        element: u32,
+        type_: u32,
+        length: u32,
+        buf: *mut u32,
+    ) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_scan_complete_callback() -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_cli_scanlist() -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_cli_init() -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_scan_ap(
+        ssid: *mut ::cty::c_char,
+        item: *mut wifi_mgmr_ap_item_t,
+    ) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_scan_ap_all(
+        env: *mut wifi_mgmr_ap_item_t,
+        param1: *mut u32,
+        cb: scan_item_cb_t,
+    ) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_raw_80211_send(pkt: *mut u8, len: ::cty::c_int) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_set_country_code(country_code: *mut ::cty::c_char) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_ext_dump_needed() -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_status_code_str(status_code: u16) -> *const ::cty::c_char;
+}
+#[doc = " \\brief Event"]
+#[doc = ""]
+#[doc = " Events trigger transitions from a state to another. Event types are defined"]
+#[doc = " by the user. Any event may optionally contain a \\ref #event::data"]
+#[doc = " \"payload\"."]
+#[doc = ""]
+#[doc = " \\sa state"]
+#[doc = " \\sa transition"]
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct event {
+    #[doc = " \\brief Type of event. Defined by user."]
+    pub type_: ::cty::c_int,
+    #[doc = " \\brief Event payload."]
+    #[doc = ""]
+    #[doc = " How this is used is entirely up to the user. This data"]
+    #[doc = " is always passed together with #type in order to make it possible to"]
+    #[doc = " always cast the data correctly."]
+    pub data: *mut ::cty::c_void,
+}
+impl Default for event {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[doc = " \\brief Transition between a state and another state"]
+#[doc = ""]
+#[doc = " All states that are not final must have at least one transition. The"]
+#[doc = " transition may be guarded or not. Transitions are triggered by events. If"]
+#[doc = " a state has more than one transition with the same type of event (and the"]
+#[doc = " same condition), the first transition in the array will be run. An"]
+#[doc = " unconditional transition placed last in the transition array of a state can"]
+#[doc = " act as a \"catch-all\". A transition may optionally run an #action, which"]
+#[doc = " will have the triggering event passed to it as an argument, along with the"]
+#[doc = " current and new states' \\ref state::data \"data\"."]
+#[doc = ""]
+#[doc = " It is perfectly valid for a transition to return to the state it belongs"]
+#[doc = " to. Such a transition will not call the state's \\ref state::entryAction"]
+#[doc = " \"entry action\" or \\ref state::exitAction \"exit action\". If there are no"]
+#[doc = " transitions for the current event, the state's parent will be handed the"]
+#[doc = " event."]
+#[doc = ""]
+#[doc = " ### Examples ###"]
+#[doc = " - An ungarded transition to a state with no action performed:"]
+#[doc = " ~~~{.c}"]
+#[doc = " {"]
+#[doc = "    .eventType = Event_timeout,"]
+#[doc = "    .condition = NULL,"]
+#[doc = "    .guard = NULL,"]
+#[doc = "    .action = NULL,"]
+#[doc = "    .nextState = &mainMenuState,"]
+#[doc = " },"]
+#[doc = " ~~~"]
+#[doc = " - A guarded transition executing an action"]
+#[doc = " ~~~{.c}"]
+#[doc = " {"]
+#[doc = "    .eventType = Event_keyboard,"]
+#[doc = "    .condition = NULL,"]
+#[doc = "    .guard = &ensureNumericInput,"]
+#[doc = "    .action = &addToBuffer,"]
+#[doc = "    .nextState = &awaitingInputState,"]
+#[doc = " },"]
+#[doc = " ~~~"]
+#[doc = " - A guarded transition using a condition"]
+#[doc = " ~~~{.c}"]
+#[doc = " {"]
+#[doc = "    .eventType = Event_mouse,"]
+#[doc = "    .condition = boxLimits,"]
+#[doc = "    .guard = &coordinatesWithinLimits,"]
+#[doc = " },"]
+#[doc = " ~~~"]
+#[doc = " By using \\ref #condition \"conditions\" a more general guard function can be"]
+#[doc = " used, operating on the supplied argument #condition. In this example,"]
+#[doc = " `coordinatesWithinLimits` checks whether the coordinates in the mouse event"]
+#[doc = " are within the limits of the \"box\"."]
+#[doc = ""]
+#[doc = " \\sa event"]
+#[doc = " \\sa state"]
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct transition {
+    #[doc = " \\brief The event that will trigger this transition."]
+    pub eventType: ::cty::c_int,
+    #[doc = " \\brief Condition that event must fulfil"]
+    #[doc = ""]
+    #[doc = " This variable will be passed to the #guard (if #guard is non-NULL) and"]
+    #[doc = " may be used as a condition that the incoming event's data must fulfil in"]
+    #[doc = " order for the transition to be performed. By using this variable, the"]
+    #[doc = " number of #guard functions can be minimised by making them more general."]
+    pub condition: *mut ::cty::c_void,
+    #[doc = " \\brief Check if data passed with event fulfils a condition"]
+    #[doc = ""]
+    #[doc = " A transition may be conditional. If so, this function, if non-NULL, will"]
+    #[doc = " be called. Its first argument will be supplied with #condition, which"]
+    #[doc = " can be compared against the \\ref event::data \"payload\" in the #event."]
+    #[doc = " The user may choose to use this argument or not. Only if the result is"]
+    #[doc = " true, the transition will take place."]
+    #[doc = ""]
+    #[doc = " \\param condition event (data) to compare the incoming event against."]
+    #[doc = " \\param event the event passed to the state machine."]
+    #[doc = ""]
+    #[doc = " \\returns true if the event's data fulfils the condition, otherwise false."]
+    pub guard: ::core::option::Option<
+        unsafe extern "C" fn(condition: *mut ::cty::c_void, event: *mut event) -> bool,
+    >,
+    #[doc = " \\brief Function containing tasks to be performed during the transition"]
+    #[doc = ""]
+    #[doc = " The transition may optionally do some work in this function before"]
+    #[doc = " entering the next state. May be NULL."]
+    #[doc = ""]
+    #[doc = " \\param currentStateData the leaving state's \\ref state::data \"data\""]
+    #[doc = " \\param event the event passed to the state machine."]
+    #[doc = " \\param newStateData the new state's (the \\ref state::entryState"]
+    #[doc = " \"entryState\" of any (chain of) parent states, not the parent state"]
+    #[doc = " itself) \\ref state::data \"data\""]
+    pub action: ::core::option::Option<
+        unsafe extern "C" fn(
+            currentStateData: *mut ::cty::c_void,
+            event: *mut event,
+            newStateData: *mut ::cty::c_void,
+        ),
+    >,
+    #[doc = " \\brief The next state"]
+    #[doc = ""]
+    #[doc = " This must point to the next state that will be entered. It cannot be"]
+    #[doc = " NULL. If it is, the state machine will detect it and enter the \\ref"]
+    #[doc = " stateMachine::errorState \"error state\"."]
+    pub nextState: *const state,
+}
+impl Default for transition {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[doc = " \\brief State"]
+#[doc = ""]
+#[doc = " The current state in a state machine moves to a new state when one of the"]
+#[doc = " #transitions in the current state triggers on an event. An optional \\ref"]
+#[doc = " #exitAction \"exit action\" is called when the state is left, and an \\ref"]
+#[doc = " #entryAction \"entry action\" is called when the state machine enters a new"]
+#[doc = " state. If a state returns to itself, neither #exitAction nor #entryAction"]
+#[doc = " will be called. An optional \\ref transition::action \"transition action\" is"]
+#[doc = " called in either case."]
+#[doc = ""]
+#[doc = " States may be organised in a hierarchy by setting \\ref #parentState"]
+#[doc = " \"parent states\". When a group/parent state is entered, the state machine is"]
+#[doc = " redirected to the group state's \\ref #entryState \"entry state\" (if"]
+#[doc = " non-NULL). If an event does not trigger a transition in a state and if the"]
+#[doc = " state has a parent state, the event will be passed to the parent state."]
+#[doc = " This behaviour is repeated for all parents. Thus all children of a state"]
+#[doc = " have a set of common #transitions. A parent state's #entryAction will not"]
+#[doc = " be called if an event is passed on to a child state."]
+#[doc = ""]
+#[doc = " The following lists the different types of states that may be created, and"]
+#[doc = " how to create them:"]
+#[doc = ""]
+#[doc = " ### Normal state ###"]
+#[doc = " ~~~{.c}"]
+#[doc = " struct state normalState = {"]
+#[doc = "    .parentState = &groupState,"]
+#[doc = "    .entryState = NULL,"]
+#[doc = "    .transition = (struct transition[]){"]
+#[doc = "       { Event_keyboard, (void *)(intptr_t)'\\n', &compareKeyboardChar,"]
+#[doc = "          NULL, &msgReceivedState },"]
+#[doc = "    },"]
+#[doc = "    .numTransitions = 1,"]
+#[doc = "    .data = normalStateData,"]
+#[doc = "    .entryAction = &doSomething,"]
+#[doc = "    .exitAction = &cleanUp,"]
+#[doc = " };"]
+#[doc = " ~~~"]
+#[doc = " In this example, `normalState` is a child of `groupState`, but the"]
+#[doc = " #parentState value may also be NULL to indicate that it is not a child of"]
+#[doc = " any group state."]
+#[doc = ""]
+#[doc = " ### Group/parent state ###"]
+#[doc = " A state becomes a group/parent state when it is linked to by child states"]
+#[doc = " by using #parentState. No members in the group state need to be set in a"]
+#[doc = " particular way. A parent state may also have a parent."]
+#[doc = " ~~~{.c}"]
+#[doc = " struct state groupState = {"]
+#[doc = "    .entryState = &normalState,"]
+#[doc = "    .entryAction = NULL,"]
+#[doc = " ~~~"]
+#[doc = " If there are any transitions in the state machine that lead to a group"]
+#[doc = " state, it makes sense to define an entry state in the group. This can be"]
+#[doc = " done by using #entryState, but it is not mandatory. If the #entryState"]
+#[doc = " state has children, the chain of children will be traversed until a child"]
+#[doc = " with its #entryState set to NULL is found."]
+#[doc = ""]
+#[doc = " \\note If #entryState is defined for a group state, the group state's"]
+#[doc = " #entryAction will not be called (the state pointed to by #entryState (after"]
+#[doc = " following the chain of children), however, will have its #entryAction"]
+#[doc = " called)."]
+#[doc = ""]
+#[doc = " \\warning The state machine cannot detect cycles in parent chains and"]
+#[doc = " children chains. If such cycles are present, stateM_handleEvent() will"]
+#[doc = " never finish due to never-ending loops."]
+#[doc = ""]
+#[doc = " ### Final state ###"]
+#[doc = " A final state is a state that terminates the state machine. A state is"]
+#[doc = " considered as a final state if its #numTransitions is 0:"]
+#[doc = " ~~~{.c}"]
+#[doc = " struct state finalState = {"]
+#[doc = "    .transitions = NULL,"]
+#[doc = "    .numTransitions = 0,"]
+#[doc = " ~~~"]
+#[doc = " The error state used by the state machine to indicate errors should be a"]
+#[doc = " final state. Any calls to stateM_handleEvent() when the current state is a"]
+#[doc = " final state will return #stateM_noStateChange."]
+#[doc = ""]
+#[doc = " \\sa event"]
+#[doc = " \\sa transition"]
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct state {
+    #[doc = " \\brief If the state has a parent state, this pointer must be non-NULL."]
+    pub parentState: *const state,
+    #[doc = " \\brief If this state is a parent state, this pointer may point to a"]
+    #[doc = " child state that serves as an entry point."]
+    pub entryState: *const state,
+    #[doc = " \\brief An array of transitions for the state."]
+    pub transitions: *mut transition,
+    #[doc = " \\brief Number of transitions in the #transitions array."]
+    pub numTransitions: size_t,
+    #[doc = " \\brief Data that will be available for the state in its #entryAction and"]
+    #[doc = " #exitAction, and in any \\ref transition::action \"transition action\""]
+    pub data: *mut ::cty::c_void,
+    #[doc = " \\brief This function is called whenever the state is being entered. May"]
+    #[doc = " be NULL."]
+    #[doc = ""]
+    #[doc = " \\note If a state returns to itself through a transition (either directly"]
+    #[doc = " or through a parent/group sate), its #entryAction will not be called."]
+    #[doc = ""]
+    #[doc = " \\note A group/parent state with its #entryState defined will not have"]
+    #[doc = " its #entryAction called."]
+    #[doc = ""]
+    #[doc = " \\param stateData the state's #data will be passed."]
+    #[doc = " \\param event the event that triggered the transition will be passed."]
+    pub entryAction: ::core::option::Option<
+        unsafe extern "C" fn(stateData: *mut ::cty::c_void, event: *mut event),
+    >,
+    #[doc = " \\brief This function is called whenever the state is being left. May be"]
+    #[doc = " NULL."]
+    #[doc = ""]
+    #[doc = " \\note If a state returns to itself through a transition (either directly"]
+    #[doc = " or through a parent/group sate), its #exitAction will not be called."]
+    #[doc = ""]
+    #[doc = " \\param stateData the state's #data will be passed."]
+    #[doc = " \\param event the event that triggered a transition will be passed."]
+    pub exitAction: ::core::option::Option<
+        unsafe extern "C" fn(stateData: *mut ::cty::c_void, event: *mut event),
+    >,
+}
+impl Default for state {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[doc = " \\brief State machine"]
+#[doc = ""]
+#[doc = " There is no need to manipulate the members directly."]
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct stateMachine {
+    #[doc = " \\brief Pointer to the current state"]
+    pub currentState: *const state,
+    #[doc = " \\brief Pointer to previous state"]
+    #[doc = ""]
+    #[doc = " The previous state is stored for convenience in case the user needs to"]
+    #[doc = " keep track of previous states."]
+    pub previousState: *const state,
+    #[doc = " \\brief Pointer to a state that will be entered whenever an error occurs"]
+    #[doc = " in the state machine."]
+    #[doc = ""]
+    #[doc = " See #stateM_errorStateReached for when the state machine enters the"]
+    #[doc = " error state."]
+    pub errorState: *const state,
+}
+impl Default for stateMachine {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+pub type os_messagequeue_t = StaticMessageBuffer_t;
+pub type os_timer_t = StaticTimer_t;
+pub const WIFI_MGMR_EVENT_WIFI_MGMR_EVENT_APP_IDLE: WIFI_MGMR_EVENT = 0;
+pub const WIFI_MGMR_EVENT_WIFI_MGMR_EVENT_APP_CONNECT: WIFI_MGMR_EVENT = 1;
+pub const WIFI_MGMR_EVENT_WIFI_MGMR_EVENT_APP_SNIFFER: WIFI_MGMR_EVENT = 2;
+pub const WIFI_MGMR_EVENT_WIFI_MGMR_EVENT_APP_CONNECTED: WIFI_MGMR_EVENT = 3;
+pub const WIFI_MGMR_EVENT_WIFI_MGMR_EVENT_APP_IP_GOT: WIFI_MGMR_EVENT = 4;
+pub const WIFI_MGMR_EVENT_WIFI_MGMR_EVENT_APP_DISCONNECT: WIFI_MGMR_EVENT = 5;
+pub const WIFI_MGMR_EVENT_WIFI_MGMR_EVENT_APP_RECONNECT: WIFI_MGMR_EVENT = 6;
+pub const WIFI_MGMR_EVENT_WIFI_MGMR_EVENT_APP_PHY_UP: WIFI_MGMR_EVENT = 7;
+pub const WIFI_MGMR_EVENT_WIFI_MGMR_EVENT_APP_AP_START: WIFI_MGMR_EVENT = 8;
+pub const WIFI_MGMR_EVENT_WIFI_MGMR_EVENT_APP_AP_STOP: WIFI_MGMR_EVENT = 9;
+pub const WIFI_MGMR_EVENT_WIFI_MGMR_EVENT_APP_CONF_MAX_STA: WIFI_MGMR_EVENT = 10;
+pub const WIFI_MGMR_EVENT_WIFI_MGMR_EVENT_APP_RC_CONFIG: WIFI_MGMR_EVENT = 11;
+pub const WIFI_MGMR_EVENT_WIFI_MGMR_EVENT_APP_DENOISE: WIFI_MGMR_EVENT = 12;
+pub const WIFI_MGMR_EVENT_WIFI_MGMR_EVENT_APP_RELOAD_TSEN: WIFI_MGMR_EVENT = 13;
+pub const WIFI_MGMR_EVENT_WIFI_MGMR_EVENT_MAXAPP_MINIFW: WIFI_MGMR_EVENT = 14;
+pub const WIFI_MGMR_EVENT_WIFI_MGMR_EVENT_FW_DISCONNECT: WIFI_MGMR_EVENT = 15;
+pub const WIFI_MGMR_EVENT_WIFI_MGMR_EVENT_FW_POWERSAVING: WIFI_MGMR_EVENT = 16;
+pub const WIFI_MGMR_EVENT_WIFI_MGMR_EVENT_FW_CHANNEL_SET: WIFI_MGMR_EVENT = 17;
+pub const WIFI_MGMR_EVENT_WIFI_MGMR_EVENT_FW_SCAN: WIFI_MGMR_EVENT = 18;
+pub const WIFI_MGMR_EVENT_WIFI_MGMR_EVENT_FW_IND_DISCONNECT: WIFI_MGMR_EVENT = 19;
+pub const WIFI_MGMR_EVENT_WIFI_MGMR_EVENT_FW_IND_CONNECTED: WIFI_MGMR_EVENT = 20;
+pub const WIFI_MGMR_EVENT_WIFI_MGMR_EVENT_FW_DATA_RAW_SEND: WIFI_MGMR_EVENT = 21;
+pub const WIFI_MGMR_EVENT_WIFI_MGMR_EVENT_FW_CFG_REQ: WIFI_MGMR_EVENT = 22;
+pub const WIFI_MGMR_EVENT_WIFI_MGMR_EVENT_MAXFW_MINI_GLOBAL: WIFI_MGMR_EVENT = 23;
+pub const WIFI_MGMR_EVENT_WIFI_MGMR_EVENT_GLB_SCAN_IND_BEACON: WIFI_MGMR_EVENT = 24;
+pub const WIFI_MGMR_EVENT_WIFI_MGMR_EVENT_GLB_SCAN_IND_PROBE_RESP: WIFI_MGMR_EVENT = 25;
+pub const WIFI_MGMR_EVENT_WIFI_MGMR_EVENT_GLB_AP_IND_STA_NEW: WIFI_MGMR_EVENT = 26;
+pub const WIFI_MGMR_EVENT_WIFI_MGMR_EVENT_GLB_AP_IND_STA_DEL: WIFI_MGMR_EVENT = 27;
+pub const WIFI_MGMR_EVENT_WIFI_MGMR_EVENT_GLB_DISABLE_AUTORECONNECT: WIFI_MGMR_EVENT = 28;
+pub const WIFI_MGMR_EVENT_WIFI_MGMR_EVENT_GLB_ENABLE_AUTORECONNECT: WIFI_MGMR_EVENT = 29;
+pub const WIFI_MGMR_EVENT_WIFI_MGMR_EVENT_GLB_IP_UPDATE: WIFI_MGMR_EVENT = 30;
+pub type WIFI_MGMR_EVENT = ::cty::c_uint;
+pub use self::WIFI_MGMR_EVENT as WIFI_MGMR_EVENT_T;
+pub const WIFI_MGMR_CONNECTION_STATUS_WIFI_MGMR_CONNECTION_STATUS_IDLE:
+    WIFI_MGMR_CONNECTION_STATUS = 0;
+pub const WIFI_MGMR_CONNECTION_STATUS_WIFI_MGMR_CONNECTION_STATUS_CONNECTING:
+    WIFI_MGMR_CONNECTION_STATUS = 1;
+pub const WIFI_MGMR_CONNECTION_STATUS_WIFI_MGMR_CONNECTION_STATUS_CONNECTED_IP_YES:
+    WIFI_MGMR_CONNECTION_STATUS = 2;
+pub const WIFI_MGMR_CONNECTION_STATUS_WIFI_MGMR_CONNECTION_STATUS_CONNECTED_IP_NO:
+    WIFI_MGMR_CONNECTION_STATUS = 3;
+pub const WIFI_MGMR_CONNECTION_STATUS_WIFI_MGMR_CONNECTION_STATUS_DISCONNECTED:
+    WIFI_MGMR_CONNECTION_STATUS = 4;
+pub type WIFI_MGMR_CONNECTION_STATUS = ::cty::c_uint;
+pub use self::WIFI_MGMR_CONNECTION_STATUS as WIFI_MGMR_CONNECTION_STATUS_T;
+#[repr(C, packed)]
+pub struct wifi_mgmr_msg {
+    pub ev: WIFI_MGMR_EVENT_T,
+    pub data1: *mut ::cty::c_void,
+    pub data2: *mut ::cty::c_void,
+    pub len: u32,
+    pub data: __IncompleteArrayField<u8>,
+}
+impl Default for wifi_mgmr_msg {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+pub type wifi_mgmr_msg_t = wifi_mgmr_msg;
+#[repr(C, packed)]
+#[derive(Default)]
+pub struct wifi_mgmr_cfg_element_msg {
+    pub ops: u32,
+    pub task: u32,
+    pub element: u32,
+    pub type_: u32,
+    pub length: u32,
+    pub buf: __IncompleteArrayField<u32>,
+}
+pub type wifi_mgmr_cfg_element_msg_t = wifi_mgmr_cfg_element_msg;
+#[repr(C, packed)]
+#[derive(Copy, Clone)]
+pub struct wifi_mgmr_profile_msg {
+    pub ssid: [::cty::c_char; 32usize],
+    pub ssid_tail: [::cty::c_char; 1usize],
+    pub ssid_len: u32,
+    pub psk: [::cty::c_char; 64usize],
+    pub psk_tail: [::cty::c_char; 1usize],
+    pub pmk: [::cty::c_char; 64usize],
+    pub pmk_tail: [::cty::c_char; 1usize],
+    pub psk_len: u32,
+    pub pmk_len: u32,
+    pub mac: [u8; 6usize],
+    pub band: u8,
+    pub freq: u16,
+    pub dhcp_use: u8,
+}
+impl Default for wifi_mgmr_profile_msg {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+pub type wifi_mgmr_profile_msg_t = wifi_mgmr_profile_msg;
+#[repr(C, packed)]
+#[derive(Default, Copy, Clone)]
+pub struct wifi_mgmr_ipgot_msg {
+    pub ip: u32,
+    pub mask: u32,
+    pub gw: u32,
+    pub dns1: u32,
+    pub dns2: u32,
+}
+pub type wifi_mgmr_ipgot_msg_t = wifi_mgmr_ipgot_msg;
+#[repr(C, packed)]
+#[derive(Copy, Clone)]
+pub struct wifi_mgmr_ap_msg {
+    pub channel: i32,
+    pub ssid: [::cty::c_char; 32usize],
+    pub ssid_tail: [::cty::c_char; 1usize],
+    pub hidden_ssid: u8,
+    pub ssid_len: u32,
+    pub psk: [::cty::c_char; 64usize],
+    pub psk_tail: [::cty::c_char; 1usize],
+    pub psk_len: u32,
+}
+impl Default for wifi_mgmr_ap_msg {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+pub type wifi_mgmr_ap_msg_t = wifi_mgmr_ap_msg;
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct wifi_mgmr_profile {
+    pub ssid: [::cty::c_char; 33usize],
+    pub no_autoconnect: u8,
+    pub ssid_len: u32,
+    pub psk: [::cty::c_char; 65usize],
+    pub psk_len: u32,
+    pub pmk: [::cty::c_char; 65usize],
+    pub pmk_len: u32,
+    pub mac: [u8; 6usize],
+    pub dhcp_use: u8,
+    pub priority: u8,
+    pub isActive: u8,
+    pub isUsed: u8,
+}
+impl Default for wifi_mgmr_profile {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+pub type wifi_mgmr_profile_t = wifi_mgmr_profile;
+#[repr(C, packed)]
+#[derive(Default, Copy, Clone)]
+pub struct wifi_mgmr_cipher_t {
+    pub _bitfield_align_1: [u8; 0],
+    pub _bitfield_1: __BindgenBitfieldUnit<[u8; 1usize]>,
+}
+impl wifi_mgmr_cipher_t {
+    #[inline]
+    pub fn wep40(&self) -> u8 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(0usize, 1u8) as u8) }
+    }
+    #[inline]
+    pub fn set_wep40(&mut self, val: u8) {
+        unsafe {
+            let val: u8 = ::core::mem::transmute(val);
+            self._bitfield_1.set(0usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn wep104(&self) -> u8 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(1usize, 1u8) as u8) }
+    }
+    #[inline]
+    pub fn set_wep104(&mut self, val: u8) {
+        unsafe {
+            let val: u8 = ::core::mem::transmute(val);
+            self._bitfield_1.set(1usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn tkip(&self) -> u8 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(2usize, 1u8) as u8) }
+    }
+    #[inline]
+    pub fn set_tkip(&mut self, val: u8) {
+        unsafe {
+            let val: u8 = ::core::mem::transmute(val);
+            self._bitfield_1.set(2usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn ccmp(&self) -> u8 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(3usize, 1u8) as u8) }
+    }
+    #[inline]
+    pub fn set_ccmp(&mut self, val: u8) {
+        unsafe {
+            let val: u8 = ::core::mem::transmute(val);
+            self._bitfield_1.set(3usize, 1u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn rsvd(&self) -> u8 {
+        unsafe { ::core::mem::transmute(self._bitfield_1.get(4usize, 4u8) as u8) }
+    }
+    #[inline]
+    pub fn set_rsvd(&mut self, val: u8) {
+        unsafe {
+            let val: u8 = ::core::mem::transmute(val);
+            self._bitfield_1.set(4usize, 4u8, val as u64)
+        }
+    }
+    #[inline]
+    pub fn new_bitfield_1(
+        wep40: u8,
+        wep104: u8,
+        tkip: u8,
+        ccmp: u8,
+        rsvd: u8,
+    ) -> __BindgenBitfieldUnit<[u8; 1usize]> {
+        let mut __bindgen_bitfield_unit: __BindgenBitfieldUnit<[u8; 1usize]> = Default::default();
+        __bindgen_bitfield_unit.set(0usize, 1u8, {
+            let wep40: u8 = unsafe { ::core::mem::transmute(wep40) };
+            wep40 as u64
+        });
+        __bindgen_bitfield_unit.set(1usize, 1u8, {
+            let wep104: u8 = unsafe { ::core::mem::transmute(wep104) };
+            wep104 as u64
+        });
+        __bindgen_bitfield_unit.set(2usize, 1u8, {
+            let tkip: u8 = unsafe { ::core::mem::transmute(tkip) };
+            tkip as u64
+        });
+        __bindgen_bitfield_unit.set(3usize, 1u8, {
+            let ccmp: u8 = unsafe { ::core::mem::transmute(ccmp) };
+            ccmp as u64
+        });
+        __bindgen_bitfield_unit.set(4usize, 4u8, {
+            let rsvd: u8 = unsafe { ::core::mem::transmute(rsvd) };
+            rsvd as u64
+        });
+        __bindgen_bitfield_unit
+    }
+}
+#[repr(C)]
+#[derive(Default, Copy, Clone)]
+pub struct wifi_mgmr_scan_item {
+    pub ssid: [::cty::c_char; 32usize],
+    pub ssid_tail: [::cty::c_char; 1usize],
+    pub ssid_len: u32,
+    pub bssid: [u8; 6usize],
+    pub channel: u8,
+    pub rssi: i8,
+    pub ppm_abs: i8,
+    pub ppm_rel: i8,
+    pub auth: u8,
+    pub cipher: u8,
+    pub is_used: u8,
+    pub timestamp_lastseen: u32,
+}
+pub type wifi_mgmr_scan_item_t = wifi_mgmr_scan_item;
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct wlan_netif {
+    pub mode: ::cty::c_int,
+    pub vif_index: u8,
+    pub mac: [u8; 6usize],
+    pub ipv4: wlan_netif__bindgen_ty_1,
+    pub netif: netif,
+    pub __bindgen_anon_1: wlan_netif__bindgen_ty_2,
+}
+#[repr(C)]
+#[derive(Default, Copy, Clone)]
+pub struct wlan_netif__bindgen_ty_1 {
+    pub ip: u32,
+    pub mask: u32,
+    pub gw: u32,
+    pub dns1: u32,
+    pub dns2: u32,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union wlan_netif__bindgen_ty_2 {
+    pub sta: wlan_netif__bindgen_ty_2__bindgen_ty_1,
+}
+#[repr(C)]
+#[derive(Default, Copy, Clone)]
+pub struct wlan_netif__bindgen_ty_2__bindgen_ty_1 {
+    pub rssi: i8,
+}
+impl Default for wlan_netif__bindgen_ty_2 {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+impl Default for wlan_netif {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct wifi_mgmr_connect_ind_stat_info {
+    pub status_code: u16,
+    pub type_ind: u8,
+    pub ssid: [::cty::c_char; 32usize],
+    pub psk: [::cty::c_char; 65usize],
+    pub bssid: [u8; 6usize],
+    pub chan_freq: u16,
+    pub chan_band: u8,
+}
+impl Default for wifi_mgmr_connect_ind_stat_info {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+pub type wifi_mgmr_connect_ind_stat_info_t = wifi_mgmr_connect_ind_stat_info;
+#[repr(C)]
+#[derive(Default, Copy, Clone)]
+pub struct wifi_mgmr_sta_basic_info {
+    pub sta_idx: u8,
+    pub is_used: u8,
+    pub sta_mac: [u8; 6usize],
+    pub tsfhi: u32,
+    pub tsflo: u32,
+    pub rssi: ::cty::c_int,
+    pub data_rate: u8,
+}
+pub type wifi_mgmr_sta_basic_info_t = wifi_mgmr_sta_basic_info;
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct wifi_mgmr {
+    pub ready: u8,
+    pub channel: ::cty::c_int,
+    pub inf_ap_enabled: ::cty::c_int,
+    pub wlan_sta: wlan_netif,
+    pub wlan_ap: wlan_netif,
+    pub status: WIFI_MGMR_CONNECTION_STATUS_T,
+    pub profiles: [wifi_mgmr_profile_t; 2usize],
+    pub profile_active_index: ::cty::c_int,
+    pub scan_items: [wifi_mgmr_scan_item_t; 50usize],
+    pub mq: os_messagequeue_t,
+    pub mq_pool: [u8; 2240usize],
+    pub m: stateMachine,
+    pub timer: os_timer_t,
+    pub wifi_mgmr_stat_info: wifi_mgmr_connect_ind_stat_info_t,
+    pub country_code: [::cty::c_char; 3usize],
+    pub disable_autoreconnect: u8,
+    pub channel_nums: ::cty::c_int,
+    pub pending_task: u32,
+    pub features: u32,
+    pub scan_item_timeout: ::cty::c_int,
+}
+impl Default for wifi_mgmr {
+    fn default() -> Self {
+        unsafe { ::core::mem::zeroed() }
+    }
+}
+pub type wifi_mgmr_t = wifi_mgmr;
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_event_notify(msg: *mut wifi_mgmr_msg_t) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_state_get_internal(state: *mut ::cty::c_int) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_status_code_clean_internal() -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_status_code_get_internal(s_code: *mut ::cty::c_int) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_set_country_code_internal(country_code: *mut ::cty::c_char) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_ap_sta_cnt_get_internal(sta_cnt: *mut u8) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_ap_sta_info_get_internal(
+        sta_info_internal: *mut wifi_mgmr_sta_basic_info_t,
+        idx: u8,
+    ) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_ap_sta_delete_internal(sta_idx: u8) -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_scan_complete_notify() -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub static mut wifiMgmr: wifi_mgmr_t;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_auth_to_str(auth: u8) -> *mut ::cty::c_char;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_cipher_to_str(cipher: u8) -> *mut ::cty::c_char;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_api_fw_tsen_reload() -> ::cty::c_int;
+}
+#[safe_wrap(_)] extern "C" {
+    pub fn wifi_mgmr_scan_item_is_timeout(
+        mgmr: *mut wifi_mgmr_t,
+        item: *mut wifi_mgmr_scan_item_t,
+    ) -> ::cty::c_int;
 }
