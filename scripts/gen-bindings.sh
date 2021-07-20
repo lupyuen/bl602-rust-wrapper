@@ -208,18 +208,29 @@ function generate_bindings_core() {
     #  Add allowlist and blocklist
     local modname=$1     # Module name: bl or hal
     local submodname=$2  # Submodule name e.g. gpio
+
+    #  Header file to be processed e.g. components/hal_drv/bl602_hal/bl_gpio.h
+    local headerfile=../bl_iot_sdk/components/hal_drv/bl602_hal/${modname}_${submodname}.h
+
+    #  For SPI, combine the header files for processing
     if [ "$submodname" == 'spi' ]; then
-        #  For SPI, combine the header files for processing
         local headerfile=/tmp/gen-bindings-${submodname}.h
         echo "#include <stdint.h>" >$headerfile
         cat \
             ../bl_iot_sdk/components/fs/vfs/include/hal/soc/spi.h \
             ../bl_iot_sdk/components/hal_drv/bl602_hal/hal_spi.h \
             >>$headerfile
-    else
-        #  Header file e.g. components/hal_drv/bl602_hal/bl_gpio.h
-        local headerfile=../bl_iot_sdk/components/hal_drv/bl602_hal/${modname}_${submodname}.h
     fi
+
+    #  For ADC, insert stdint into the header file
+    if [ "$submodname" == 'adc' ]; then
+        local headerfile=/tmp/gen-bindings-${submodname}.h
+        echo "#include <stdint.h>" >$headerfile
+        cat \
+            ../bl_iot_sdk/components/hal_drv/bl602_hal/bl_adc.h \
+            >>$headerfile
+    fi
+
     #  Define allowlist by submodule e.g. gpio, i2c
     local allowlistname=$submodname
     if [ "$submodname" == 'obj' ]; then
@@ -269,13 +280,17 @@ EOF
     fi
 }
 
-#  Generate bindings for I2C
-#  components/hal_drv/bl602_hal/bl_i2c.h
-generate_bindings_core bl i2c
+#  Generate bindings for ADC
+#  components/hal_drv/bl602_hal/bl_adc.h
+generate_bindings_core bl adc
 
 #  Generate bindings for GPIO
 #  components/hal_drv/bl602_hal/bl_gpio.h
 generate_bindings_core bl gpio
+
+#  Generate bindings for I2C
+#  components/hal_drv/bl602_hal/bl_i2c.h
+generate_bindings_core bl i2c
 
 #  Generate bindings for PWM
 #  components/hal_drv/bl602_hal/bl_pwm.h
