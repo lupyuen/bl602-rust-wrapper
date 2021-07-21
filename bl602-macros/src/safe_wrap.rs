@@ -50,10 +50,11 @@ fn function_is_allowlisted(fname: &str) -> bool {
         "hal_spi_init" => false,
         "spi_init" => true,
         _ => { 
-            //  Functions starting with `bl_`, `hal_`, `i2c_` and `wifi_` are allowlisted.
+            //  Functions starting with `bl_`, `hal_`, `i2c_`, `pwm_` and `wifi_` are allowlisted.
             if fname.starts_with("bl_")
                 || fname.starts_with("hal_")
                 || fname.starts_with("i2c_")    
+                || fname.starts_with("pwm_")    
                 || fname.starts_with("wifi_")    
                 { true }
             else { false }

@@ -56,6 +56,7 @@ To produce the Rust Wrappers for BL602 IoT SDK...
 
 ```rust
 //  Expanded version of `safe_wrap` macros for the GPIO Rust Bindings
+#[doc = "Configure a GPIO Pin for Output Mode. See `bl_gpio_enable_output` in \"Enable GPIO\" <https://lupyuen.github.io/articles/led#enable-gpio>"]
 pub fn gpio_enable_output(pin: u8, pullup: u8, pulldown: u8)
     -> BlResult<()> {
     "----------Extern Decl----------";
@@ -74,6 +75,7 @@ pub fn gpio_enable_output(pin: u8, pullup: u8, pulldown: u8)
     }
 }
 
+#[doc = "Set output value of GPIO Pin. See `bl_gpio_output_set` in \"Read and Write GPIO\" <https://lupyuen.github.io/articles/led#read-and-write-gpio>"]
 pub fn gpio_output_set(pin: u8, value: u8) -> BlResult<()> {
     "----------Extern Decl----------";
     extern "C" {

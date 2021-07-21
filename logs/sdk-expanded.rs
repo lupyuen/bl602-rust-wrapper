@@ -373,7 +373,7 @@ pub mod gpio {
         }
     }
     #[doc =
-      "Set output value of GPIO Pin. See `bl_gpio_output_set` in \"Read and Write GPIO\" <https://lupyuen.github.io/articles/led#read-and-write-gpio>"]
+      "Set the output value of a GPIO Pin. See `bl_gpio_output_set` in \"Read and Write GPIO\" <https://lupyuen.github.io/articles/led#read-and-write-gpio>"]
     pub fn gpio_output_set(pin: u8, value: u8) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
@@ -389,7 +389,7 @@ pub mod gpio {
         }
     }
     #[doc =
-      "Get input value of GPIO Pin, by reference. See `bl_gpio_input_get` in \"Read and Write GPIO\" <https://lupyuen.github.io/articles/led#read-and-write-gpio>"]
+      "Get the input value of a GPIO Pin, by reference. See `bl_gpio_input_get` in \"Read and Write GPIO\" <https://lupyuen.github.io/articles/led#read-and-write-gpio>"]
     pub fn gpio_input_get(pin: u8, value: *mut u8) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
@@ -405,7 +405,7 @@ pub mod gpio {
         }
     }
     #[doc =
-      "Get input value of GPIO Pin. See `bl_gpio_input_get_value` in \"Read and Write GPIO\" <https://lupyuen.github.io/articles/led#read-and-write-gpio>"]
+      "Get the input value of GPIO Pin. See `bl_gpio_input_get_value` in \"Read and Write GPIO\" <https://lupyuen.github.io/articles/led#read-and-write-gpio>"]
     pub fn gpio_input_get_value(pin: u8) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
@@ -6125,6 +6125,8 @@ pub mod pwm {
         pub fn PWM_Int_Callback_Install(intType: u32,
                                         cbFun: intCallback_Type);
     }
+    #[doc =
+      "Designate a GPIO Pin as a PWM Channel. See `bl_pwm_init` in \"Initialise PWM\" <https://lupyuen.github.io/articles/led#initialise-pwm>"]
     pub fn pwm_init(id: u8, pin: u8, freq: u32) -> BlResult<i32> {
         "----------Extern Decl----------";
         extern "C" {
@@ -6139,6 +6141,8 @@ pub mod pwm {
             Ok(res)
         }
     }
+    #[doc =
+      "Start a PWM Channel. See `bl_pwm_start` in \"PWM Operation\" <https://lupyuen.github.io/articles/led#pwm-operation>"]
     pub fn pwm_start(id: u8) -> BlResult<i32> {
         "----------Extern Decl----------";
         extern "C" {
@@ -6153,6 +6157,8 @@ pub mod pwm {
             Ok(res)
         }
     }
+    #[doc =
+      "Stop a PWM Channel. See `bl_pwm_stop` in \"PWM Operation\" <https://lupyuen.github.io/articles/led#pwm-operation>"]
     pub fn pwm_stop(id: u8) -> BlResult<i32> {
         "----------Extern Decl----------";
         extern "C" {
@@ -6167,6 +6173,8 @@ pub mod pwm {
             Ok(res)
         }
     }
+    #[doc =
+      "Set the Frequency of a PWM Channel. See `bl_pwm_set_freq` in \"PWM Frequency and Duty Cycle\" <https://lupyuen.github.io/articles/led#pwm-frequency-and-duty-cycle>"]
     pub fn pwm_set_freq(id: u8, freq: u32) -> BlResult<i32> {
         "----------Extern Decl----------";
         extern "C" {
@@ -6181,6 +6189,8 @@ pub mod pwm {
             Ok(res)
         }
     }
+    #[doc =
+      "Set the Duty Cycle of a PWM Channel. See `bl_pwm_set_duty` in \"PWM Frequency and Duty Cycle\" <https://lupyuen.github.io/articles/led#pwm-frequency-and-duty-cycle>"]
     pub fn pwm_set_duty(id: u8, duty: f32) -> BlResult<i32> {
         "----------Extern Decl----------";
         extern "C" {
@@ -6195,6 +6205,8 @@ pub mod pwm {
             Ok(res)
         }
     }
+    #[doc =
+      "Get the Duty Cycle of a PWM Channel. See `bl_pwm_get_duty` in \"PWM Frequency and Duty Cycle\" <https://lupyuen.github.io/articles/led#pwm-frequency-and-duty-cycle>"]
     pub fn pwm_get_duty(id: u8, p_duty: *mut f32) -> BlResult<i32> {
         "----------Extern Decl----------";
         extern "C" {
