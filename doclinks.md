@@ -52,3 +52,7 @@
 
 | Function | Description | Section | URL
 | -------- | ----------- | ------- | ---
+| hal_wifi_start_firmware_task | Start the WiFi Firmware Task. | Start WiFi Firmware Task | https://lupyuen.github.io/articles/wifi#start-wifi-firmware-task
+| wifi_mgmr_start_background | Start the WiFi Manager Task. | Start WiFi Manager Task | https://lupyuen.github.io/articles/wifi#start-wifi-manager-task
+| wifi_mgmr_sta_enable | Enable the WiFi Client. | Connect to WiFi Network | https://lupyuen.github.io/articles/wifi#connect-to-wifi-network
+| wifi_mgmr_sta_connect | Connect to a WiFi Access Point. | Connect to WiFi Network | https://lupyuen.github.io/articles/wifi#connect-to-wifi-network

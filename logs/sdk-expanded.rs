@@ -6296,7 +6296,7 @@ pub mod spi {
         fn default() -> Self { unsafe { ::core::mem::zeroed() } }
     }
     #[doc =
-      "Execute an SPI Data Transfer See `hal_spi_transfer` in \"Execute the SPI Transfers\" <https://lupyuen.github.io/articles/spi#execute-the-spi-transfers>"]
+      "Execute an SPI Data Transfer. See `hal_spi_transfer` in \"Execute the SPI Transfers\" <https://lupyuen.github.io/articles/spi#execute-the-spi-transfers>"]
     pub fn spi_transfer(spi_dev: *mut spi_dev_t, xfer: Ptr, size: u8)
      -> BlResult<()> {
         "----------Extern Decl----------";
@@ -6316,7 +6316,7 @@ pub mod spi {
         }
     }
     #[doc =
-      "Initialise an SPI Port See `spi_init` in \"Initialise SPI Port\" <https://lupyuen.github.io/articles/spi#initialise-spi-port>"]
+      "Initialise an SPI Port. See `spi_init` in \"Initialise SPI Port\" <https://lupyuen.github.io/articles/spi#initialise-spi-port>"]
     pub fn init(spi: *mut spi_dev_t, port: u8, mode: u8, polar_phase: u8,
                 freq: u32, tx_dma_ch: u8, rx_dma_ch: u8, pin_clk: u8,
                 pin_cs: u8, pin_mosi: u8, pin_miso: u8) -> BlResult<()> {
@@ -11298,6 +11298,8 @@ pub mod wifi {
     }
     pub type StaticStreamBuffer_t = xSTATIC_STREAM_BUFFER;
     pub type StaticMessageBuffer_t = StaticStreamBuffer_t;
+    #[doc =
+      "Start the WiFi Firmware Task. See `hal_wifi_start_firmware_task` in \"Start WiFi Firmware Task\" <https://lupyuen.github.io/articles/wifi#start-wifi-firmware-task>"]
     pub fn wifi_start_firmware_task() -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
@@ -11855,6 +11857,8 @@ pub mod wifi {
             Ok(())
         }
     }
+    #[doc =
+      "Start the WiFi Manager Task. See `wifi_mgmr_start_background` in \"Start WiFi Manager Task\" <https://lupyuen.github.io/articles/wifi#start-wifi-manager-task>"]
     pub fn mgmr_start_background(conf: *mut wifi_conf_t) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
@@ -11884,6 +11888,8 @@ pub mod wifi {
             Ok(())
         }
     }
+    #[doc =
+      "Enable the WiFi Client. See `wifi_mgmr_sta_enable` in \"Connect to WiFi Network\" <https://lupyuen.github.io/articles/wifi#connect-to-wifi-network>"]
     pub fn mgmr_sta_enable() -> BlResult<wifi_interface_t> {
         "----------Extern Decl----------";
         extern "C" {
@@ -12007,6 +12013,8 @@ pub mod wifi {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
+    #[doc =
+      "Connect to a WiFi Access Point. See `wifi_mgmr_sta_connect` in \"Connect to WiFi Network\" <https://lupyuen.github.io/articles/wifi#connect-to-wifi-network>"]
     pub fn mgmr_sta_connect(wifi_interface: *mut wifi_interface_t,
                             ssid: *mut ::cty::c_char, psk: *mut ::cty::c_char,
                             pmk: *mut ::cty::c_char, mac: *mut u8, band: u8,
