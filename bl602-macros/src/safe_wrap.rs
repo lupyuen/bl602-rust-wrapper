@@ -145,7 +145,9 @@ pub fn wrap_function(foreign_fn: &ForeignItemFn) -> proc_macro2::TokenStream {
     let TransformedFunctionName{ 
         ident: fname,
         token: fname_token, 
-        without_namespace_token: fname_without_namespace_token, .. 
+        without_namespace_token: fname_without_namespace_token, 
+        doc_tokens,
+        .. 
     } = transformed_fname;
 
     //  If function name is not allowlisted, return the extern tokens without wrapping.
@@ -156,7 +158,7 @@ pub fn wrap_function(foreign_fn: &ForeignItemFn) -> proc_macro2::TokenStream {
     //  Move the `#[doc]` attributes out from the extern and into the top level.
     //  TODO: Accumulate doc in attrs and rename args.
     let attrs = &foreign_fn.attrs;
-    let mut doc_tokens = proc_macro2::TokenStream::new();
+    let mut doc_tokens = doc_tokens;
     for attr in attrs {
         //  println!("attr: {:#?}", quote! { #attr }.to_string());
         let attr_span = attr.span();
@@ -469,6 +471,10 @@ fn transform_function_name(ident: &Ident) -> TransformedFunctionName {
     let fname_without_namespace = &fname[namespace_prefix.len()..];
     let fname_token = Ident::new(&fname, ident.span());
     let fname_without_namespace_token = Ident::new(&fname_without_namespace, ident.span());
+
+    //  Compose the function doc by looking up the doclink.
+    let mut doc_tokens = proc_macro2::TokenStream::new();
+
     //  Return the transformed function name.
     TransformedFunctionName {
         ident:                      Box::new(fname.clone()),
@@ -477,6 +483,7 @@ fn transform_function_name(ident: &Ident) -> TransformedFunctionName {
         token:                      Box::new(fname_token),
         without_namespace_token:    Box::new(fname_without_namespace_token),
         ident_span:                 Box::new(ident.span()),
+        doc_tokens:                 Box::new(doc_tokens),
     }
 }
 
@@ -570,6 +577,8 @@ struct TransformedFunctionName {
     without_namespace_token: Box<Ident>,
     /// Span of the identifier (file location)
     ident_span: Box<Span>,
+    /// Tokens for the function documentation e.g. #[doc = "Configure a GPIO Pin for Output Mode. See `bl_gpio_enable_output` in \"Read and Write GPIO\" <https://lupyuen.github.io/articles/led#read-and-write-gpio>"]
+    doc_tokens: Box<proc_macro2::TokenStream>,
 }
 
 /// Separator for composing declarations and call expressions
