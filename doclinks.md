@@ -29,6 +29,12 @@
 
 | Function | Description | Section | URL
 | -------- | ----------- | ------- | ---
+| i2c_gpio_init | Init an I2C Port. | Assign I2C Pins and set I2C Frequency | https://lupyuen.github.io/articles/i2c#assign-i2c-pins-and-set-i2c-frequency
+| i2c_set_freq | Set the Frequency of an I2C Port. | Assign I2C Pins and set I2C Frequency | https://lupyuen.github.io/articles/i2c#assign-i2c-pins-and-set-i2c-frequency
+| I2C_Disable | Disable an I2C Port. | Enable I2C Interrupts | https://lupyuen.github.io/articles/i2c#enable-i2c-interrupts
+| I2C_IntMask | Set Interrupt Mask for an I2C Port. | Enable I2C Interrupts | https://lupyuen.github.io/articles/i2c#enable-i2c-interrupts
+| i2c_transfer_start | Start an I2C Data Transfer. | Start I2C Transfer | https://lupyuen.github.io/articles/i2c#start-i2c-transfer
+| i2c_clear_status | Clear the I2C Error Status for an I2C Port. | Stop I2C Read | https://lupyuen.github.io/articles/i2c#stop-i2c-read
 
 ## ADC
 

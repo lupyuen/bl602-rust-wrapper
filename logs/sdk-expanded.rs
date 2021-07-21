@@ -525,6 +525,8 @@ pub mod i2c {
         fn default() -> Self { unsafe { ::core::mem::zeroed() } }
     }
     pub type i2c_msg_t = i2c_msg;
+    #[doc =
+      "Set the Frequency of an I2C Port. See `i2c_set_freq` in \"Assign I2C Pins and set I2C Frequency\" <https://lupyuen.github.io/articles/i2c#assign-i2c-pins-and-set-i2c-frequency>"]
     pub fn set_freq(freq: ::cty::c_int, i2cx: ::cty::c_int) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
@@ -538,6 +540,8 @@ pub mod i2c {
             Ok(())
         }
     }
+    #[doc =
+      "Init an I2C Port. See `i2c_gpio_init` in \"Assign I2C Pins and set I2C Frequency\" <https://lupyuen.github.io/articles/i2c#assign-i2c-pins-and-set-i2c-frequency>"]
     pub fn gpio_init(i2cx: ::cty::c_int) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
@@ -551,6 +555,8 @@ pub mod i2c {
             Ok(())
         }
     }
+    #[doc =
+      "Clear the I2C Error Status for an I2C Port. See `i2c_clear_status` in \"Stop I2C Read\" <https://lupyuen.github.io/articles/i2c#stop-i2c-read>"]
     pub fn clear_status(i2cx: ::cty::c_int) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
@@ -564,6 +570,8 @@ pub mod i2c {
             Ok(())
         }
     }
+    #[doc =
+      "Start an I2C Data Transfer. See `i2c_transfer_start` in \"Start I2C Transfer\" <https://lupyuen.github.io/articles/i2c#start-i2c-transfer>"]
     pub fn transfer_start(pstmsg: *mut i2c_msg_t) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
