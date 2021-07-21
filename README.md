@@ -109,6 +109,10 @@ for i in 0..10 {  //  Iterates 10 times from 0 to 9 (`..` excludes 10)
     ).expect("GPIO output failed");  //  Halt on error
 ```
 
+Links to ["The RISC-V BL602 Book"](https://lupyuen.github.io/articles/book) are defined here...
+
+-   [`doclinks.md`](doclinks.md)
+
 Build the project with this script...
 
 -   [`scripts/build.sh`](scripts/build.sh)
