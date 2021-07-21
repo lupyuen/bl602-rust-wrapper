@@ -18,7 +18,11 @@
  */
 //! Macro that creates a safe wrapper for C APIs
 extern crate proc_macro;
-use std::{fs::File, io::{BufReader, BufRead}};
+use std::{
+    collections::HashMap,
+    fs::File, 
+    io::{BufReader, BufRead}
+};
 use proc_macro::TokenStream;
 use proc_macro2::Span;
 use quote::{quote, quote_spanned};
@@ -477,15 +481,44 @@ fn transform_function_name(ident: &Ident) -> TransformedFunctionName {
 }
 
 /// Read the links that will be embedded into the documentation
-fn read_doclinks() {
+fn read_doclinks() -> DocLinkType {
+    //  Read the doclinks into a HashMap
     let input = File::open("doclinks.md")
         .expect("doclinks.md is missing");
     let buffered = BufReader::new(input);
 
+    //  Split each line into columns and add to the HashMap
+    let mut map = DocLinkType::new();
     for line in buffered.lines() {
-        //  println!("{}", line.unwrap());
-    }    
+        let split: Vec<String> = line
+            .unwrap()
+            .split("|")
+            .map(|s| s.trim().to_string())
+            .collect();
+        if split.len() < 2 { continue; }
+        
+        //  Map a function name to its doclink:
+        //  `bl_gpio_enable_output` -> [ `Configure a GPIO Pin for Output Mode`, `Enable GPIO`, `https://lupyuen.github.io/articles/led#enable-gpio` ]
+        map.insert(
+            split[1].trim().to_string(),  //  `bl_gpio_enable_output`
+            split[2..].to_vec()           //  [ `Configure a GPIO Pin for Output Mode`, `Enable GPIO`, `https://lupyuen.github.io/articles/led#enable-gpio` ]
+        );
+    }
+
+    //  How we fetch the doclink by function name:
+    //  println!("map.get={:#?}", map.get("bl_gpio_enable_output"));
+    map
 }
+
+//  Init the globals lazily because Rust doesn't allow `::new()` to be called during init
+lazy_static::lazy_static! {
+    /// Map a function name to its doclink:
+    /// `bl_gpio_enable_output` -> [ `Configure a GPIO Pin for Output Mode`, `Enable GPIO`, `https://lupyuen.github.io/articles/led#enable-gpio` ]
+    static ref DOCLINKS: DocLinkType = read_doclinks();
+}
+
+/// Map a function name to its doclink
+type DocLinkType = HashMap<String, Vec<String>>;
 
 /// Extern arg declaration transformed into the Wrap, Validation and Call forms 
 struct TransformedArg {
