@@ -45,6 +45,8 @@
 
 | Function | Description | Section | URL
 | -------- | ----------- | ------- | ---
+| spi_init | Initialise an SPI Port. | Initialise SPI Port | https://lupyuen.github.io/articles/spi#initialise-spi-port
+| hal_spi_transfer | Execute an SPI Data Transfer. | Execute the SPI Transfers | https://lupyuen.github.io/articles/spi#execute-the-spi-transfers
 
 ## WiFi
 

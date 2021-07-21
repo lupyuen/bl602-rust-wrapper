@@ -257,9 +257,6 @@ EOF
         # lv_indev_drv_* functions should be defined under lv_hal. 
         local allowlisttypes=
         local blocklist=`cat << EOF
-            --blocklist-item     _lv_.* \
-            --blocklist-item     lv_.*_t \
-            --blocklist-item     lv_indev_drv_init \
             --blocklist-item     lv_indev_get_next
 EOF
 `
@@ -278,7 +275,13 @@ EOF
         --allowlist-type     (?i)hal_${allowlistname}.* \
         --allowlist-var      (?i)hal_${allowlistname}.* \
         ${allowlisttypes} \
-        --blocklist-item     lv_obj_get_style_value_str \
+        --blocklist-item     hal_spi_init \
+        --blocklist-item     hal_spi_finalize \
+        --blocklist-item     hal_spi_recv \
+        --blocklist-item     hal_spi_send \
+        --blocklist-item     hal_spi_send_recv \
+        --blocklist-item     hal_spi_set_rwmode \
+        --blocklist-item     hal_spi_set_rwspeed \
         ${blocklist}
 EOF
 `    
