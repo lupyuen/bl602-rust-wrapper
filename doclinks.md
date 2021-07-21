@@ -1,5 +1,10 @@
 # Links to be injected into the documentation
 
+## ADC
+
+| Function | Description | Section | URL
+| -------- | ----------- | ------- | ---
+
 ## GPIO
 
 | Function | Description | Section | URL
@@ -14,17 +19,6 @@
 | bl_set_gpio_intmod | Set GPIO Interrupt Mode. | GPIO Interrupts | https://lupyuen.github.io/articles/led#gpio-interrupts
 | bl_gpio_register | Register GPIO Interrupt. | GPIO Interrupts | https://lupyuen.github.io/articles/led#gpio-interrupts
 
-## PWM
-
-| Function | Description | Section | URL
-| -------- | ----------- | ------- | ---
-| bl_pwm_init | Designate a GPIO Pin as a PWM Channel. | Initialise PWM | https://lupyuen.github.io/articles/led#initialise-pwm
-| bl_pwm_set_freq | Set the Frequency of a PWM Channel. | PWM Frequency and Duty Cycle | https://lupyuen.github.io/articles/led#pwm-frequency-and-duty-cycle
-| bl_pwm_set_duty | Set the Duty Cycle of a PWM Channel. | PWM Frequency and Duty Cycle | https://lupyuen.github.io/articles/led#pwm-frequency-and-duty-cycle
-| bl_pwm_get_duty | Get the Duty Cycle of a PWM Channel. | PWM Frequency and Duty Cycle | https://lupyuen.github.io/articles/led#pwm-frequency-and-duty-cycle
-| bl_pwm_start | Start a PWM Channel. | PWM Operation | https://lupyuen.github.io/articles/led#pwm-operation
-| bl_pwm_stop | Stop a PWM Channel. | PWM Operation | https://lupyuen.github.io/articles/led#pwm-operation
-
 ## I2C
 
 | Function | Description | Section | URL
@@ -36,10 +30,16 @@
 | i2c_transfer_start | Start an I2C Data Transfer. | Start I2C Transfer | https://lupyuen.github.io/articles/i2c#start-i2c-transfer
 | i2c_clear_status | Clear the I2C Error Status for an I2C Port. | Stop I2C Read | https://lupyuen.github.io/articles/i2c#stop-i2c-read
 
-## ADC
+## PWM
 
 | Function | Description | Section | URL
 | -------- | ----------- | ------- | ---
+| bl_pwm_init | Designate a GPIO Pin as a PWM Channel. | Initialise PWM | https://lupyuen.github.io/articles/led#initialise-pwm
+| bl_pwm_set_freq | Set the Frequency of a PWM Channel. | PWM Frequency and Duty Cycle | https://lupyuen.github.io/articles/led#pwm-frequency-and-duty-cycle
+| bl_pwm_set_duty | Set the Duty Cycle of a PWM Channel. | PWM Frequency and Duty Cycle | https://lupyuen.github.io/articles/led#pwm-frequency-and-duty-cycle
+| bl_pwm_get_duty | Get the Duty Cycle of a PWM Channel. | PWM Frequency and Duty Cycle | https://lupyuen.github.io/articles/led#pwm-frequency-and-duty-cycle
+| bl_pwm_start | Start a PWM Channel. | PWM Operation | https://lupyuen.github.io/articles/led#pwm-operation
+| bl_pwm_stop | Stop a PWM Channel. | PWM Operation | https://lupyuen.github.io/articles/led#pwm-operation
 
 ## SPI
 
@@ -47,6 +47,14 @@
 | -------- | ----------- | ------- | ---
 | spi_init | Initialise an SPI Port. | Initialise SPI Port | https://lupyuen.github.io/articles/spi#initialise-spi-port
 | hal_spi_transfer | Execute an SPI Data Transfer. | Execute the SPI Transfers | https://lupyuen.github.io/articles/spi#execute-the-spi-transfers
+
+## UART
+
+| Function | Description | Section | URL
+| -------- | ----------- | ------- | ---
+| bl_uart_init | Initialise a UART Port. | Initialise UART Port | https://lupyuen.github.io/articles/uart#initialise-uart-port
+| bl_uart_data_recv | Receive data from a UART Port (non-blocking). | Receive Data | https://lupyuen.github.io/articles/uart#receive-data
+| bl_uart_data_send | Transmit data to a UART Port. | Transmit Data | https://lupyuen.github.io/articles/uart#transmit-data
 
 ## WiFi
 
