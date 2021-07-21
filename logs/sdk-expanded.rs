@@ -143,9 +143,6 @@ pub mod adc {
 
 
 
-
-    //  Testing
-
     use super::*;
     pub const ADC_DMA_CHANNEL: u32 = 1;
     pub const ADC_CHANNEL_MAX: u32 = 12;
@@ -338,6 +335,8 @@ pub mod gpio {
         fn default() -> Self { unsafe { ::core::mem::zeroed() } }
     }
     pub type gpio_ctx_t = _gpio_ctx_desc;
+    #[doc =
+      "Configure a GPIO Pin for Output Mode. See `bl_gpio_enable_output` in \"Enable GPIO\" <https://lupyuen.github.io/articles/led#enable-gpio>"]
     pub fn gpio_enable_output(pin: u8, pullup: u8, pulldown: u8)
      -> BlResult<()> {
         "----------Extern Decl----------";
@@ -355,6 +354,8 @@ pub mod gpio {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
+    #[doc =
+      "Configure a GPIO Pin for Input Mode. See `bl_gpio_enable_input` in \"Enable GPIO\" <https://lupyuen.github.io/articles/led#enable-gpio>"]
     pub fn gpio_enable_input(pin: u8, pullup: u8, pulldown: u8)
      -> BlResult<()> {
         "----------Extern Decl----------";
@@ -371,6 +372,8 @@ pub mod gpio {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
+    #[doc =
+      "Set output value of GPIO Pin. See `bl_gpio_output_set` in \"Read and Write GPIO\" <https://lupyuen.github.io/articles/led#read-and-write-gpio>"]
     pub fn gpio_output_set(pin: u8, value: u8) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
@@ -385,6 +388,8 @@ pub mod gpio {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
+    #[doc =
+      "Get input value of GPIO Pin, by reference. See `bl_gpio_input_get` in \"Read and Write GPIO\" <https://lupyuen.github.io/articles/led#read-and-write-gpio>"]
     pub fn gpio_input_get(pin: u8, value: *mut u8) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
@@ -399,6 +404,8 @@ pub mod gpio {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
+    #[doc =
+      "Get input value of GPIO Pin. See `bl_gpio_input_get_value` in \"Read and Write GPIO\" <https://lupyuen.github.io/articles/led#read-and-write-gpio>"]
     pub fn gpio_input_get_value(pin: u8) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
@@ -413,6 +420,8 @@ pub mod gpio {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
+    #[doc =
+      "Clear GPIO Interrupt. See `bl_gpio_int_clear` in \"GPIO Interrupts\" <https://lupyuen.github.io/articles/led#gpio-interrupts>"]
     pub fn gpio_int_clear(gpioPin: u8, intClear: u8) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
@@ -427,6 +436,8 @@ pub mod gpio {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
+    #[doc =
+      "Set GPIO Interrupt Mask. See `bl_gpio_intmask` in \"GPIO Interrupts\" <https://lupyuen.github.io/articles/led#gpio-interrupts>"]
     pub fn gpio_intmask(gpiopin: u8, mask: u8) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
@@ -440,6 +451,8 @@ pub mod gpio {
             Ok(())
         }
     }
+    #[doc =
+      "Register GPIO Interrupt. See `bl_gpio_register` in \"GPIO Interrupts\" <https://lupyuen.github.io/articles/led#gpio-interrupts>"]
     pub fn gpio_register(pstnode: *mut gpio_ctx_t) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
@@ -14633,24 +14646,3 @@ unsafe impl <'a> Send for Strn<'a> { }
 unsafe impl <'a> Sync for Strn<'a> { }
 ///  Declare a `void *` pointer that will be passed to C functions
 pub type Ptr = *mut ::cty::c_void;
-#[doc = "Configure a GPIO Pin for Output Mode."]
-#[doc =
-  "See `bl_gpio_enable_output` in \"Read and Write GPIO\" <https://lupyuen.github.io/articles/led#read-and-write-gpio>"]
-pub fn gpio_enable_output(pin: u8, pullup: u8, pulldown: u8) -> BlResult<()> {
-    "----------Extern Decl----------";
-    extern "C" {
-        #[doc = "Configure a GPIO Pin for Output Mode."]
-        #[doc =
-          "See `bl_gpio_enable_output` in \"Read and Write GPIO\" <https://lupyuen.github.io/articles/led#read-and-write-gpio>"]
-        pub fn bl_gpio_enable_output(pin: u8, pullup: u8, pulldown: u8)
-        -> ::cty::c_int;
-    }
-    "----------Validation----------";
-    unsafe {
-        "----------Call----------";
-        let res =
-            bl_gpio_enable_output(pin as u8, pullup as u8, pulldown as u8);
-        "----------Result----------";
-        match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
-    }
-}

@@ -34,12 +34,13 @@ use syn::{
     ForeignItemFn,
     Ident,
     ItemForeignMod,
+    LitStr,
     PatType,
     ReturnType,
     Type,
     punctuated::Punctuated,
     spanned::Spanned,
-    token::Comma,
+    token::{Comma},
 };
 
 /// Given a function name like `bl_gpio_output_set`, return true if we should create the wrapper
@@ -453,16 +454,17 @@ fn transform_return_type(output: &ReturnType) -> TransformedReturnType {
     }
 }
 
-/// Transform the extern function name e.g. `os_task_init`
+/// Transform the extern function name e.g. `bl_gpio_enable_output`
 fn transform_function_name(ident: &Ident) -> TransformedFunctionName {
-    //  Get namespace e.g. `os`
+    //  Extern function name e.g `bl_gpio_enable_output`
     let fname = ident.to_string();
+    //  Get namespace e.g. `gpio`
     let namespace = get_namespace(&fname);
     //  println!("fname: {:#?}, namespace: {:#?}", fname, namespace);
-    //  Get namespace prefix e.g. `os_`
+    //  Get namespace prefix e.g. `gpio_`
     let namespace_prefix = 
         if namespace.len() > 0 { 
-            format!("{}_", namespace).to_string()  //  e.g. `os_`
+            format!("{}_", namespace).to_string()  //  e.g. `gpio_`
         } else {
             "".to_string()
         };
@@ -472,8 +474,29 @@ fn transform_function_name(ident: &Ident) -> TransformedFunctionName {
     let fname_token = Ident::new(&fname, ident.span());
     let fname_without_namespace_token = Ident::new(&fname_without_namespace, ident.span());
 
-    //  Compose the function doc by looking up the doclink.
+    //  Compose the function doc by looking up the doclink:
+    //  #[doc = "Configure a GPIO Pin for Output Mode. See `bl_gpio_enable_output` in \"Read and Write GPIO\" <https://lupyuen.github.io/articles/led#read-and-write-gpio>"]
     let mut doc_tokens = proc_macro2::TokenStream::new();
+    //  If the doclink exists for the function name...
+    if let Some(doclink) = DOCLINKS.get(&fname) {
+        //  Compose "Configure a GPIO Pin for Output Mode. See `bl_gpio_enable_output` in \"Read and Write GPIO\" <https://lupyuen.github.io/articles/led#read-and-write-gpio>"
+        let desc = &doclink[0];
+        let doc =
+            if doclink.len() < 3 { desc.to_string() }  //  Description only
+            else {  //  Description, section and URL
+                let section = &doclink[1];
+                let url = &doclink[2];        
+                format!("{} See `{}` in \"{}\" <{}>", desc, fname, section, url)
+            };
+        //  Convert to a literal token.
+        let lit = LitStr::new(&doc, ident.span());        
+        //  Append to the doc tokens.
+        doc_tokens.extend(
+            quote! {
+                #[doc = #lit]
+            }
+        );
+    }
 
     //  Return the transformed function name.
     TransformedFunctionName {
@@ -497,12 +520,15 @@ fn read_doclinks() -> DocLinkType {
     //  Split each line into columns and add to the HashMap
     let mut map = DocLinkType::new();
     for line in buffered.lines() {
+        //  Split the line by "|"
         let split: Vec<String> = line
             .unwrap()
             .split("|")
             .map(|s| s.trim().to_string())
             .collect();
-        if split.len() < 2 { continue; }
+
+        //  Every row must have function name and description
+        if split.len() < 3 { continue; }
         
         //  Map a function name to its doclink:
         //  `bl_gpio_enable_output` -> [ `Configure a GPIO Pin for Output Mode`, `Enable GPIO`, `https://lupyuen.github.io/articles/led#enable-gpio` ]
