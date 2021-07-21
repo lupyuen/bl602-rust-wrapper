@@ -355,7 +355,7 @@ pub type Ptr = *mut ::cty::c_void;
 //  Testing
 
 #[safe_wrap(_)] extern "C" {
-    #[doc = "Configure GPIO Pin for Output Mode."]
+    #[doc = "Configure a GPIO Pin for Output Mode."]
     #[doc = "See `bl_gpio_enable_output` in \"Read and Write GPIO\" <https://lupyuen.github.io/articles/led#read-and-write-gpio>"]
     pub fn bl_gpio_enable_output(pin: u8, pullup: u8, pulldown: u8) -> ::cty::c_int;
 }

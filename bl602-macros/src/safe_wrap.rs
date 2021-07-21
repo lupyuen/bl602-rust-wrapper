@@ -16,8 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-//! Macro that creates a safe wrapper
+//! Macro that creates a safe wrapper for C APIs
 extern crate proc_macro;
+use std::{fs::File, io::{BufReader, BufRead}};
 use proc_macro::TokenStream;
 use proc_macro2::Span;
 use quote::{quote, quote_spanned};
@@ -93,7 +94,10 @@ fn get_namespace_lvgl(fname: &str) -> String {
 }
 
 /// Given an `extern "C"` block of function declarations, generate the safe wrapper for the function.
-pub fn safe_wrap_internal(_attr: TokenStream, item: TokenStream) -> TokenStream {
+pub fn safe_wrap_internal(_attr: TokenStream, item: TokenStream) -> TokenStream {    
+    //  Read the links that will be embedded into the documentation
+    read_doclinks();
+
     //  println!("attr: {:#?}", attr);
     //  println!("item: {:#?}", item);
     //  Parse the macro input as an extern "C" function declaration.
@@ -470,6 +474,17 @@ fn transform_function_name(ident: &Ident) -> TransformedFunctionName {
         without_namespace_token:    Box::new(fname_without_namespace_token),
         ident_span:                 Box::new(ident.span()),
     }
+}
+
+/// Read the links that will be embedded into the documentation
+fn read_doclinks() {
+    let input = File::open("doclinks.md")
+        .expect("doclinks.md is missing");
+    let buffered = BufReader::new(input);
+
+    for line in buffered.lines() {
+        //  println!("{}", line.unwrap());
+    }    
 }
 
 /// Extern arg declaration transformed into the Wrap, Validation and Call forms 

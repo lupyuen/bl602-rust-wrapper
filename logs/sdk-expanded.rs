@@ -14633,13 +14633,13 @@ unsafe impl <'a> Send for Strn<'a> { }
 unsafe impl <'a> Sync for Strn<'a> { }
 ///  Declare a `void *` pointer that will be passed to C functions
 pub type Ptr = *mut ::cty::c_void;
-#[doc = "Configure GPIO Pin for Output Mode."]
+#[doc = "Configure a GPIO Pin for Output Mode."]
 #[doc =
   "See `bl_gpio_enable_output` in \"Read and Write GPIO\" <https://lupyuen.github.io/articles/led#read-and-write-gpio>"]
 pub fn gpio_enable_output(pin: u8, pullup: u8, pulldown: u8) -> BlResult<()> {
     "----------Extern Decl----------";
     extern "C" {
-        #[doc = "Configure GPIO Pin for Output Mode."]
+        #[doc = "Configure a GPIO Pin for Output Mode."]
         #[doc =
           "See `bl_gpio_enable_output` in \"Read and Write GPIO\" <https://lupyuen.github.io/articles/led#read-and-write-gpio>"]
         pub fn bl_gpio_enable_output(pin: u8, pullup: u8, pulldown: u8)
