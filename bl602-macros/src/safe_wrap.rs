@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-//! Mynewt Macro that creates a safe wrapper
+//! Macro that creates a safe wrapper
 extern crate proc_macro;
 use proc_macro::TokenStream;
 use proc_macro2::Span;
@@ -44,10 +44,11 @@ fn function_is_allowlisted(fname: &str) -> bool {
         "hal_spi_init" => false,
         "spi_init" => true,
         _ => { 
-            //  Functions starting with `bl_`, `hal_` and `i2c_` are allowlisted.
+            //  Functions starting with `bl_`, `hal_`, `i2c_` and `wifi_` are allowlisted.
             if fname.starts_with("bl_")
                 || fname.starts_with("hal_")
                 || fname.starts_with("i2c_")    
+                || fname.starts_with("wifi_")    
                 { true }
             else { false }
         }
@@ -169,7 +170,7 @@ pub fn wrap_function(foreign_fn: &ForeignItemFn) -> proc_macro2::TokenStream {
     //  Get the function args and transform each arg into 3 forms:
     //  (1) Wrap Declaration: How the arg type is exposed via the wrapper
     //  (2) Validation Stmt: To validate each arg if needed, e.g. check strings are null-terminated
-    //  (3) Call Expr: Inside the wrapper, call the Mynewt API with type casting
+    //  (3) Call Expr: Inside the wrapper, call the C API with type casting
     let args = &sig.inputs;
     let transformed_args = transform_arg_list(args);
 
@@ -375,27 +376,27 @@ fn transform_return_type(output: &ReturnType) -> TransformedReturnType {
     let type_span = output.span();
     let wrap_type =
         if let ReturnType::Type (_, return_type) = output {
-            //  e.g. `:: cty :: c_int` for Mynewt error code, or `* mut os_eventq`
+            //  e.g. `:: cty :: c_int` for error code, or `* mut os_eventq`
             (quote! { #return_type }).to_string()
         }
         else { "".to_string() };  //  No return type
     //  println!("wrap_type: {:#?}", wrap_type);
 
-    #[cfg(feature = "mynewt_os")]  //  If building for Mynewt...
+    //  TODO: #[cfg(feature = "mynewt_os")]  //  If building for BL602 IoT SDK...
     let result_token = quote! { BlResult };  //  Result type is BlResult
 
-    #[cfg(feature = "riot_os")]    //  If building for RIOT OS...
-    let result_token = quote! { LvglResult };    //  Result type is LvglResult
+    //  TODO: #[cfg(feature = "riot_os")]    //  If building for RIOT OS...
+    //  let result_token = quote! { LvglResult };    //  Result type is LvglResult
 
     //  Declare the result type.
     let declare_result_tokens =
         match wrap_type.as_str() {
             //  No return type (void)
             ""                          => { quote! { #result_token< () > } }
-            //  Mynewt error code
+            //  Error code
             ":: cty :: c_int"           => { quote! { #result_token< () > } }
-            //  String becomes `Strn`
-            "* const :: cty :: c_char"  => { quote! { #result_token< Strn > } }
+            //  String becomes `Strn<'static>`
+            "* const :: cty :: c_char"  => { quote! { #result_token< Strn<'static> > } }
             //  Specified return type e.g. `* mut os_eventq`
             _ => {
                 let return_type_tokens = syn::parse_str::<Type>(&wrap_type).unwrap();
@@ -413,7 +414,7 @@ fn transform_return_type(output: &ReturnType) -> TransformedReturnType {
         match wrap_type.as_str() {
             //  If no return type, return nothing
             "" => { quote! { Ok( () ) } }
-            //  Return Mynewt error code
+            //  Return error code
             ":: cty :: c_int" => {  
                 quote! {
                     match res {

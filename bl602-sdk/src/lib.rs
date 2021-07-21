@@ -220,5 +220,126 @@ pub mod result {
     }
 }
 
+/// Represents a null-terminated string, suitable for passing to C APIs as `* const char`.
+/// The string could be a null-terminated byte string created in Rust, or a pointer to a null-terminated string returned by C.
+/// Pointer may be null.
+#[derive(Clone, Copy)]  //  Strn may be copied
+pub struct Strn<'a> {
+    /// Either a byte string terminated with null, or a pointer to a null-terminated string
+    pub rep: StrnRep<'a>
+}
+
+/// Either a byte string or a string pointer
+#[derive(Clone, Copy)]  //  StrnRep may be copied
+#[repr(u8)]
+pub enum StrnRep<'a> {
+    /// Byte string terminated with null
+    ByteStr(&'a [u8]),
+    /// Pointer to a null-terminated string
+    CStr(*const u8),
+}
+
+impl<'a> Strn<'a> {
+    /// Create a new `Strn` with a byte string. Fail if the last byte is not zero.
+    /// ```
+    /// Strn::new(b"network\0")
+    /// strn!("network")
+    /// ```
+    pub fn new(bs: &[u8]) -> Strn {
+        assert_eq!(bs.last(), Some(&0u8), "no null");  //  Last byte must be 0.
+        Strn { 
+            rep: StrnRep::ByteStr(bs)
+        }
+    }
+
+    /// Create a new `Strn` with a null-terminated string pointer returned by C.
+    pub fn from_cstr(cstr: *const u8) -> Strn<'a> {
+        Strn { 
+            rep: StrnRep::CStr(cstr)
+        }
+    }
+
+    /// Return a pointer to the string
+    pub fn as_ptr(&self) -> *const u8 {
+        match self.rep {
+            StrnRep::ByteStr(bs) => { bs.as_ptr() }
+            StrnRep::CStr(cstr)  => { cstr }
+        }
+    }
+
+    /// Return the length of the string, excluding the terminating null. For safety, we limit to 128.
+    pub fn len(&self) -> usize {
+        match self.rep {
+            StrnRep::ByteStr(bs) => { 
+                assert_eq!(bs.last(), Some(&0u8), "no null");  //  Last byte must be 0.
+                bs.len() - 1  //  Don't count the terminating null.
+            }
+            StrnRep::CStr(cstr)  => { 
+                //  Look for the null termination.
+                if cstr.is_null() { return 0; }
+                for len in 0..127 {
+                    let ptr: *const u8 =  ((cstr as u32) + len) as *const u8;
+                    if unsafe { *ptr } == 0 { return len as usize; }                    
+                }
+                assert!(false, "big strn");  //  String too long
+                return 128 as usize;
+            }
+        }
+    }
+
+    /// Return true if the string is empty
+    pub fn is_empty(&self) -> bool {
+        self.len() == 0
+    }
+
+    /// Return the byte string as a null-terminated `* const char` C-style string.
+    /// Fail if the last byte is not zero.
+    pub fn as_cstr(&self) -> *const u8 {
+        match self.rep {
+            StrnRep::ByteStr(bs) => { 
+                assert_eq!(bs.last(), Some(&0u8), "no null");  //  Last byte must be 0.
+                bs.as_ptr() as *const u8
+            }
+            StrnRep::CStr(cstr)  => { cstr }
+        }
+    }
+
+    /// Return the byte string.
+    /// Fail if the last byte is not zero.
+    pub fn as_bytestr(&self) -> &'a [u8] {
+        match self.rep {
+            StrnRep::ByteStr(bs) => {                
+                assert_eq!(bs.last(), Some(&0u8), "no null");  //  Last byte must be 0.
+                &bs
+            }
+            StrnRep::CStr(_cstr)  => { 
+                assert!(false, "strn cstr");  //  Not implemented
+                b"\0"
+            }
+        }
+    }
+
+    /// Fail if the last byte is not zero.
+    pub fn validate(&self) {
+        match self.rep {
+            StrnRep::ByteStr(bs) => {         
+                assert_eq!(bs.last(), Some(&0u8), "no null");  //  Last byte must be 0.
+            }
+            StrnRep::CStr(_cstr)  => {}
+        }
+    }
+
+    /// Fail if the last byte is not zero.
+    pub fn validate_bytestr(bs: &'static [u8]) {
+        assert_eq!(bs.last(), Some(&0u8), "no null");  //  Last byte must be 0.
+    }
+}
+
+///  Allow threads to share Strn, since it is static.
+unsafe impl<'a> Send for Strn<'a> {}
+
+///  Allow threads to share Strn, since it is static.
+unsafe impl<'a> Sync for Strn<'a> {}
+
 ///  Declare a `void *` pointer that will be passed to C functions
 pub type Ptr = *mut ::cty::c_void;

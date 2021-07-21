@@ -116,6 +116,31 @@ pub mod adc {
 
     //  TODO
 
+    //  Strn may be copied
+
+    //  StrnRep may be copied
+
+    //  Last byte must be 0.
+
+
+
+    //  Last byte must be 0.
+    //  Don't count the terminating null.
+    //  Look for the null termination.
+    //  String too long
+
+
+    //  Last byte must be 0.
+
+    //  Last byte must be 0.
+    //  Not implemented
+
+    //  Last byte must be 0.
+
+    //  Last byte must be 0.
+
+
+
     use super::*;
     pub const ADC_DMA_CHANNEL: u32 = 1;
     pub const ADC_CHANNEL_MAX: u32 = 12;
@@ -11913,246 +11938,883 @@ pub mod wifi {
         }
     }
     pub type wifi_conf_t = wifi_conf;
-    extern "C" {
-        pub fn wifi_mgmr_psk_cal(password: *mut ::cty::c_char,
-                                 ssid: *mut ::cty::c_char,
-                                 ssid_len: ::cty::c_int,
-                                 output: *mut ::cty::c_char)
-        -> ::cty::c_int;
-    }
-    extern "C" {
-        pub fn wifi_mgmr_drv_init(conf: *mut wifi_conf_t)
-        -> ::cty::c_int;
-    }
-    extern "C" {
-        pub fn wifi_mgmr_init()
-        -> ::cty::c_int;
-    }
-    extern "C" {
-        pub fn wifi_mgmr_start();
-    }
-    extern "C" {
-        pub fn wifi_mgmr_start_background(conf: *mut wifi_conf_t);
-    }
-    extern "C" {
-        pub fn wifi_mgmr_get_wifi_channel_conf(wifi_chan_conf:
-                                                   *mut wifi_conf_t);
-    }
-    extern "C" {
-        pub fn wifi_mgmr_sta_enable()
-        -> wifi_interface_t;
-    }
-    extern "C" {
-        pub fn wifi_mgmr_sta_disable(interface: *mut wifi_interface_t)
-        -> ::cty::c_int;
-    }
-    extern "C" {
-        pub fn wifi_mgmr_sta_mac_set(mac: *mut u8)
-        -> ::cty::c_int;
-    }
-    extern "C" {
-        pub fn wifi_mgmr_sta_mac_get(mac: *mut u8)
-        -> ::cty::c_int;
-    }
-    extern "C" {
-        pub fn wifi_mgmr_sta_ip_get(ip: *mut u32, gw: *mut u32,
-                                    mask: *mut u32)
-        -> ::cty::c_int;
-    }
-    extern "C" {
-        pub fn wifi_mgmr_sta_ip_set(ip: u32, mask: u32, gw: u32, dns1: u32,
-                                    dns2: u32)
-        -> ::cty::c_int;
-    }
-    extern "C" {
-        pub fn wifi_mgmr_sta_dns_get(dns1: *mut u32, dns2: *mut u32)
-        -> ::cty::c_int;
-    }
-    extern "C" {
-        pub fn wifi_mgmr_sta_ip_unset()
-        -> ::cty::c_int;
-    }
-    extern "C" {
-        pub fn wifi_mgmr_sta_connect(wifi_interface: *mut wifi_interface_t,
+    pub fn mgmr_psk_cal(password: *mut ::cty::c_char,
+                        ssid: *mut ::cty::c_char, ssid_len: ::cty::c_int,
+                        output: *mut ::cty::c_char) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_psk_cal(password: *mut ::cty::c_char,
                                      ssid: *mut ::cty::c_char,
-                                     psk: *mut ::cty::c_char,
-                                     pmk: *mut ::cty::c_char, mac: *mut u8,
-                                     band: u8, freq: u16)
-        -> ::cty::c_int;
+                                     ssid_len: ::cty::c_int,
+                                     output: *mut ::cty::c_char)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res =
+                wifi_mgmr_psk_cal(password as *mut ::cty::c_char,
+                                  ssid as *mut ::cty::c_char,
+                                  ssid_len as ::cty::c_int,
+                                  output as *mut ::cty::c_char);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_sta_disconnect()
-        -> ::cty::c_int;
+    pub fn mgmr_drv_init(conf: *mut wifi_conf_t) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_drv_init(conf: *mut wifi_conf_t)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_drv_init(conf as *mut wifi_conf_t);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_sta_powersaving(ps: ::cty::c_int)
-        -> ::cty::c_int;
+    pub fn mgmr_init() -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_init()
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_init();
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_sta_autoconnect_enable()
-        -> ::cty::c_int;
+    pub fn mgmr_start() -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_start();
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            wifi_mgmr_start();
+            "----------Result----------";
+            Ok(())
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_sta_autoconnect_disable()
-        -> ::cty::c_int;
+    pub fn mgmr_start_background(conf: *mut wifi_conf_t) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_start_background(conf: *mut wifi_conf_t);
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            wifi_mgmr_start_background(conf as *mut wifi_conf_t);
+            "----------Result----------";
+            Ok(())
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_sta_ssid_set(ssid: *mut ::cty::c_char);
+    pub fn mgmr_get_wifi_channel_conf(wifi_chan_conf: *mut wifi_conf_t)
+     -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_get_wifi_channel_conf(wifi_chan_conf:
+                                                       *mut wifi_conf_t);
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            wifi_mgmr_get_wifi_channel_conf(wifi_chan_conf as
+                                                *mut wifi_conf_t);
+            "----------Result----------";
+            Ok(())
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_sta_psk_set(psk: *mut ::cty::c_char);
+    pub fn mgmr_sta_enable() -> BlResult<wifi_interface_t> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_sta_enable()
+            -> wifi_interface_t;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_sta_enable();
+            "----------Result----------";
+            Ok(res)
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_sta_connect_ind_stat_get(wifi_mgmr_ind_stat:
-                                                      *mut wifi_mgmr_sta_connect_ind_stat_info_t);
+    pub fn mgmr_sta_disable(interface: *mut wifi_interface_t)
+     -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_sta_disable(interface: *mut wifi_interface_t)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res =
+                wifi_mgmr_sta_disable(interface as *mut wifi_interface_t);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_ap_enable()
-        -> wifi_interface_t;
+    pub fn mgmr_sta_mac_set(mac: *mut u8) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_sta_mac_set(mac: *mut u8)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_sta_mac_set(mac as *mut u8);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_ap_mac_set(mac: *mut u8)
-        -> ::cty::c_int;
+    pub fn mgmr_sta_mac_get(mac: *mut u8) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_sta_mac_get(mac: *mut u8)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_sta_mac_get(mac as *mut u8);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_ap_mac_get(mac: *mut u8)
-        -> ::cty::c_int;
+    pub fn mgmr_sta_ip_get(ip: *mut u32, gw: *mut u32, mask: *mut u32)
+     -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_sta_ip_get(ip: *mut u32, gw: *mut u32,
+                                        mask: *mut u32)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res =
+                wifi_mgmr_sta_ip_get(ip as *mut u32, gw as *mut u32,
+                                     mask as *mut u32);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_ap_ip_get(ip: *mut u32, gw: *mut u32, mask: *mut u32)
-        -> ::cty::c_int;
+    pub fn mgmr_sta_ip_set(ip: u32, mask: u32, gw: u32, dns1: u32, dns2: u32)
+     -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_sta_ip_set(ip: u32, mask: u32, gw: u32,
+                                        dns1: u32, dns2: u32)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res =
+                wifi_mgmr_sta_ip_set(ip as u32, mask as u32, gw as u32,
+                                     dns1 as u32, dns2 as u32);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_ap_stop(interface: *mut wifi_interface_t)
-        -> ::cty::c_int;
+    pub fn mgmr_sta_dns_get(dns1: *mut u32, dns2: *mut u32) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_sta_dns_get(dns1: *mut u32, dns2: *mut u32)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res =
+                wifi_mgmr_sta_dns_get(dns1 as *mut u32, dns2 as *mut u32);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_ap_start(interface: *mut wifi_interface_t,
-                                  ssid: *mut ::cty::c_char,
-                                  hidden_ssid: ::cty::c_int,
-                                  passwd: *mut ::cty::c_char,
-                                  channel: ::cty::c_int)
-        -> ::cty::c_int;
+    pub fn mgmr_sta_ip_unset() -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_sta_ip_unset()
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_sta_ip_unset();
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_ap_sta_cnt_get(sta_cnt: *mut u8)
-        -> ::cty::c_int;
+    pub fn mgmr_sta_connect(wifi_interface: *mut wifi_interface_t,
+                            ssid: *mut ::cty::c_char, psk: *mut ::cty::c_char,
+                            pmk: *mut ::cty::c_char, mac: *mut u8, band: u8,
+                            freq: u16) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_sta_connect(wifi_interface:
+                                             *mut wifi_interface_t,
+                                         ssid: *mut ::cty::c_char,
+                                         psk: *mut ::cty::c_char,
+                                         pmk: *mut ::cty::c_char,
+                                         mac: *mut u8, band: u8, freq: u16)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res =
+                wifi_mgmr_sta_connect(wifi_interface as *mut wifi_interface_t,
+                                      ssid as *mut ::cty::c_char,
+                                      psk as *mut ::cty::c_char,
+                                      pmk as *mut ::cty::c_char,
+                                      mac as *mut u8, band as u8,
+                                      freq as u16);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_ap_sta_info_get(sta_info: *mut wifi_sta_basic_info,
-                                         idx: u8)
-        -> ::cty::c_int;
+    pub fn mgmr_sta_disconnect() -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_sta_disconnect()
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_sta_disconnect();
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_ap_sta_delete(sta_idx: u8)
-        -> ::cty::c_int;
+    pub fn mgmr_sta_powersaving(ps: ::cty::c_int) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_sta_powersaving(ps: ::cty::c_int)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_sta_powersaving(ps as ::cty::c_int);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_ap_set_gateway(gateway: *mut ::cty::c_char)
-        -> ::cty::c_int;
+    pub fn mgmr_sta_autoconnect_enable() -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_sta_autoconnect_enable()
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_sta_autoconnect_enable();
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_sniffer_enable()
-        -> ::cty::c_int;
+    pub fn mgmr_sta_autoconnect_disable() -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_sta_autoconnect_disable()
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_sta_autoconnect_disable();
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_sniffer_disable()
-        -> ::cty::c_int;
+    pub fn mgmr_sta_ssid_set(ssid: *mut ::cty::c_char) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_sta_ssid_set(ssid: *mut ::cty::c_char);
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            wifi_mgmr_sta_ssid_set(ssid as *mut ::cty::c_char);
+            "----------Result----------";
+            Ok(())
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_rate_config(config: u16)
-        -> ::cty::c_int;
+    pub fn mgmr_sta_psk_set(psk: *mut ::cty::c_char) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_sta_psk_set(psk: *mut ::cty::c_char);
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            wifi_mgmr_sta_psk_set(psk as *mut ::cty::c_char);
+            "----------Result----------";
+            Ok(())
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_conf_max_sta(max_sta_supported: u8)
-        -> ::cty::c_int;
+    pub fn mgmr_sta_connect_ind_stat_get(wifi_mgmr_ind_stat:
+                                             *mut wifi_mgmr_sta_connect_ind_stat_info_t)
+     -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_sta_connect_ind_stat_get(wifi_mgmr_ind_stat:
+                                                          *mut wifi_mgmr_sta_connect_ind_stat_info_t);
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            wifi_mgmr_sta_connect_ind_stat_get(wifi_mgmr_ind_stat as
+                                                   *mut wifi_mgmr_sta_connect_ind_stat_info_t);
+            "----------Result----------";
+            Ok(())
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_sniffer_register(env: *mut ::cty::c_void,
-                                          cb: sniffer_cb_t)
-        -> ::cty::c_int;
+    pub fn mgmr_ap_enable() -> BlResult<wifi_interface_t> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_ap_enable()
+            -> wifi_interface_t;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_ap_enable();
+            "----------Result----------";
+            Ok(res)
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_sniffer_unregister(env: *mut ::cty::c_void)
-        -> ::cty::c_int;
+    pub fn mgmr_ap_mac_set(mac: *mut u8) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_ap_mac_set(mac: *mut u8)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_ap_mac_set(mac as *mut u8);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_state_get(state: *mut ::cty::c_int)
-        -> ::cty::c_int;
+    pub fn mgmr_ap_mac_get(mac: *mut u8) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_ap_mac_get(mac: *mut u8)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_ap_mac_get(mac as *mut u8);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_status_code_get(s_code: *mut ::cty::c_int)
-        -> ::cty::c_int;
+    pub fn mgmr_ap_ip_get(ip: *mut u32, gw: *mut u32, mask: *mut u32)
+     -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_ap_ip_get(ip: *mut u32, gw: *mut u32,
+                                       mask: *mut u32)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res =
+                wifi_mgmr_ap_ip_get(ip as *mut u32, gw as *mut u32,
+                                    mask as *mut u32);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_rssi_get(rssi: *mut ::cty::c_int)
-        -> ::cty::c_int;
+    pub fn mgmr_ap_stop(interface: *mut wifi_interface_t) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_ap_stop(interface: *mut wifi_interface_t)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_ap_stop(interface as *mut wifi_interface_t);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_channel_get(channel: *mut ::cty::c_int)
-        -> ::cty::c_int;
+    pub fn mgmr_ap_start(interface: *mut wifi_interface_t,
+                         ssid: *mut ::cty::c_char, hidden_ssid: ::cty::c_int,
+                         passwd: *mut ::cty::c_char, channel: ::cty::c_int)
+     -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_ap_start(interface: *mut wifi_interface_t,
+                                      ssid: *mut ::cty::c_char,
+                                      hidden_ssid: ::cty::c_int,
+                                      passwd: *mut ::cty::c_char,
+                                      channel: ::cty::c_int)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res =
+                wifi_mgmr_ap_start(interface as *mut wifi_interface_t,
+                                   ssid as *mut ::cty::c_char,
+                                   hidden_ssid as ::cty::c_int,
+                                   passwd as *mut ::cty::c_char,
+                                   channel as ::cty::c_int);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_channel_set(channel: ::cty::c_int,
-                                     use_40Mhz: ::cty::c_int)
-        -> ::cty::c_int;
+    pub fn mgmr_ap_sta_cnt_get(sta_cnt: *mut u8) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_ap_sta_cnt_get(sta_cnt: *mut u8)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_ap_sta_cnt_get(sta_cnt as *mut u8);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_all_ap_scan(ap_ary: *mut *mut wifi_mgmr_ap_item_t,
-                                     num: *mut u32)
-        -> ::cty::c_int;
+    pub fn mgmr_ap_sta_info_get(sta_info: *mut wifi_sta_basic_info, idx: u8)
+     -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_ap_sta_info_get(sta_info:
+                                                 *mut wifi_sta_basic_info,
+                                             idx: u8)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res =
+                wifi_mgmr_ap_sta_info_get(sta_info as
+                                              *mut wifi_sta_basic_info,
+                                          idx as u8);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_scan_filter_hidden_ssid(filter: ::cty::c_int)
-        -> ::cty::c_int;
+    pub fn mgmr_ap_sta_delete(sta_idx: u8) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_ap_sta_delete(sta_idx: u8)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_ap_sta_delete(sta_idx as u8);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_scan(data: *mut ::cty::c_void,
-                              cb: scan_complete_cb_t)
-        -> ::cty::c_int;
+    pub fn mgmr_ap_set_gateway(gateway: *mut ::cty::c_char) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_ap_set_gateway(gateway: *mut ::cty::c_char)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_ap_set_gateway(gateway as *mut ::cty::c_char);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_cfg_req(ops: u32, task: u32, element: u32,
-                                 type_: u32, length: u32, buf: *mut u32)
-        -> ::cty::c_int;
+    pub fn mgmr_sniffer_enable() -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_sniffer_enable()
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_sniffer_enable();
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_scan_complete_callback()
-        -> ::cty::c_int;
+    pub fn mgmr_sniffer_disable() -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_sniffer_disable()
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_sniffer_disable();
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_cli_scanlist()
-        -> ::cty::c_int;
+    pub fn mgmr_rate_config(config: u16) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_rate_config(config: u16)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_rate_config(config as u16);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_cli_init()
-        -> ::cty::c_int;
+    pub fn mgmr_conf_max_sta(max_sta_supported: u8) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_conf_max_sta(max_sta_supported: u8)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_conf_max_sta(max_sta_supported as u8);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_scan_ap(ssid: *mut ::cty::c_char,
-                                 item: *mut wifi_mgmr_ap_item_t)
-        -> ::cty::c_int;
+    pub fn mgmr_sniffer_register(env: Ptr, cb: sniffer_cb_t) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_sniffer_register(env: *mut ::cty::c_void,
+                                              cb: sniffer_cb_t)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res =
+                wifi_mgmr_sniffer_register(env as *mut ::cty::c_void,
+                                           cb as sniffer_cb_t);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_scan_ap_all(env: *mut wifi_mgmr_ap_item_t,
-                                     param1: *mut u32, cb: scan_item_cb_t)
-        -> ::cty::c_int;
+    pub fn mgmr_sniffer_unregister(env: Ptr) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_sniffer_unregister(env: *mut ::cty::c_void)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_sniffer_unregister(env as *mut ::cty::c_void);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_raw_80211_send(pkt: *mut u8, len: ::cty::c_int)
-        -> ::cty::c_int;
+    pub fn mgmr_state_get(state: *mut ::cty::c_int) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_state_get(state: *mut ::cty::c_int)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_state_get(state as *mut ::cty::c_int);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_set_country_code(country_code: *mut ::cty::c_char)
-        -> ::cty::c_int;
+    pub fn mgmr_status_code_get(s_code: *mut ::cty::c_int) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_status_code_get(s_code: *mut ::cty::c_int)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_status_code_get(s_code as *mut ::cty::c_int);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_ext_dump_needed()
-        -> ::cty::c_int;
+    pub fn mgmr_rssi_get(rssi: *mut ::cty::c_int) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_rssi_get(rssi: *mut ::cty::c_int)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_rssi_get(rssi as *mut ::cty::c_int);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_status_code_str(status_code: u16)
-        -> *const ::cty::c_char;
+    pub fn mgmr_channel_get(channel: *mut ::cty::c_int) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_channel_get(channel: *mut ::cty::c_int)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_channel_get(channel as *mut ::cty::c_int);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
+    }
+    pub fn mgmr_channel_set(channel: ::cty::c_int, use_40Mhz: ::cty::c_int)
+     -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_channel_set(channel: ::cty::c_int,
+                                         use_40Mhz: ::cty::c_int)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res =
+                wifi_mgmr_channel_set(channel as ::cty::c_int,
+                                      use_40Mhz as ::cty::c_int);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
+    }
+    pub fn mgmr_all_ap_scan(ap_ary: *mut *mut wifi_mgmr_ap_item_t,
+                            num: *mut u32) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_all_ap_scan(ap_ary:
+                                             *mut *mut wifi_mgmr_ap_item_t,
+                                         num: *mut u32)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res =
+                wifi_mgmr_all_ap_scan(ap_ary as *mut *mut wifi_mgmr_ap_item_t,
+                                      num as *mut u32);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
+    }
+    pub fn mgmr_scan_filter_hidden_ssid(filter: ::cty::c_int)
+     -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_scan_filter_hidden_ssid(filter: ::cty::c_int)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res =
+                wifi_mgmr_scan_filter_hidden_ssid(filter as ::cty::c_int);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
+    }
+    pub fn mgmr_scan(data: Ptr, cb: scan_complete_cb_t) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_scan(data: *mut ::cty::c_void,
+                                  cb: scan_complete_cb_t)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res =
+                wifi_mgmr_scan(data as *mut ::cty::c_void,
+                               cb as scan_complete_cb_t);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
+    }
+    pub fn mgmr_cfg_req(ops: u32, task: u32, element: u32, type_: u32,
+                        length: u32, buf: *mut u32) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_cfg_req(ops: u32, task: u32, element: u32,
+                                     type_: u32, length: u32, buf: *mut u32)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res =
+                wifi_mgmr_cfg_req(ops as u32, task as u32, element as u32,
+                                  type_ as u32, length as u32,
+                                  buf as *mut u32);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
+    }
+    pub fn mgmr_scan_complete_callback() -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_scan_complete_callback()
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_scan_complete_callback();
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
+    }
+    pub fn mgmr_cli_scanlist() -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_cli_scanlist()
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_cli_scanlist();
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
+    }
+    pub fn mgmr_cli_init() -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_cli_init()
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_cli_init();
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
+    }
+    pub fn mgmr_scan_ap(ssid: *mut ::cty::c_char,
+                        item: *mut wifi_mgmr_ap_item_t) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_scan_ap(ssid: *mut ::cty::c_char,
+                                     item: *mut wifi_mgmr_ap_item_t)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res =
+                wifi_mgmr_scan_ap(ssid as *mut ::cty::c_char,
+                                  item as *mut wifi_mgmr_ap_item_t);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
+    }
+    pub fn mgmr_scan_ap_all(env: *mut wifi_mgmr_ap_item_t, param1: *mut u32,
+                            cb: scan_item_cb_t) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_scan_ap_all(env: *mut wifi_mgmr_ap_item_t,
+                                         param1: *mut u32, cb: scan_item_cb_t)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res =
+                wifi_mgmr_scan_ap_all(env as *mut wifi_mgmr_ap_item_t,
+                                      param1 as *mut u32,
+                                      cb as scan_item_cb_t);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
+    }
+    pub fn mgmr_raw_80211_send(pkt: *mut u8, len: ::cty::c_int)
+     -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_raw_80211_send(pkt: *mut u8, len: ::cty::c_int)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res =
+                wifi_mgmr_raw_80211_send(pkt as *mut u8, len as ::cty::c_int);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
+    }
+    pub fn mgmr_set_country_code(country_code: *mut ::cty::c_char)
+     -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_set_country_code(country_code:
+                                                  *mut ::cty::c_char)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res =
+                wifi_mgmr_set_country_code(country_code as
+                                               *mut ::cty::c_char);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
+    }
+    pub fn mgmr_ext_dump_needed() -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_ext_dump_needed()
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_ext_dump_needed();
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
+    }
+    pub fn mgmr_status_code_str(status_code: u16) -> BlResult<Strn<'static>> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_status_code_str(status_code: u16)
+            -> *const ::cty::c_char;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_status_code_str(status_code as u16);
+            "----------Result----------";
+            Ok(Strn::from_cstr(res as *const u8))
+        }
     }
     #[doc = " \\brief Event"]
     #[doc = ""]
@@ -13404,65 +14066,213 @@ pub mod wifi {
         fn default() -> Self { unsafe { ::core::mem::zeroed() } }
     }
     pub type wifi_mgmr_t = wifi_mgmr;
-    extern "C" {
-        pub fn wifi_mgmr_event_notify(msg: *mut wifi_mgmr_msg_t)
-        -> ::cty::c_int;
+    pub fn mgmr_event_notify(msg: *mut wifi_mgmr_msg_t) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_event_notify(msg: *mut wifi_mgmr_msg_t)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_event_notify(msg as *mut wifi_mgmr_msg_t);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_state_get_internal(state: *mut ::cty::c_int)
-        -> ::cty::c_int;
+    pub fn mgmr_state_get_internal(state: *mut ::cty::c_int) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_state_get_internal(state: *mut ::cty::c_int)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res =
+                wifi_mgmr_state_get_internal(state as *mut ::cty::c_int);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_status_code_clean_internal()
-        -> ::cty::c_int;
+    pub fn mgmr_status_code_clean_internal() -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_status_code_clean_internal()
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_status_code_clean_internal();
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_status_code_get_internal(s_code: *mut ::cty::c_int)
-        -> ::cty::c_int;
+    pub fn mgmr_status_code_get_internal(s_code: *mut ::cty::c_int)
+     -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_status_code_get_internal(s_code:
+                                                          *mut ::cty::c_int)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res =
+                wifi_mgmr_status_code_get_internal(s_code as
+                                                       *mut ::cty::c_int);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_set_country_code_internal(country_code:
-                                                       *mut ::cty::c_char)
-        -> ::cty::c_int;
+    pub fn mgmr_set_country_code_internal(country_code: *mut ::cty::c_char)
+     -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_set_country_code_internal(country_code:
+                                                           *mut ::cty::c_char)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res =
+                wifi_mgmr_set_country_code_internal(country_code as
+                                                        *mut ::cty::c_char);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_ap_sta_cnt_get_internal(sta_cnt: *mut u8)
-        -> ::cty::c_int;
+    pub fn mgmr_ap_sta_cnt_get_internal(sta_cnt: *mut u8) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_ap_sta_cnt_get_internal(sta_cnt: *mut u8)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_ap_sta_cnt_get_internal(sta_cnt as *mut u8);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_ap_sta_info_get_internal(sta_info_internal:
-                                                      *mut wifi_mgmr_sta_basic_info_t,
-                                                  idx: u8)
-        -> ::cty::c_int;
+    pub fn mgmr_ap_sta_info_get_internal(sta_info_internal:
+                                             *mut wifi_mgmr_sta_basic_info_t,
+                                         idx: u8) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_ap_sta_info_get_internal(sta_info_internal:
+                                                          *mut wifi_mgmr_sta_basic_info_t,
+                                                      idx: u8)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res =
+                wifi_mgmr_ap_sta_info_get_internal(sta_info_internal as
+                                                       *mut wifi_mgmr_sta_basic_info_t,
+                                                   idx as u8);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_ap_sta_delete_internal(sta_idx: u8)
-        -> ::cty::c_int;
+    pub fn mgmr_ap_sta_delete_internal(sta_idx: u8) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_ap_sta_delete_internal(sta_idx: u8)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_ap_sta_delete_internal(sta_idx as u8);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_scan_complete_notify()
-        -> ::cty::c_int;
+    pub fn mgmr_scan_complete_notify() -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_scan_complete_notify()
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_scan_complete_notify();
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
     extern "C" {
         pub static mut wifiMgmr: wifi_mgmr_t ;
     }
-    extern "C" {
-        pub fn wifi_mgmr_auth_to_str(auth: u8)
-        -> *mut ::cty::c_char;
+    pub fn mgmr_auth_to_str(auth: u8) -> BlResult<*mut ::cty::c_char> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_auth_to_str(auth: u8)
+            -> *mut ::cty::c_char;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_auth_to_str(auth as u8);
+            "----------Result----------";
+            Ok(res)
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_cipher_to_str(cipher: u8)
-        -> *mut ::cty::c_char;
+    pub fn mgmr_cipher_to_str(cipher: u8) -> BlResult<*mut ::cty::c_char> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_cipher_to_str(cipher: u8)
+            -> *mut ::cty::c_char;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_cipher_to_str(cipher as u8);
+            "----------Result----------";
+            Ok(res)
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_api_fw_tsen_reload()
-        -> ::cty::c_int;
+    pub fn mgmr_api_fw_tsen_reload() -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_api_fw_tsen_reload()
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = wifi_mgmr_api_fw_tsen_reload();
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
-    extern "C" {
-        pub fn wifi_mgmr_scan_item_is_timeout(mgmr: *mut wifi_mgmr_t,
-                                              item:
-                                                  *mut wifi_mgmr_scan_item_t)
-        -> ::cty::c_int;
+    pub fn mgmr_scan_item_is_timeout(mgmr: *mut wifi_mgmr_t,
+                                     item: *mut wifi_mgmr_scan_item_t)
+     -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn wifi_mgmr_scan_item_is_timeout(mgmr: *mut wifi_mgmr_t,
+                                                  item:
+                                                      *mut wifi_mgmr_scan_item_t)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res =
+                wifi_mgmr_scan_item_is_timeout(mgmr as *mut wifi_mgmr_t,
+                                               item as
+                                                   *mut wifi_mgmr_scan_item_t);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
     }
 }
 use core::{panic::PanicInfo, str::FromStr};
@@ -13577,5 +14387,238 @@ pub mod result {
         }
     }
 }
+/// Represents a null-terminated string, suitable for passing to C APIs as `* const char`.
+/// The string could be a null-terminated byte string created in Rust, or a pointer to a null-terminated string returned by C.
+/// Pointer may be null.
+pub struct Strn<'a> {
+    /// Either a byte string terminated with null, or a pointer to a null-terminated string
+    pub rep: StrnRep<'a>,
+}
+#[automatically_derived]
+#[allow(unused_qualifications)]
+impl <'a> ::core::clone::Clone for Strn<'a> {
+    #[inline]
+    fn clone(&self) -> Strn<'a> {
+        { let _: ::core::clone::AssertParamIsClone<StrnRep<'a>>; *self }
+    }
+}
+#[automatically_derived]
+#[allow(unused_qualifications)]
+impl <'a> ::core::marker::Copy for Strn<'a> { }
+/// Either a byte string or a string pointer
+#[repr(u8)]
+pub enum StrnRep<'a> {
+
+    /// Byte string terminated with null
+    ByteStr(&'a [u8]),
+
+    /// Pointer to a null-terminated string
+    CStr(*const u8),
+}
+#[automatically_derived]
+#[allow(unused_qualifications)]
+impl <'a> ::core::clone::Clone for StrnRep<'a> {
+    #[inline]
+    fn clone(&self) -> StrnRep<'a> {
+        {
+            let _: ::core::clone::AssertParamIsClone<&'a [u8]>;
+            let _: ::core::clone::AssertParamIsClone<*const u8>;
+            *self
+        }
+    }
+}
+#[automatically_derived]
+#[allow(unused_qualifications)]
+impl <'a> ::core::marker::Copy for StrnRep<'a> { }
+impl <'a> Strn<'a> {
+    /// Create a new `Strn` with a byte string. Fail if the last byte is not zero.
+    /// ```
+    /// Strn::new(b"network\0")
+    /// strn!("network")
+    /// ```
+    pub fn new(bs: &[u8]) -> Strn {
+        {
+            match (&bs.last(), &Some(&0u8)) {
+                (left_val, right_val) => {
+                    if !(*left_val == *right_val) {
+                        let kind = ::core::panicking::AssertKind::Eq;
+                        ::core::panicking::assert_failed(kind, &*left_val,
+                                                         &*right_val,
+                                                         ::core::option::Option::Some(::core::fmt::Arguments::new_v1(&["no null"],
+                                                                                                                     &match ()
+                                                                                                                          {
+                                                                                                                          ()
+                                                                                                                          =>
+                                                                                                                          [],
+                                                                                                                      })));
+                    }
+                }
+            }
+        };
+        Strn{rep: StrnRep::ByteStr(bs),}
+    }
+    /// Create a new `Strn` with a null-terminated string pointer returned by C.
+    pub fn from_cstr(cstr: *const u8) -> Strn<'a> {
+        Strn{rep: StrnRep::CStr(cstr),}
+    }
+    /// Return a pointer to the string
+    pub fn as_ptr(&self) -> *const u8 {
+        match self.rep {
+            StrnRep::ByteStr(bs) => { bs.as_ptr() }
+            StrnRep::CStr(cstr) => { cstr }
+        }
+    }
+    /// Return the length of the string, excluding the terminating null. For safety, we limit to 128.
+    pub fn len(&self) -> usize {
+        match self.rep {
+            StrnRep::ByteStr(bs) => {
+                {
+                    match (&bs.last(), &Some(&0u8)) {
+                        (left_val, right_val) => {
+                            if !(*left_val == *right_val) {
+                                let kind = ::core::panicking::AssertKind::Eq;
+                                ::core::panicking::assert_failed(kind,
+                                                                 &*left_val,
+                                                                 &*right_val,
+                                                                 ::core::option::Option::Some(::core::fmt::Arguments::new_v1(&["no null"],
+                                                                                                                             &match ()
+                                                                                                                                  {
+                                                                                                                                  ()
+                                                                                                                                  =>
+                                                                                                                                  [],
+                                                                                                                              })));
+                            }
+                        }
+                    }
+                };
+                bs.len() - 1
+            }
+            StrnRep::CStr(cstr) => {
+                if cstr.is_null() { return 0; }
+                for len in 0..127 {
+                    let ptr: *const u8 = ((cstr as u32) + len) as *const u8;
+                    if unsafe { *ptr } == 0 { return len as usize; }
+                }
+                if !false { ::core::panicking::panic("big strn") };
+                return 128 as usize;
+            }
+        }
+    }
+    /// Return true if the string is empty
+    pub fn is_empty(&self) -> bool { self.len() == 0 }
+    /// Return the byte string as a null-terminated `* const char` C-style string.
+    /// Fail if the last byte is not zero.
+    pub fn as_cstr(&self) -> *const u8 {
+        match self.rep {
+            StrnRep::ByteStr(bs) => {
+                {
+                    match (&bs.last(), &Some(&0u8)) {
+                        (left_val, right_val) => {
+                            if !(*left_val == *right_val) {
+                                let kind = ::core::panicking::AssertKind::Eq;
+                                ::core::panicking::assert_failed(kind,
+                                                                 &*left_val,
+                                                                 &*right_val,
+                                                                 ::core::option::Option::Some(::core::fmt::Arguments::new_v1(&["no null"],
+                                                                                                                             &match ()
+                                                                                                                                  {
+                                                                                                                                  ()
+                                                                                                                                  =>
+                                                                                                                                  [],
+                                                                                                                              })));
+                            }
+                        }
+                    }
+                };
+                bs.as_ptr() as *const u8
+            }
+            StrnRep::CStr(cstr) => { cstr }
+        }
+    }
+    /// Return the byte string.
+    /// Fail if the last byte is not zero.
+    pub fn as_bytestr(&self) -> &'a [u8] {
+        match self.rep {
+            StrnRep::ByteStr(bs) => {
+                {
+                    match (&bs.last(), &Some(&0u8)) {
+                        (left_val, right_val) => {
+                            if !(*left_val == *right_val) {
+                                let kind = ::core::panicking::AssertKind::Eq;
+                                ::core::panicking::assert_failed(kind,
+                                                                 &*left_val,
+                                                                 &*right_val,
+                                                                 ::core::option::Option::Some(::core::fmt::Arguments::new_v1(&["no null"],
+                                                                                                                             &match ()
+                                                                                                                                  {
+                                                                                                                                  ()
+                                                                                                                                  =>
+                                                                                                                                  [],
+                                                                                                                              })));
+                            }
+                        }
+                    }
+                };
+                &bs
+            }
+            StrnRep::CStr(_cstr) => {
+                if !false { ::core::panicking::panic("strn cstr") };
+                b"\0"
+            }
+        }
+    }
+    /// Fail if the last byte is not zero.
+    pub fn validate(&self) {
+        match self.rep {
+            StrnRep::ByteStr(bs) => {
+                {
+                    match (&bs.last(), &Some(&0u8)) {
+                        (left_val, right_val) => {
+                            if !(*left_val == *right_val) {
+                                let kind = ::core::panicking::AssertKind::Eq;
+                                ::core::panicking::assert_failed(kind,
+                                                                 &*left_val,
+                                                                 &*right_val,
+                                                                 ::core::option::Option::Some(::core::fmt::Arguments::new_v1(&["no null"],
+                                                                                                                             &match ()
+                                                                                                                                  {
+                                                                                                                                  ()
+                                                                                                                                  =>
+                                                                                                                                  [],
+                                                                                                                              })));
+                            }
+                        }
+                    }
+                };
+            }
+            StrnRep::CStr(_cstr) => { }
+        }
+    }
+    /// Fail if the last byte is not zero.
+    pub fn validate_bytestr(bs: &'static [u8]) {
+        {
+            match (&bs.last(), &Some(&0u8)) {
+                (left_val, right_val) => {
+                    if !(*left_val == *right_val) {
+                        let kind = ::core::panicking::AssertKind::Eq;
+                        ::core::panicking::assert_failed(kind, &*left_val,
+                                                         &*right_val,
+                                                         ::core::option::Option::Some(::core::fmt::Arguments::new_v1(&["no null"],
+                                                                                                                     &match ()
+                                                                                                                          {
+                                                                                                                          ()
+                                                                                                                          =>
+                                                                                                                          [],
+                                                                                                                      })));
+                    }
+                }
+            }
+        };
+    }
+}
+///  Allow threads to share Strn, since it is static.
+unsafe impl <'a> Send for Strn<'a> { }
+///  Allow threads to share Strn, since it is static.
+unsafe impl <'a> Sync for Strn<'a> { }
 ///  Declare a `void *` pointer that will be passed to C functions
 pub type Ptr = *mut ::cty::c_void;
