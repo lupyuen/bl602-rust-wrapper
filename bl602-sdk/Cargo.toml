@@ -1,20 +1,20 @@
-# Info about this package.
+# Info about this package
 [package]
 authors = ["Lee Lup Yuen <luppy@appkaki.com>"]
 edition = "2018"
 readme  = "README.md"
-name    = "app"
+name    = "bl602-sdk"
 version = "0.0.1"
 
-# External Rust libraries used by this module.  See crates.io.
+# External Rust libraries used by this module
 [dependencies]
 bl602-macros = { path = "../bl602-macros" }  # Wrapper Macros
-heapless = "0.6.1" # `static` friendly data structures that don't require dynamic memory allocation: https://crates.io/crates/heapless
-cty = "0.2.1"  # String utilities: https://crates.io/crates/cty
+heapless     = "0.7.3"  # `static` friendly data structures that don't require dynamic memory allocation: https://crates.io/crates/heapless
+cty          = "0.2.1"  # String utilities: https://crates.io/crates/cty
 
 # Build this module as a Rust library, not a Rust application.  We will link this library with the BL602 firmware.
 [lib]
-name       = "app"  # Output will be named `libapp.a`
+name       = "bl602_sdk"  # Output will be named `libbl602_sdk.a`
 test       = false
 bench      = false
 crate-type = ["staticlib"]

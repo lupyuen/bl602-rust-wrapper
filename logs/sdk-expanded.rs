@@ -14469,7 +14469,7 @@ fn time_delay(ticks: u32) {
     unsafe { ble_npl_time_delay(ticks); }
 }
 /// Limit Strings to 64 chars, similar to `char[64]` in C
-type String = heapless::String<heapless::consts::U64>;
+type String = heapless::String<64>;
 /// HAL return type and error codes
 pub mod result {
     /// Common return type for BL602 HAL.  If no error, returns `Ok(val)` where val has type T.

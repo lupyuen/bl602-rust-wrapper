@@ -174,7 +174,7 @@ fn time_delay(
 }
 
 /// Limit Strings to 64 chars, similar to `char[64]` in C
-type String = heapless::String::<heapless::consts::U64>;
+type String = heapless::String::<64>;
 
 ///////////////////////////////////////////////////////////////////////////////
 //  BL602 Types

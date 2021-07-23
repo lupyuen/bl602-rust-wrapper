@@ -35,4 +35,5 @@ cargo doc \
 popd
 
 #  Copy the docs
-cp -r target/riscv32imacf-unknown-none-elf/doc/app docs
+cp -r target/riscv32imacf-unknown-none-elf/doc/bl602_sdk docs
+cp -r target/riscv32imacf-unknown-none-elf/doc/src docs
