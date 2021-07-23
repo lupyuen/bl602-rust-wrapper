@@ -52,7 +52,6 @@ pub mod wifi;
 
 //  Import the Rust Core Library
 use core::{
-    panic::PanicInfo,  //  For `PanicInfo` type used by `panic` function
     str::FromStr,      //  For converting `str` to `String`
 };
 
@@ -62,7 +61,7 @@ use core::{
 
 /// Print a message to the serial console.
 /// TODO: Auto-generate this wrapper with `bindgen` from the C declaration
-fn puts(s: &str) -> i32 {  //  `&str` is a reference to a string slice, similar to `const char *` in C
+pub fn puts(s: &str) -> i32 {  //  `&str` is a reference to a string slice, similar to `const char *` in C
 
     extern "C" {  //  Import C Function
         /// Print a message to the serial console (from C stdio library)
@@ -91,7 +90,7 @@ fn puts(s: &str) -> i32 {  //  `&str` is a reference to a string slice, similar 
 /// Convert milliseconds to system ticks.
 /// TODO: Auto-generate this wrapper with `bindgen` from the C declaration:
 /// `ble_npl_time_t ble_npl_time_ms_to_ticks32(uint32_t ms)`
-fn time_ms_to_ticks32(
+pub fn time_ms_to_ticks32(
     ms: u32  //  Number of milliseconds
 ) -> u32 {   //  Returns the number of ticks (uint32_t)
     extern "C" {        //  Import C Function
@@ -110,7 +109,7 @@ fn time_ms_to_ticks32(
 /// Sleep for the specified number of system ticks.
 /// TODO: Auto-generate this wrapper with `bindgen` from the C declaration:
 /// `void ble_npl_time_delay(ble_npl_time_t ticks)`
-fn time_delay(
+pub fn time_delay(
     ticks: u32  //  Number of ticks to sleep
 ) {
     extern "C" {  //  Import C Function
@@ -125,7 +124,7 @@ fn time_delay(
 }
 
 /// Limit Strings to 64 chars, similar to `char[64]` in C
-type String = heapless::String::<64>;
+pub type String = heapless::String::<64>;
 
 ///////////////////////////////////////////////////////////////////////////////
 //  Wrapper Types
@@ -345,17 +344,4 @@ extern "C" fn test_rust(  //  Declare `extern "C"` because it will be called by 
     }
 
     //  Return to the BL602 command-line interface
-}
-
-/// For Testing: This function is called on panic, like an assertion failure
-#[panic_handler]
-fn test_panic(_info: &PanicInfo) -> ! {  //  `!` means that panic handler will never return
-    //  TODO: Implement the complete panic handler like this:
-    //  https://github.com/lupyuen/pinetime-rust-BL602/blob/master/rust/app/src/lib.rs#L115-L146
-
-    //  For now we display a message
-    puts("TODO: Test Rust panic"); 
-
-	//  Loop forever, do not pass go, do not collect $200
-    loop {}
 }
