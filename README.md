@@ -8,12 +8,28 @@ Read the article and Rust docs...
 
 -   [Check this Twitter Thread for updates](https://twitter.com/MisterTechBlog/status/1416608940876435462)
 
-Prerequisites: Install [`bindgen`](https://rust-lang.github.io/rust-bindgen/requirements.html) and `clang`...
+## Build Instructions
+
+To generate the Rust Wrapper and build the project...
 
 ```bash
+#  Install bindgen and clang: https://rust-lang.github.io/rust-bindgen/requirements.html 
 cargo install bindgen
 sudo apt install llvm-dev libclang-dev clang
+
+#  Download the source code
+git clone --recursive https://github.com/lupyuen/bl602-rust-wrapper
+git clone --recursive https://github.com/lupyuen/bl_iot_sdk
+
+#  Generate the wrapper
+cd bl602-rust-wrapper
+scripts/gen-bindings.sh
+
+#  Build the docs and the test project
+scripts/build.sh
 ```
+
+## How It Works
 
 This script...
 
