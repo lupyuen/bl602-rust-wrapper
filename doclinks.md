@@ -4,6 +4,13 @@
 
 | Function | Description | Section | URL
 | -------- | ----------- | ------- | ---
+| bl_adc_dma_init | Init DMA for the ADC Channel | init_adc | https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c
+| bl_adc_freq_init | Init the ADC Channel Frequency | init_adc | https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c
+| bl_adc_get_channel_by_gpio | Get the ADC Channel Number for the GPIO Pin | init_adc | https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c
+| bl_adc_gpio_init | Configure the GPIO Pin as ADC Input (no pullup, no pulldown) | init_adc | https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c
+| bl_adc_init | Init an ADC Channel | init_adc | https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c
+| bl_adc_parse_data | Parse the ADC Samples that have been read
+| bl_adc_start | Start reading the ADC Channel via DMA | init_adc | https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c
 
 ## GPIO
 

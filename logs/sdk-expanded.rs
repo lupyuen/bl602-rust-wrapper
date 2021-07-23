@@ -186,6 +186,8 @@ pub mod adc {
         fn default() -> Self { unsafe { ::core::mem::zeroed() } }
     }
     pub type adc_ctx_t = adc_ctx;
+    #[doc =
+      "Init an ADC Channel See `bl_adc_init` in \"init_adc\" <https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c>"]
     pub fn adc_init(mode: ::cty::c_int, gpio_num: ::cty::c_int)
      -> BlResult<()> {
         "----------Extern Decl----------";
@@ -202,6 +204,8 @@ pub mod adc {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
+    #[doc =
+      "Init DMA for the ADC Channel See `bl_adc_dma_init` in \"init_adc\" <https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c>"]
     pub fn adc_dma_init(mode: ::cty::c_int, data_num: u32) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
@@ -216,6 +220,8 @@ pub mod adc {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
+    #[doc =
+      "Start reading the ADC Channel via DMA See `bl_adc_start` in \"init_adc\" <https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c>"]
     pub fn adc_start() -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
@@ -230,6 +236,8 @@ pub mod adc {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
+    #[doc =
+      "Configure the GPIO Pin as ADC Input (no pullup, no pulldown) See `bl_adc_gpio_init` in \"init_adc\" <https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c>"]
     pub fn adc_gpio_init(gpio_num: ::cty::c_int) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
@@ -244,6 +252,8 @@ pub mod adc {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
+    #[doc =
+      "Get the ADC Channel Number for the GPIO Pin See `bl_adc_get_channel_by_gpio` in \"init_adc\" <https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c>"]
     pub fn adc_get_channel_by_gpio(gpio_num: ::cty::c_int) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
@@ -258,6 +268,8 @@ pub mod adc {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
+    #[doc =
+      "Init the ADC Channel Frequency See `bl_adc_freq_init` in \"init_adc\" <https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c>"]
     pub fn adc_freq_init(mode: ::cty::c_int, freq: u32) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
@@ -272,6 +284,7 @@ pub mod adc {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
+    #[doc = "Parse the ADC Samples that have been read"]
     pub fn adc_parse_data(parr: *mut u32, data_size: ::cty::c_int,
                           channel: ::cty::c_int, raw_flag: ::cty::c_int)
      -> BlResult<i32> {
