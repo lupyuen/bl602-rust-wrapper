@@ -12,6 +12,29 @@ Read the article and docs...
 
 -   [Check this Twitter Thread for updates](https://twitter.com/MisterTechBlog/status/1416608940876435462)
 
+## Usage
+
+Here's how we call the Rust Wrapper for BL602 GPIO HAL in our BL602 Rust Firmware...
+
+```rust
+use bl602_sdk::gpio;
+...
+//  Configure the LED GPIO for output (instead of input)
+gpio::enable_output(LED_GPIO, 0, 0)        //  No pullup, no pulldown
+    .expect("GPIO enable output failed");  //  Halt on error
+
+//  Blink the LED 5 times
+for i in 0..10 {  //  Iterates 10 times from 0 to 9 (`..` excludes 10)
+
+    //  Toggle the LED GPIO between 0 (on) and 1 (off)
+    gpio::output_set(  //  Set the GPIO output (from BL602 GPIO HAL)
+        LED_GPIO,      //  GPIO pin number
+        i % 2          //  0 for low, 1 for high
+    ).expect("GPIO output failed");  //  Halt on error
+```
+
+[From `bl602-sdk/src/lib.rs`](bl602-sdk/src/lib.rs)
+
 ## Build Instructions
 
 To generate the Rust Wrapper and build the project...
@@ -111,25 +134,6 @@ pub fn output_set(pin: u8, value: u8) -> BlResult<()> {
         match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
     }
 }
-```
-
-Here's how we call the Rust Wrapper for BL602 GPIO HAL in our BL602 Rust Firmware...
-
--   [`bl602-sdk/src/lib.rs`](bl602-sdk/src/lib.rs)
-
-```rust
-//  Configure the LED GPIO for output (instead of input)
-gpio::enable_output(LED_GPIO, 0, 0)        //  No pullup, no pulldown
-    .expect("GPIO enable output failed");  //  Halt on error
-
-//  Blink the LED 5 times
-for i in 0..10 {  //  Iterates 10 times from 0 to 9 (`..` excludes 10)
-
-    //  Toggle the LED GPIO between 0 (on) and 1 (off)
-    gpio::output_set(  //  Set the GPIO output (from BL602 GPIO HAL)
-        LED_GPIO,      //  GPIO pin number
-        i % 2          //  0 for low, 1 for high
-    ).expect("GPIO output failed");  //  Halt on error
 ```
 
 Links to ["The RISC-V BL602 Book"](https://lupyuen.github.io/articles/book) are defined here...
