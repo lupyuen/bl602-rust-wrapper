@@ -11,6 +11,11 @@ use result::*;
 #[allow(non_snake_case)]
 pub mod adc;
 
+/// DMA HAL for BL602. See <https://lupyuen.github.io/articles/book#dma-on-bl602>
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub mod dma;
+
 /// GPIO HAL for BL602. See <https://lupyuen.github.io/articles/book#gpio-on-bl602>
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]

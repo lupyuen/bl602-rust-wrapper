@@ -214,12 +214,12 @@ function generate_bindings_core() {
     #  Header file to be processed e.g. components/hal_drv/bl602_hal/bl_gpio.h
     local headerfile=../bl_iot_sdk/components/hal_drv/bl602_hal/${modname}_${submodname}.h
 
-    #  For ADC: Insert stdint into the header file
-    if [ "$submodname" == 'adc' ]; then
+    #  For ADC and DMA: Insert stdint into the header file
+    if [ "$submodname" == 'adc' ] || [ "$submodname" == 'dma' ]; then
         local headerfile=/tmp/gen-bindings-${submodname}.h
         echo "#include <stdint.h>" >$headerfile
         cat \
-            ../bl_iot_sdk/components/hal_drv/bl602_hal/bl_adc.h \
+            ../bl_iot_sdk/components/hal_drv/bl602_hal/bl_${submodname}.h \
             >>$headerfile
     fi
 
@@ -297,6 +297,10 @@ EOF
 #  Generate bindings for ADC
 #  components/hal_drv/bl602_hal/bl_adc.h
 generate_bindings_core bl adc
+
+#  Generate bindings for DMA
+#  components/hal_drv/bl602_hal/bl_dma.h
+generate_bindings_core bl dma
 
 #  Generate bindings for GPIO
 #  components/hal_drv/bl602_hal/bl_gpio.h

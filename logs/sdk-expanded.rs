@@ -25,6 +25,7 @@ pub mod adc {
 
 
 
+
     //  Import the Rust Core Library
     //  For `PanicInfo` type used by `panic` function
     //  For converting `str` to `String`
@@ -187,7 +188,7 @@ pub mod adc {
     }
     pub type adc_ctx_t = adc_ctx;
     #[doc =
-      "Init an ADC Channel See `bl_adc_init` in \"init_adc\" <https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c>"]
+      "Init an ADC Channel. See `bl_adc_init` in \"init_adc\" <https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c>"]
     pub fn adc_init(mode: ::cty::c_int, gpio_num: ::cty::c_int)
      -> BlResult<()> {
         "----------Extern Decl----------";
@@ -205,7 +206,7 @@ pub mod adc {
         }
     }
     #[doc =
-      "Init DMA for the ADC Channel See `bl_adc_dma_init` in \"init_adc\" <https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c>"]
+      "Init DMA for the ADC Channel. See `bl_adc_dma_init` in \"init_adc\" <https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c>"]
     pub fn adc_dma_init(mode: ::cty::c_int, data_num: u32) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
@@ -221,7 +222,7 @@ pub mod adc {
         }
     }
     #[doc =
-      "Start reading the ADC Channel via DMA See `bl_adc_start` in \"init_adc\" <https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c>"]
+      "Start reading the ADC Channel via DMA. See `bl_adc_start` in \"init_adc\" <https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c>"]
     pub fn adc_start() -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
@@ -237,7 +238,7 @@ pub mod adc {
         }
     }
     #[doc =
-      "Configure the GPIO Pin as ADC Input (no pullup, no pulldown) See `bl_adc_gpio_init` in \"init_adc\" <https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c>"]
+      "Configure the GPIO Pin as ADC Input (no pullup, no pulldown). See `bl_adc_gpio_init` in \"init_adc\" <https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c>"]
     pub fn adc_gpio_init(gpio_num: ::cty::c_int) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
@@ -253,7 +254,7 @@ pub mod adc {
         }
     }
     #[doc =
-      "Get the ADC Channel Number for the GPIO Pin See `bl_adc_get_channel_by_gpio` in \"init_adc\" <https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c>"]
+      "Get the ADC Channel Number for the GPIO Pin. See `bl_adc_get_channel_by_gpio` in \"init_adc\" <https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c>"]
     pub fn adc_get_channel_by_gpio(gpio_num: ::cty::c_int) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
@@ -269,7 +270,7 @@ pub mod adc {
         }
     }
     #[doc =
-      "Init the ADC Channel Frequency See `bl_adc_freq_init` in \"init_adc\" <https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c>"]
+      "Init the ADC Channel Frequency. See `bl_adc_freq_init` in \"init_adc\" <https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c>"]
     pub fn adc_freq_init(mode: ::cty::c_int, freq: u32) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
@@ -284,7 +285,7 @@ pub mod adc {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
-    #[doc = "Parse the ADC Samples that have been read"]
+    #[doc = "Parse the ADC Samples that have been read."]
     pub fn adc_parse_data(parr: *mut u32, data_size: ::cty::c_int,
                           channel: ::cty::c_int, raw_flag: ::cty::c_int)
      -> BlResult<i32> {
@@ -304,6 +305,266 @@ pub mod adc {
                                   raw_flag as ::cty::c_int);
             "----------Result----------";
             Ok(res)
+        }
+    }
+}
+/// DMA HAL for BL602. See <https://lupyuen.github.io/articles/book#dma-on-bl602>
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+pub mod dma {
+    use super::*;
+    pub const BL_DMA_ITEM_CTRL_MAGIC_IRQ: u32 = 2353639424;
+    pub const BL_DMA_ITEM_CTRL_MAGIC_NOIRQ: u32 = 206155776;
+    pub const BL_DMA_ITEM_CTRL_MAGIC_IRQ_CLR: u32 = 2147483647;
+    pub const BL_DMA_ITEM_CTRL_MAGIC_IRQ_SET: u32 = 2147483648;
+    pub const BL_DMA_ITEM_BITS_SRC_BURST_COUNT_01: u32 = 0;
+    pub const BL_DMA_ITEM_BITS_SRC_BURST_COUNT_04: u32 = 4096;
+    pub const BL_DMA_ITEM_BITS_SRC_BURST_COUNT_08: u32 = 8192;
+    pub const BL_DMA_ITEM_BITS_SRC_BURST_COUNT_16: u32 = 12288;
+    pub const BL_DMA_ITEM_BITS_DST_BURST_COUNT_01: u32 = 0;
+    pub const BL_DMA_ITEM_BITS_DST_BURST_COUNT_04: u32 = 32768;
+    pub const BL_DMA_ITEM_BITS_DST_BURST_COUNT_08: u32 = 65536;
+    pub const BL_DMA_ITEM_BITS_DST_BURST_COUNT_16: u32 = 98304;
+    pub const BL_DMA_ITEM_BITS_SRC_WIDTH_1BYTE: u32 = 0;
+    pub const BL_DMA_ITEM_BITS_SRC_WIDTH_2BYTE: u32 = 262144;
+    pub const BL_DMA_ITEM_BITS_SRC_WIDTH_4BYTE: u32 = 524288;
+    pub const BL_DMA_ITEM_BITS_DST_WIDTH_1BYTE: u32 = 0;
+    pub const BL_DMA_ITEM_BITS_DST_WIDTH_2BYTE: u32 = 2097152;
+    pub const BL_DMA_ITEM_BITS_DST_WIDTH_4BYTE: u32 = 4194304;
+    pub const BL_DMA_ITEM_BITS_SRC_AUTO_INCR_ENABLE: u32 = 67108864;
+    pub const BL_DMA_ITEM_BITS_DST_AUTO_INCR_ENABLE: u32 = 134217728;
+    pub const BL_DMA_ITEM_BITS_IRQ_ENABLE: u32 = 2147483648;
+    pub type __uint8_t = ::cty::c_uchar;
+    pub type __uint32_t = ::cty::c_uint;
+    #[repr(C)]
+    pub struct utils_list_hdr {
+        pub next: *mut utils_list_hdr,
+    }
+    #[automatically_derived]
+    #[allow(unused_qualifications)]
+    impl ::core::marker::Copy for utils_list_hdr { }
+    #[automatically_derived]
+    #[allow(unused_qualifications)]
+    impl ::core::clone::Clone for utils_list_hdr {
+        #[inline]
+        fn clone(&self) -> utils_list_hdr {
+            {
+                let _: ::core::clone::AssertParamIsClone<*mut utils_list_hdr>;
+                *self
+            }
+        }
+    }
+    impl Default for utils_list_hdr {
+        fn default() -> Self { unsafe { ::core::mem::zeroed() } }
+    }
+    #[repr(C)]
+    pub struct bl_dma_item {
+        pub item: utils_list_hdr,
+        pub cb: ::core::option::Option<unsafe extern "C" fn(arg:
+                                                                *mut ::cty::c_void)>,
+        pub arg: *mut ::cty::c_void,
+        pub src: u32,
+        pub dst: u32,
+        pub next: u32,
+        pub ctrl: u32,
+    }
+    #[automatically_derived]
+    #[allow(unused_qualifications)]
+    impl ::core::marker::Copy for bl_dma_item { }
+    #[automatically_derived]
+    #[allow(unused_qualifications)]
+    impl ::core::clone::Clone for bl_dma_item {
+        #[inline]
+        fn clone(&self) -> bl_dma_item {
+            {
+                let _: ::core::clone::AssertParamIsClone<utils_list_hdr>;
+                let _:
+                        ::core::clone::AssertParamIsClone<::core::option::Option<unsafe extern "C" fn(arg:
+                                                                                                          *mut ::cty::c_void)>>;
+                let _: ::core::clone::AssertParamIsClone<*mut ::cty::c_void>;
+                let _: ::core::clone::AssertParamIsClone<u32>;
+                let _: ::core::clone::AssertParamIsClone<u32>;
+                let _: ::core::clone::AssertParamIsClone<u32>;
+                let _: ::core::clone::AssertParamIsClone<u32>;
+                *self
+            }
+        }
+    }
+    impl Default for bl_dma_item {
+        fn default() -> Self { unsafe { ::core::mem::zeroed() } }
+    }
+    pub fn dma_copy(item: *mut bl_dma_item) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn bl_dma_copy(item: *mut bl_dma_item);
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            bl_dma_copy(item as *mut bl_dma_item);
+            "----------Result----------";
+            Ok(())
+        }
+    }
+    pub fn dma_init() -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn bl_dma_init();
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            bl_dma_init();
+            "----------Result----------";
+            Ok(())
+        }
+    }
+    pub fn dma_test() -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn bl_dma_test();
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            bl_dma_test();
+            "----------Result----------";
+            Ok(())
+        }
+    }
+    pub fn dma_int_clear(ch: ::cty::c_int) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn bl_dma_int_clear(ch: ::cty::c_int)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = bl_dma_int_clear(ch as ::cty::c_int);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
+    }
+    pub fn dma_update_memsrc(ch: u8, src: u32, len: u32) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn bl_dma_update_memsrc(ch: u8, src: u32, len: u32);
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            bl_dma_update_memsrc(ch as u8, src as u32, len as u32);
+            "----------Result----------";
+            Ok(())
+        }
+    }
+    pub fn dma_update_memdst(ch: u8, dst: u32, len: u32) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn bl_dma_update_memdst(ch: u8, dst: u32, len: u32);
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            bl_dma_update_memdst(ch as u8, dst as u32, len as u32);
+            "----------Result----------";
+            Ok(())
+        }
+    }
+    pub fn dma_irq_register(channel: ::cty::c_int, tc_handler: Ptr,
+                            interr_handler: Ptr, ctx: Ptr) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn bl_dma_irq_register(channel: ::cty::c_int,
+                                       tc_handler: *mut ::cty::c_void,
+                                       interr_handler: *mut ::cty::c_void,
+                                       ctx: *mut ::cty::c_void)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res =
+                bl_dma_irq_register(channel as ::cty::c_int,
+                                    tc_handler as *mut ::cty::c_void,
+                                    interr_handler as *mut ::cty::c_void,
+                                    ctx as *mut ::cty::c_void);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
+    }
+    pub fn dma_irq_unregister(channel: ::cty::c_int) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn bl_dma_irq_unregister(channel: ::cty::c_int)
+            -> ::cty::c_int;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = bl_dma_irq_unregister(channel as ::cty::c_int);
+            "----------Result----------";
+            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+        }
+    }
+    pub fn dma_find_node_by_channel(channel: ::cty::c_int)
+     -> BlResult<*mut ::cty::c_void> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn bl_dma_find_node_by_channel(channel: ::cty::c_int)
+            -> *mut ::cty::c_void;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = bl_dma_find_node_by_channel(channel as ::cty::c_int);
+            "----------Result----------";
+            Ok(res)
+        }
+    }
+    #[doc =
+      "Get the DMA Context for an ADC Channel. See `bl_dma_find_ctx_by_channel` in \"init_adc\" <https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c>"]
+    pub fn dma_find_ctx_by_channel(channel: ::cty::c_int)
+     -> BlResult<*mut ::cty::c_void> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn bl_dma_find_ctx_by_channel(channel: ::cty::c_int)
+            -> *mut ::cty::c_void;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = bl_dma_find_ctx_by_channel(channel as ::cty::c_int);
+            "----------Result----------";
+            Ok(res)
+        }
+    }
+    pub fn dma_mem_malloc(size: u32) -> BlResult<*mut ::cty::c_void> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn bl_dma_mem_malloc(size: u32)
+            -> *mut ::cty::c_void;
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            let res = bl_dma_mem_malloc(size as u32);
+            "----------Result----------";
+            Ok(res)
+        }
+    }
+    pub fn dma_mem_free(ptr: Ptr) -> BlResult<()> {
+        "----------Extern Decl----------";
+        extern "C" {
+            pub fn bl_dma_mem_free(ptr: *mut ::cty::c_void);
+        }
+        "----------Validation----------";
+        unsafe {
+            "----------Call----------";
+            bl_dma_mem_free(ptr as *mut ::cty::c_void);
+            "----------Result----------";
+            Ok(())
         }
     }
 }
