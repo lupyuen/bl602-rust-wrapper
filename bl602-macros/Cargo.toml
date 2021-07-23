@@ -1,15 +1,15 @@
 # Info about this package.
 [package]
 name          = "bl602-macros"
-version       = "2.0.0"
+version       = "0.0.1"
 authors       = ["Lee Lup Yuen <luppy@appkaki.com>"]
 edition       = "2018"
 description   = "Macros for BL602 IoT SDK"
 repository    = "https://github.com/lupyuen/bl602-rust-wrapper"
 documentation = "https://docs.rs/bl602-macros"
 categories    = []
-keywords      = ["bl602"]
-readme        = "./README.md"
+keywords      = ["bl602", "bl604"]
+readme        = "../README.md"
 license       = "Apache-2.0"
 
 # External Rust libraries used by this module.  See crates.io.
@@ -33,7 +33,5 @@ proc-macro = true  # Allow building of Procedural Macros: https://blog.rust-lang
 [features]
 default =  [      # Select the conditional compiled features
     "mynewt_os",  # Uncomment to support Mynewt OS
-    # "riot_os"   # Uncomment to support RIOT OS
 ]
 mynewt_os = []    # Define the features
-riot_os   = []

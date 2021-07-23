@@ -1,10 +1,16 @@
 # Info about this package
 [package]
-authors = ["Lee Lup Yuen <luppy@appkaki.com>"]
-edition = "2018"
-readme  = "README.md"
-name    = "bl602-sdk"
-version = "0.0.1"
+name          = "bl602-sdk"
+version       = "0.0.1"
+authors       = ["Lee Lup Yuen <luppy@appkaki.com>"]
+edition       = "2018"
+description   = "Rust Wrapper for BL602 IoT SDK"
+repository    = "https://github.com/lupyuen/bl602-rust-wrapper"
+documentation = "https://docs.rs/bl602-sdk"
+categories    = ["embedded", "no-std"]
+keywords      = ["bl602", "bl604", "riscv"]
+readme        = "../README.md"
+license       = "Apache-2.0"
 
 # External Rust libraries used by this module
 [dependencies]

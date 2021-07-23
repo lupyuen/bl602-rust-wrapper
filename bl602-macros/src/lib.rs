@@ -16,15 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-//! Mynewt Macros for calling Mynewt APIs . Import this crate into a source code crate and check the expanded macros using:
-//! ```
-//! clear ; cargo rustc -- -Z unstable-options --pretty expanded | head -20
-//! ```
+//! Macros for BL602 IoT SDK
 #![recursion_limit="128"]     //  Increase recursion limit to prevent quote!{} errors
 #![feature(proc_macro_span)]  //  Allow use of spans in Procedural Macros
 
 mod safe_wrap;   //  Include safe_wrap.rs
-mod infer_type;  //  Include infer_type.rs
 
 extern crate proc_macro;
 use proc_macro::TokenStream;
@@ -37,12 +33,6 @@ use syn::{
 #[proc_macro_attribute]
 pub fn safe_wrap(attr: TokenStream, item: TokenStream) -> TokenStream {
     safe_wrap::safe_wrap_internal(attr, item)
-}
-
-/// Given a Rust function definition, infer the placeholder types in the function
-#[proc_macro_attribute]
-pub fn infer_type(attr: TokenStream, item: TokenStream) -> TokenStream {
-    infer_type::infer_type_internal(attr, item)
 }
 
 /// Given a static mutable variable, return an unsafe mutable pointer that's suitable for passing to Mynewt APIs for writing output.

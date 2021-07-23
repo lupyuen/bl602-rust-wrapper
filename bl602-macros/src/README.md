@@ -1,8 +1,6 @@
 # src
 
-Rust Procedural Macros
-
-[`infer_type.rs`](infer_type.rs): Type Inference for Visual Embedded Rust programs
+Macros for BL602 IoT SDK
 
 [`lib.rs`](lib.rs): General macros
 
