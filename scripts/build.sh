@@ -37,3 +37,7 @@ popd
 #  Copy the docs
 cp -r target/riscv32imacf-unknown-none-elf/doc/bl602_sdk docs
 cp -r target/riscv32imacf-unknown-none-elf/doc/src docs
+
+#  To publish:
+#  pushd bl602-macros ; cargo publish ; popd
+#  pushd bl602-sdk ; cargo publish --target ./riscv32imacf-unknown-none-elf.json -Z build-std=core ; popd
