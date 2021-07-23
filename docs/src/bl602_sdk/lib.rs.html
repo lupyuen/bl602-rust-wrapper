@@ -688,14 +688,14 @@
     <span class="kw">const</span> <span class="ident">LED_GPIO</span>: <span class="ident">u8</span> <span class="op">=</span> <span class="number">11</span>;  <span class="comment">//  `u8` is 8-bit unsigned integer</span>
 
     <span class="comment">//  Configure the LED GPIO for output (instead of input)</span>
-    <span class="ident">gpio::gpio_enable_output</span>(<span class="ident">LED_GPIO</span>, <span class="number">0</span>, <span class="number">0</span>)   <span class="comment">//  No pullup, no pulldown</span>
+    <span class="ident">gpio::enable_output</span>(<span class="ident">LED_GPIO</span>, <span class="number">0</span>, <span class="number">0</span>)   <span class="comment">//  No pullup, no pulldown</span>
         .<span class="ident">expect</span>(<span class="string">&quot;GPIO enable output failed&quot;</span>);  <span class="comment">//  Halt on error</span>
 
     <span class="comment">//  Blink the LED 5 times</span>
     <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">10</span> {  <span class="comment">//  Iterates 10 times from 0 to 9 (`..` excludes 10)</span>
 
         <span class="comment">//  Toggle the LED GPIO between 0 (on) and 1 (off)</span>
-        <span class="ident">gpio::gpio_output_set</span>(  <span class="comment">//  Set the GPIO output (from BL602 GPIO HAL)</span>
+        <span class="ident">gpio::output_set</span>(  <span class="comment">//  Set the GPIO output (from BL602 GPIO HAL)</span>
             <span class="ident">LED_GPIO</span>,           <span class="comment">//  GPIO pin number</span>
             <span class="ident">i</span> <span class="op">%</span> <span class="number">2</span>               <span class="comment">//  0 for low, 1 for high</span>
         ).<span class="ident">expect</span>(<span class="string">&quot;GPIO output failed&quot;</span>);  <span class="comment">//  Halt on error</span>

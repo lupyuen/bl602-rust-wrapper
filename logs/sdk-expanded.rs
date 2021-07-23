@@ -1,3 +1,175 @@
+fname: "bl_adc_init", namespace: "bl_adc"
+fname: "bl_adc_dma_init", namespace: "bl_adc"
+fname: "bl_adc_start", namespace: "bl_adc"
+fname: "bl_adc_gpio_init", namespace: "bl_adc"
+fname: "bl_adc_get_channel_by_gpio", namespace: "bl_adc"
+fname: "bl_adc_freq_init", namespace: "bl_adc"
+fname: "bl_adc_parse_data", namespace: "bl_adc"
+fname: "bl_dma_copy", namespace: "bl_dma"
+fname: "bl_dma_init", namespace: "bl_dma"
+fname: "bl_dma_test", namespace: "bl_dma"
+fname: "bl_dma_int_clear", namespace: "bl_dma"
+fname: "bl_dma_update_memsrc", namespace: "bl_dma"
+fname: "bl_dma_update_memdst", namespace: "bl_dma"
+fname: "bl_dma_irq_register", namespace: "bl_dma"
+fname: "bl_dma_irq_unregister", namespace: "bl_dma"
+fname: "bl_dma_find_node_by_channel", namespace: "bl_dma"
+fname: "bl_dma_find_ctx_by_channel", namespace: "bl_dma"
+fname: "bl_dma_mem_malloc", namespace: "bl_dma"
+fname: "bl_dma_mem_free", namespace: "bl_dma"
+fname: "bl_gpio_enable_output", namespace: "bl_gpio"
+fname: "bl_gpio_enable_input", namespace: "bl_gpio"
+fname: "bl_gpio_output_set", namespace: "bl_gpio"
+fname: "bl_gpio_input_get", namespace: "bl_gpio"
+fname: "bl_gpio_input_get_value", namespace: "bl_gpio"
+fname: "bl_gpio_int_clear", namespace: "bl_gpio"
+fname: "bl_gpio_intmask", namespace: "bl_gpio"
+fname: "bl_gpio_register", namespace: "bl_gpio"
+fname: "i2c_set_freq", namespace: "i2c"
+fname: "i2c_gpio_init", namespace: "i2c"
+fname: "i2c_clear_status", namespace: "i2c"
+fname: "i2c_transfer_start", namespace: "i2c"
+fname: "PWM_Channel_Init", namespace: "PWM"
+fname: "PWM_Channel_Update", namespace: "PWM"
+fname: "PWM_Channel_Set_Div", namespace: "PWM"
+fname: "PWM_Channel_Set_Threshold1", namespace: "PWM"
+fname: "PWM_Channel_Set_Threshold2", namespace: "PWM"
+fname: "PWM_Channel_Set_Period", namespace: "PWM"
+fname: "PWM_Channel_Get", namespace: "PWM"
+fname: "PWM_IntMask", namespace: "PWM"
+fname: "PWM_Channel_Enable", namespace: "PWM"
+fname: "PWM_Channel_Disable", namespace: "PWM"
+fname: "PWM_Int_Callback_Install", namespace: "PWM"
+fname: "bl_pwm_init", namespace: "bl_pwm"
+fname: "bl_pwm_start", namespace: "bl_pwm"
+fname: "bl_pwm_stop", namespace: "bl_pwm"
+fname: "bl_pwm_set_freq", namespace: "bl_pwm"
+fname: "bl_pwm_set_duty", namespace: "bl_pwm"
+fname: "bl_pwm_get_duty", namespace: "bl_pwm"
+fname: "hal_spi_transfer", namespace: "hal_spi"
+fname: "spi_init", namespace: "spi"
+fname: "UART_Init", namespace: "UART"
+fname: "UART_DeInit", namespace: "UART"
+fname: "UART_FifoConfig", namespace: "UART"
+fname: "UART_IrConfig", namespace: "UART"
+fname: "UART_Enable", namespace: "UART"
+fname: "UART_Disable", namespace: "UART"
+fname: "UART_SetTxDataLength", namespace: "UART"
+fname: "UART_SetRxDataLength", namespace: "UART"
+fname: "UART_SetRxTimeoutValue", namespace: "UART"
+fname: "UART_SetDeglitchCount", namespace: "UART"
+fname: "UART_SetBaudrate", namespace: "UART"
+fname: "UART_SetRtsValue", namespace: "UART"
+fname: "UART_ClrRtsValue", namespace: "UART"
+fname: "UART_TxFreeRun", namespace: "UART"
+fname: "UART_AutoBaudDetection", namespace: "UART"
+fname: "UART_TxFifoClear", namespace: "UART"
+fname: "UART_RxFifoClear", namespace: "UART"
+fname: "UART_IntMask", namespace: "UART"
+fname: "UART_IntClear", namespace: "UART"
+fname: "UART_Int_Callback_Install", namespace: "UART"
+fname: "UART_SendData", namespace: "UART"
+fname: "UART_SendDataBlock", namespace: "UART"
+fname: "UART_ReceiveData", namespace: "UART"
+fname: "UART_GetAutoBaudCount", namespace: "UART"
+fname: "UART_GetTxFifoCount", namespace: "UART"
+fname: "UART_GetRxFifoCount", namespace: "UART"
+fname: "UART_GetIntStatus", namespace: "UART"
+fname: "UART_GetTxBusBusyStatus", namespace: "UART"
+fname: "UART_GetRxBusBusyStatus", namespace: "UART"
+fname: "UART_GetOverflowStatus", namespace: "UART"
+fname: "bl_uart_gpio_init", namespace: "bl_uart"
+fname: "bl_uart_init", namespace: "bl_uart"
+fname: "bl_uart_debug_early_init", namespace: "bl_uart"
+fname: "bl_uart_early_init", namespace: "bl_uart"
+fname: "bl_uart_int_rx_enable", namespace: "bl_uart"
+fname: "bl_uart_int_rx_disable", namespace: "bl_uart"
+fname: "bl_uart_int_tx_enable", namespace: "bl_uart"
+fname: "bl_uart_int_tx_disable", namespace: "bl_uart"
+fname: "bl_uart_string_send", namespace: "bl_uart"
+fname: "bl_uart_flush", namespace: "bl_uart"
+fname: "bl_uart_getdefconfig", namespace: "bl_uart"
+fname: "bl_uart_setconfig", namespace: "bl_uart"
+fname: "bl_uart_setbaud", namespace: "bl_uart"
+fname: "bl_uart_data_send", namespace: "bl_uart"
+fname: "bl_uart_datas_send", namespace: "bl_uart"
+fname: "bl_uart_data_recv", namespace: "bl_uart"
+fname: "bl_uart_int_enable", namespace: "bl_uart"
+fname: "bl_uart_int_disable", namespace: "bl_uart"
+fname: "bl_uart_int_rx_notify_register", namespace: "bl_uart"
+fname: "bl_uart_int_tx_notify_register", namespace: "bl_uart"
+fname: "bl_uart_int_rx_notify_unregister", namespace: "bl_uart"
+fname: "bl_uart_int_tx_notify_unregister", namespace: "bl_uart"
+fname: "hal_wifi_start_firmware_task", namespace: "hal_wifi"
+fname: "wifi_mgmr_psk_cal", namespace: "wifi"
+fname: "wifi_mgmr_drv_init", namespace: "wifi"
+fname: "wifi_mgmr_init", namespace: "wifi"
+fname: "wifi_mgmr_start", namespace: "wifi"
+fname: "wifi_mgmr_start_background", namespace: "wifi"
+fname: "wifi_mgmr_get_wifi_channel_conf", namespace: "wifi"
+fname: "wifi_mgmr_sta_enable", namespace: "wifi"
+fname: "wifi_mgmr_sta_disable", namespace: "wifi"
+fname: "wifi_mgmr_sta_mac_set", namespace: "wifi"
+fname: "wifi_mgmr_sta_mac_get", namespace: "wifi"
+fname: "wifi_mgmr_sta_ip_get", namespace: "wifi"
+fname: "wifi_mgmr_sta_ip_set", namespace: "wifi"
+fname: "wifi_mgmr_sta_dns_get", namespace: "wifi"
+fname: "wifi_mgmr_sta_ip_unset", namespace: "wifi"
+fname: "wifi_mgmr_sta_connect", namespace: "wifi"
+fname: "wifi_mgmr_sta_disconnect", namespace: "wifi"
+fname: "wifi_mgmr_sta_powersaving", namespace: "wifi"
+fname: "wifi_mgmr_sta_autoconnect_enable", namespace: "wifi"
+fname: "wifi_mgmr_sta_autoconnect_disable", namespace: "wifi"
+fname: "wifi_mgmr_sta_ssid_set", namespace: "wifi"
+fname: "wifi_mgmr_sta_psk_set", namespace: "wifi"
+fname: "wifi_mgmr_sta_connect_ind_stat_get", namespace: "wifi"
+fname: "wifi_mgmr_ap_enable", namespace: "wifi"
+fname: "wifi_mgmr_ap_mac_set", namespace: "wifi"
+fname: "wifi_mgmr_ap_mac_get", namespace: "wifi"
+fname: "wifi_mgmr_ap_ip_get", namespace: "wifi"
+fname: "wifi_mgmr_ap_stop", namespace: "wifi"
+fname: "wifi_mgmr_ap_start", namespace: "wifi"
+fname: "wifi_mgmr_ap_sta_cnt_get", namespace: "wifi"
+fname: "wifi_mgmr_ap_sta_info_get", namespace: "wifi"
+fname: "wifi_mgmr_ap_sta_delete", namespace: "wifi"
+fname: "wifi_mgmr_ap_set_gateway", namespace: "wifi"
+fname: "wifi_mgmr_sniffer_enable", namespace: "wifi"
+fname: "wifi_mgmr_sniffer_disable", namespace: "wifi"
+fname: "wifi_mgmr_rate_config", namespace: "wifi"
+fname: "wifi_mgmr_conf_max_sta", namespace: "wifi"
+fname: "wifi_mgmr_sniffer_register", namespace: "wifi"
+fname: "wifi_mgmr_sniffer_unregister", namespace: "wifi"
+fname: "wifi_mgmr_state_get", namespace: "wifi"
+fname: "wifi_mgmr_status_code_get", namespace: "wifi"
+fname: "wifi_mgmr_rssi_get", namespace: "wifi"
+fname: "wifi_mgmr_channel_get", namespace: "wifi"
+fname: "wifi_mgmr_channel_set", namespace: "wifi"
+fname: "wifi_mgmr_all_ap_scan", namespace: "wifi"
+fname: "wifi_mgmr_scan_filter_hidden_ssid", namespace: "wifi"
+fname: "wifi_mgmr_scan", namespace: "wifi"
+fname: "wifi_mgmr_cfg_req", namespace: "wifi"
+fname: "wifi_mgmr_scan_complete_callback", namespace: "wifi"
+fname: "wifi_mgmr_cli_scanlist", namespace: "wifi"
+fname: "wifi_mgmr_cli_init", namespace: "wifi"
+fname: "wifi_mgmr_scan_ap", namespace: "wifi"
+fname: "wifi_mgmr_scan_ap_all", namespace: "wifi"
+fname: "wifi_mgmr_raw_80211_send", namespace: "wifi"
+fname: "wifi_mgmr_set_country_code", namespace: "wifi"
+fname: "wifi_mgmr_ext_dump_needed", namespace: "wifi"
+fname: "wifi_mgmr_status_code_str", namespace: "wifi"
+fname: "wifi_mgmr_event_notify", namespace: "wifi"
+fname: "wifi_mgmr_state_get_internal", namespace: "wifi"
+fname: "wifi_mgmr_status_code_clean_internal", namespace: "wifi"
+fname: "wifi_mgmr_status_code_get_internal", namespace: "wifi"
+fname: "wifi_mgmr_set_country_code_internal", namespace: "wifi"
+fname: "wifi_mgmr_ap_sta_cnt_get_internal", namespace: "wifi"
+fname: "wifi_mgmr_ap_sta_info_get_internal", namespace: "wifi"
+fname: "wifi_mgmr_ap_sta_delete_internal", namespace: "wifi"
+fname: "wifi_mgmr_scan_complete_notify", namespace: "wifi"
+fname: "wifi_mgmr_auth_to_str", namespace: "wifi"
+fname: "wifi_mgmr_cipher_to_str", namespace: "wifi"
+fname: "wifi_mgmr_api_fw_tsen_reload", namespace: "wifi"
+fname: "wifi_mgmr_scan_item_is_timeout", namespace: "wifi"
 #![feature(prelude_import)]
 //!  Rust Wrapper for BL602 IoT SDK. See "The RISC-V BL602 Book" <https://lupyuen.github.io/articles/book>
 #![no_std]
@@ -192,8 +364,7 @@ pub mod adc {
     pub type adc_ctx_t = adc_ctx;
     #[doc =
       "Init an ADC Channel. See `bl_adc_init` in \"init_adc\" <https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c>"]
-    pub fn adc_init(mode: ::cty::c_int, gpio_num: ::cty::c_int)
-     -> BlResult<()> {
+    pub fn init(mode: ::cty::c_int, gpio_num: ::cty::c_int) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_adc_init(mode: ::cty::c_int, gpio_num: ::cty::c_int)
@@ -210,7 +381,7 @@ pub mod adc {
     }
     #[doc =
       "Init DMA for the ADC Channel. See `bl_adc_dma_init` in \"init_adc\" <https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c>"]
-    pub fn adc_dma_init(mode: ::cty::c_int, data_num: u32) -> BlResult<()> {
+    pub fn dma_init(mode: ::cty::c_int, data_num: u32) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_adc_dma_init(mode: ::cty::c_int, data_num: u32)
@@ -226,7 +397,7 @@ pub mod adc {
     }
     #[doc =
       "Start reading the ADC Channel via DMA. See `bl_adc_start` in \"init_adc\" <https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c>"]
-    pub fn adc_start() -> BlResult<()> {
+    pub fn start() -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_adc_start()
@@ -242,7 +413,7 @@ pub mod adc {
     }
     #[doc =
       "Configure the GPIO Pin as ADC Input (no pullup, no pulldown). See `bl_adc_gpio_init` in \"init_adc\" <https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c>"]
-    pub fn adc_gpio_init(gpio_num: ::cty::c_int) -> BlResult<()> {
+    pub fn gpio_init(gpio_num: ::cty::c_int) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_adc_gpio_init(gpio_num: ::cty::c_int)
@@ -258,7 +429,7 @@ pub mod adc {
     }
     #[doc =
       "Get the ADC Channel Number for the GPIO Pin. See `bl_adc_get_channel_by_gpio` in \"init_adc\" <https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c>"]
-    pub fn adc_get_channel_by_gpio(gpio_num: ::cty::c_int) -> BlResult<()> {
+    pub fn get_channel_by_gpio(gpio_num: ::cty::c_int) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_adc_get_channel_by_gpio(gpio_num: ::cty::c_int)
@@ -274,7 +445,7 @@ pub mod adc {
     }
     #[doc =
       "Init the ADC Channel Frequency. See `bl_adc_freq_init` in \"init_adc\" <https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c>"]
-    pub fn adc_freq_init(mode: ::cty::c_int, freq: u32) -> BlResult<()> {
+    pub fn freq_init(mode: ::cty::c_int, freq: u32) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_adc_freq_init(mode: ::cty::c_int, freq: u32)
@@ -289,8 +460,8 @@ pub mod adc {
         }
     }
     #[doc = "Parse the ADC Samples that have been read."]
-    pub fn adc_parse_data(parr: *mut u32, data_size: ::cty::c_int,
-                          channel: ::cty::c_int, raw_flag: ::cty::c_int)
+    pub fn parse_data(parr: *mut u32, data_size: ::cty::c_int,
+                      channel: ::cty::c_int, raw_flag: ::cty::c_int)
      -> BlResult<i32> {
         "----------Extern Decl----------";
         extern "C" {
@@ -396,7 +567,7 @@ pub mod dma {
     impl Default for bl_dma_item {
         fn default() -> Self { unsafe { ::core::mem::zeroed() } }
     }
-    pub fn dma_copy(item: *mut bl_dma_item) -> BlResult<()> {
+    pub fn copy(item: *mut bl_dma_item) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_dma_copy(item: *mut bl_dma_item);
@@ -409,7 +580,7 @@ pub mod dma {
             Ok(())
         }
     }
-    pub fn dma_init() -> BlResult<()> {
+    pub fn init() -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_dma_init();
@@ -422,7 +593,7 @@ pub mod dma {
             Ok(())
         }
     }
-    pub fn dma_test() -> BlResult<()> {
+    pub fn test() -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_dma_test();
@@ -435,7 +606,7 @@ pub mod dma {
             Ok(())
         }
     }
-    pub fn dma_int_clear(ch: ::cty::c_int) -> BlResult<()> {
+    pub fn int_clear(ch: ::cty::c_int) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_dma_int_clear(ch: ::cty::c_int)
@@ -449,7 +620,7 @@ pub mod dma {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
-    pub fn dma_update_memsrc(ch: u8, src: u32, len: u32) -> BlResult<()> {
+    pub fn update_memsrc(ch: u8, src: u32, len: u32) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_dma_update_memsrc(ch: u8, src: u32, len: u32);
@@ -462,7 +633,7 @@ pub mod dma {
             Ok(())
         }
     }
-    pub fn dma_update_memdst(ch: u8, dst: u32, len: u32) -> BlResult<()> {
+    pub fn update_memdst(ch: u8, dst: u32, len: u32) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_dma_update_memdst(ch: u8, dst: u32, len: u32);
@@ -475,8 +646,8 @@ pub mod dma {
             Ok(())
         }
     }
-    pub fn dma_irq_register(channel: ::cty::c_int, tc_handler: Ptr,
-                            interr_handler: Ptr, ctx: Ptr) -> BlResult<()> {
+    pub fn irq_register(channel: ::cty::c_int, tc_handler: Ptr,
+                        interr_handler: Ptr, ctx: Ptr) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_dma_irq_register(channel: ::cty::c_int,
@@ -497,7 +668,7 @@ pub mod dma {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
-    pub fn dma_irq_unregister(channel: ::cty::c_int) -> BlResult<()> {
+    pub fn irq_unregister(channel: ::cty::c_int) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_dma_irq_unregister(channel: ::cty::c_int)
@@ -511,7 +682,7 @@ pub mod dma {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
-    pub fn dma_find_node_by_channel(channel: ::cty::c_int)
+    pub fn find_node_by_channel(channel: ::cty::c_int)
      -> BlResult<*mut ::cty::c_void> {
         "----------Extern Decl----------";
         extern "C" {
@@ -528,7 +699,7 @@ pub mod dma {
     }
     #[doc =
       "Get the DMA Context for an ADC Channel. See `bl_dma_find_ctx_by_channel` in \"init_adc\" <https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c>"]
-    pub fn dma_find_ctx_by_channel(channel: ::cty::c_int)
+    pub fn find_ctx_by_channel(channel: ::cty::c_int)
      -> BlResult<*mut ::cty::c_void> {
         "----------Extern Decl----------";
         extern "C" {
@@ -543,7 +714,7 @@ pub mod dma {
             Ok(res)
         }
     }
-    pub fn dma_mem_malloc(size: u32) -> BlResult<*mut ::cty::c_void> {
+    pub fn mem_malloc(size: u32) -> BlResult<*mut ::cty::c_void> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_dma_mem_malloc(size: u32)
@@ -557,7 +728,7 @@ pub mod dma {
             Ok(res)
         }
     }
-    pub fn dma_mem_free(ptr: Ptr) -> BlResult<()> {
+    pub fn mem_free(ptr: Ptr) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_dma_mem_free(ptr: *mut ::cty::c_void);
@@ -614,8 +785,7 @@ pub mod gpio {
     pub type gpio_ctx_t = _gpio_ctx_desc;
     #[doc =
       "Configure a GPIO Pin for Output Mode. See `bl_gpio_enable_output` in \"Enable GPIO\" <https://lupyuen.github.io/articles/led#enable-gpio>"]
-    pub fn gpio_enable_output(pin: u8, pullup: u8, pulldown: u8)
-     -> BlResult<()> {
+    pub fn enable_output(pin: u8, pullup: u8, pulldown: u8) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_gpio_enable_output(pin: u8, pullup: u8, pulldown: u8)
@@ -633,8 +803,7 @@ pub mod gpio {
     }
     #[doc =
       "Configure a GPIO Pin for Input Mode. See `bl_gpio_enable_input` in \"Enable GPIO\" <https://lupyuen.github.io/articles/led#enable-gpio>"]
-    pub fn gpio_enable_input(pin: u8, pullup: u8, pulldown: u8)
-     -> BlResult<()> {
+    pub fn enable_input(pin: u8, pullup: u8, pulldown: u8) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_gpio_enable_input(pin: u8, pullup: u8, pulldown: u8)
@@ -651,7 +820,7 @@ pub mod gpio {
     }
     #[doc =
       "Set the output value of a GPIO Pin. See `bl_gpio_output_set` in \"Read and Write GPIO\" <https://lupyuen.github.io/articles/led#read-and-write-gpio>"]
-    pub fn gpio_output_set(pin: u8, value: u8) -> BlResult<()> {
+    pub fn output_set(pin: u8, value: u8) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_gpio_output_set(pin: u8, value: u8)
@@ -667,7 +836,7 @@ pub mod gpio {
     }
     #[doc =
       "Get the input value of a GPIO Pin, by reference. See `bl_gpio_input_get` in \"Read and Write GPIO\" <https://lupyuen.github.io/articles/led#read-and-write-gpio>"]
-    pub fn gpio_input_get(pin: u8, value: *mut u8) -> BlResult<()> {
+    pub fn input_get(pin: u8, value: *mut u8) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_gpio_input_get(pin: u8, value: *mut u8)
@@ -683,7 +852,7 @@ pub mod gpio {
     }
     #[doc =
       "Get the input value of GPIO Pin. See `bl_gpio_input_get_value` in \"Read and Write GPIO\" <https://lupyuen.github.io/articles/led#read-and-write-gpio>"]
-    pub fn gpio_input_get_value(pin: u8) -> BlResult<()> {
+    pub fn input_get_value(pin: u8) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_gpio_input_get_value(pin: u8)
@@ -699,7 +868,7 @@ pub mod gpio {
     }
     #[doc =
       "Clear GPIO Interrupt. See `bl_gpio_int_clear` in \"GPIO Interrupts\" <https://lupyuen.github.io/articles/led#gpio-interrupts>"]
-    pub fn gpio_int_clear(gpioPin: u8, intClear: u8) -> BlResult<()> {
+    pub fn int_clear(gpioPin: u8, intClear: u8) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_gpio_int_clear(gpioPin: u8, intClear: u8)
@@ -715,7 +884,7 @@ pub mod gpio {
     }
     #[doc =
       "Set GPIO Interrupt Mask. See `bl_gpio_intmask` in \"GPIO Interrupts\" <https://lupyuen.github.io/articles/led#gpio-interrupts>"]
-    pub fn gpio_intmask(gpiopin: u8, mask: u8) -> BlResult<()> {
+    pub fn intmask(gpiopin: u8, mask: u8) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_gpio_intmask(gpiopin: u8, mask: u8);
@@ -730,7 +899,7 @@ pub mod gpio {
     }
     #[doc =
       "Register GPIO Interrupt. See `bl_gpio_register` in \"GPIO Interrupts\" <https://lupyuen.github.io/articles/led#gpio-interrupts>"]
-    pub fn gpio_register(pstnode: *mut gpio_ctx_t) -> BlResult<()> {
+    pub fn register(pstnode: *mut gpio_ctx_t) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_gpio_register(pstnode: *mut gpio_ctx_t);
@@ -6412,7 +6581,7 @@ pub mod pwm {
     }
     #[doc =
       "Designate a GPIO Pin as a PWM Channel. See `bl_pwm_init` in \"Initialise PWM\" <https://lupyuen.github.io/articles/led#initialise-pwm>"]
-    pub fn pwm_init(id: u8, pin: u8, freq: u32) -> BlResult<i32> {
+    pub fn init(id: u8, pin: u8, freq: u32) -> BlResult<i32> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_pwm_init(id: u8, pin: u8, freq: u32)
@@ -6428,7 +6597,7 @@ pub mod pwm {
     }
     #[doc =
       "Start a PWM Channel. See `bl_pwm_start` in \"PWM Operation\" <https://lupyuen.github.io/articles/led#pwm-operation>"]
-    pub fn pwm_start(id: u8) -> BlResult<i32> {
+    pub fn start(id: u8) -> BlResult<i32> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_pwm_start(id: u8)
@@ -6444,7 +6613,7 @@ pub mod pwm {
     }
     #[doc =
       "Stop a PWM Channel. See `bl_pwm_stop` in \"PWM Operation\" <https://lupyuen.github.io/articles/led#pwm-operation>"]
-    pub fn pwm_stop(id: u8) -> BlResult<i32> {
+    pub fn stop(id: u8) -> BlResult<i32> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_pwm_stop(id: u8)
@@ -6460,7 +6629,7 @@ pub mod pwm {
     }
     #[doc =
       "Set the Frequency of a PWM Channel. See `bl_pwm_set_freq` in \"PWM Frequency and Duty Cycle\" <https://lupyuen.github.io/articles/led#pwm-frequency-and-duty-cycle>"]
-    pub fn pwm_set_freq(id: u8, freq: u32) -> BlResult<i32> {
+    pub fn set_freq(id: u8, freq: u32) -> BlResult<i32> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_pwm_set_freq(id: u8, freq: u32)
@@ -6476,7 +6645,7 @@ pub mod pwm {
     }
     #[doc =
       "Set the Duty Cycle of a PWM Channel. See `bl_pwm_set_duty` in \"PWM Frequency and Duty Cycle\" <https://lupyuen.github.io/articles/led#pwm-frequency-and-duty-cycle>"]
-    pub fn pwm_set_duty(id: u8, duty: f32) -> BlResult<i32> {
+    pub fn set_duty(id: u8, duty: f32) -> BlResult<i32> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_pwm_set_duty(id: u8, duty: f32)
@@ -6492,7 +6661,7 @@ pub mod pwm {
     }
     #[doc =
       "Get the Duty Cycle of a PWM Channel. See `bl_pwm_get_duty` in \"PWM Frequency and Duty Cycle\" <https://lupyuen.github.io/articles/led#pwm-frequency-and-duty-cycle>"]
-    pub fn pwm_get_duty(id: u8, p_duty: *mut f32) -> BlResult<i32> {
+    pub fn get_duty(id: u8, p_duty: *mut f32) -> BlResult<i32> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_pwm_get_duty(id: u8, p_duty: *mut f32)
@@ -6574,7 +6743,7 @@ pub mod spi {
     }
     #[doc =
       "Execute an SPI Data Transfer. See `hal_spi_transfer` in \"Execute the SPI Transfers\" <https://lupyuen.github.io/articles/spi#execute-the-spi-transfers>"]
-    pub fn spi_transfer(spi_dev: *mut spi_dev_t, xfer: Ptr, size: u8)
+    pub fn transfer(spi_dev: *mut spi_dev_t, xfer: Ptr, size: u8)
      -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
@@ -10839,8 +11008,8 @@ pub mod uart {
     }
     pub type cb_uart_notify_t =
      ::core::option::Option<unsafe extern "C" fn(arg: *mut ::cty::c_void)>;
-    pub fn uart_gpio_init(id: u8, tx: u8, rx: u8, rts: u8, cts: u8,
-                          baudrate: ::cty::c_int) -> BlResult<()> {
+    pub fn gpio_init(id: u8, tx: u8, rx: u8, rts: u8, cts: u8,
+                     baudrate: ::cty::c_int) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_uart_gpio_init(id: u8, tx: u8, rx: u8, rts: u8, cts: u8,
@@ -10859,8 +11028,8 @@ pub mod uart {
     }
     #[doc =
       "Initialise a UART Port. See `bl_uart_init` in \"Initialise UART Port\" <https://lupyuen.github.io/articles/uart#initialise-uart-port>"]
-    pub fn uart_init(id: u8, tx_pin: u8, rx_pin: u8, cts_pin: u8, rts_pin: u8,
-                     baudrate: u32) -> BlResult<()> {
+    pub fn init(id: u8, tx_pin: u8, rx_pin: u8, cts_pin: u8, rts_pin: u8,
+                baudrate: u32) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_uart_init(id: u8, tx_pin: u8, rx_pin: u8, cts_pin: u8,
@@ -10877,7 +11046,7 @@ pub mod uart {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
-    pub fn uart_debug_early_init(baudrate: u32) -> BlResult<()> {
+    pub fn debug_early_init(baudrate: u32) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_uart_debug_early_init(baudrate: u32)
@@ -10891,8 +11060,7 @@ pub mod uart {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
-    pub fn uart_early_init(id: u8, tx_pin: u8, baudrate: u32)
-     -> BlResult<()> {
+    pub fn early_init(id: u8, tx_pin: u8, baudrate: u32) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_uart_early_init(id: u8, tx_pin: u8, baudrate: u32)
@@ -10907,7 +11075,7 @@ pub mod uart {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
-    pub fn uart_int_rx_enable(id: u8) -> BlResult<()> {
+    pub fn int_rx_enable(id: u8) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_uart_int_rx_enable(id: u8)
@@ -10921,7 +11089,7 @@ pub mod uart {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
-    pub fn uart_int_rx_disable(id: u8) -> BlResult<()> {
+    pub fn int_rx_disable(id: u8) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_uart_int_rx_disable(id: u8)
@@ -10935,7 +11103,7 @@ pub mod uart {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
-    pub fn uart_int_tx_enable(id: u8) -> BlResult<()> {
+    pub fn int_tx_enable(id: u8) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_uart_int_tx_enable(id: u8)
@@ -10949,7 +11117,7 @@ pub mod uart {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
-    pub fn uart_int_tx_disable(id: u8) -> BlResult<()> {
+    pub fn int_tx_disable(id: u8) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_uart_int_tx_disable(id: u8)
@@ -10963,8 +11131,7 @@ pub mod uart {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
-    pub fn uart_string_send(id: u8, data: *mut ::cty::c_char)
-     -> BlResult<()> {
+    pub fn string_send(id: u8, data: *mut ::cty::c_char) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_uart_string_send(id: u8, data: *mut ::cty::c_char)
@@ -10979,7 +11146,7 @@ pub mod uart {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
-    pub fn uart_flush(id: u8) -> BlResult<()> {
+    pub fn flush(id: u8) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_uart_flush(id: u8)
@@ -10993,7 +11160,7 @@ pub mod uart {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
-    pub fn uart_getdefconfig(id: u8, parity: *mut u8) -> BlResult<()> {
+    pub fn getdefconfig(id: u8, parity: *mut u8) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_uart_getdefconfig(id: u8, parity: *mut u8);
@@ -11006,7 +11173,7 @@ pub mod uart {
             Ok(())
         }
     }
-    pub fn uart_setconfig(id: u8, baudrate: u32, parity: UART_Parity_Type)
+    pub fn setconfig(id: u8, baudrate: u32, parity: UART_Parity_Type)
      -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
@@ -11022,7 +11189,7 @@ pub mod uart {
             Ok(())
         }
     }
-    pub fn uart_setbaud(id: u8, baud: u32) -> BlResult<()> {
+    pub fn setbaud(id: u8, baud: u32) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_uart_setbaud(id: u8, baud: u32);
@@ -11037,7 +11204,7 @@ pub mod uart {
     }
     #[doc =
       "Transmit data to a UART Port. See `bl_uart_data_send` in \"Transmit Data\" <https://lupyuen.github.io/articles/uart#transmit-data>"]
-    pub fn uart_data_send(id: u8, data: u8) -> BlResult<()> {
+    pub fn data_send(id: u8, data: u8) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_uart_data_send(id: u8, data: u8)
@@ -11051,7 +11218,7 @@ pub mod uart {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
-    pub fn uart_datas_send(id: u8, data: *mut u8, len: ::cty::c_int)
+    pub fn datas_send(id: u8, data: *mut u8, len: ::cty::c_int)
      -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
@@ -11071,7 +11238,7 @@ pub mod uart {
     }
     #[doc =
       "Receive data from a UART Port (non-blocking). See `bl_uart_data_recv` in \"Receive Data\" <https://lupyuen.github.io/articles/uart#receive-data>"]
-    pub fn uart_data_recv(id: u8) -> BlResult<()> {
+    pub fn data_recv(id: u8) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_uart_data_recv(id: u8)
@@ -11085,7 +11252,7 @@ pub mod uart {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
-    pub fn uart_int_enable(id: u8) -> BlResult<()> {
+    pub fn int_enable(id: u8) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_uart_int_enable(id: u8)
@@ -11099,7 +11266,7 @@ pub mod uart {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
-    pub fn uart_int_disable(id: u8) -> BlResult<()> {
+    pub fn int_disable(id: u8) -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_uart_int_disable(id: u8)
@@ -11113,7 +11280,7 @@ pub mod uart {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
-    pub fn uart_int_rx_notify_register(id: u8, cb: cb_uart_notify_t, arg: Ptr)
+    pub fn int_rx_notify_register(id: u8, cb: cb_uart_notify_t, arg: Ptr)
      -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
@@ -11133,7 +11300,7 @@ pub mod uart {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
-    pub fn uart_int_tx_notify_register(id: u8, cb: cb_uart_notify_t, arg: Ptr)
+    pub fn int_tx_notify_register(id: u8, cb: cb_uart_notify_t, arg: Ptr)
      -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
@@ -11153,8 +11320,8 @@ pub mod uart {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
-    pub fn uart_int_rx_notify_unregister(id: u8, cb: cb_uart_notify_t,
-                                         arg: Ptr) -> BlResult<()> {
+    pub fn int_rx_notify_unregister(id: u8, cb: cb_uart_notify_t, arg: Ptr)
+     -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_uart_int_rx_notify_unregister(id: u8,
@@ -11173,8 +11340,8 @@ pub mod uart {
             match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
         }
     }
-    pub fn uart_int_tx_notify_unregister(id: u8, cb: cb_uart_notify_t,
-                                         arg: Ptr) -> BlResult<()> {
+    pub fn int_tx_notify_unregister(id: u8, cb: cb_uart_notify_t, arg: Ptr)
+     -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_uart_int_tx_notify_unregister(id: u8,
@@ -11583,7 +11750,7 @@ pub mod wifi {
     pub type StaticMessageBuffer_t = StaticStreamBuffer_t;
     #[doc =
       "Start the WiFi Firmware Task. See `hal_wifi_start_firmware_task` in \"Start WiFi Firmware Task\" <https://lupyuen.github.io/articles/wifi#start-wifi-firmware-task>"]
-    pub fn wifi_start_firmware_task() -> BlResult<()> {
+    pub fn start_firmware_task() -> BlResult<()> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn hal_wifi_start_firmware_task()
@@ -14756,10 +14923,9 @@ extern "C" fn test_rust(_result: *mut u8, _len: i32, _argc: i32,
                         _argv: *const *const u8) {
     puts("Hello from Rust!");
     const LED_GPIO: u8 = 11;
-    gpio::gpio_enable_output(LED_GPIO, 0,
-                             0).expect("GPIO enable output failed");
+    gpio::enable_output(LED_GPIO, 0, 0).expect("GPIO enable output failed");
     for i in 0..10 {
-        gpio::gpio_output_set(LED_GPIO, i % 2).expect("GPIO output failed");
+        gpio::output_set(LED_GPIO, i % 2).expect("GPIO output failed");
         time_delay(time_ms_to_ticks32(1000));
     }
 }

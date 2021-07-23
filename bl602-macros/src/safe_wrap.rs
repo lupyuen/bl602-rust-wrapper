@@ -62,21 +62,18 @@ fn function_is_allowlisted(fname: &str) -> bool {
     }
 }
 
-/// Given a function name like `os_task_init`, return the namespace (`os`)
+/// Given a function name like `bl_gpio_output_set`, return the namespace (`bl_gpio`)
 fn get_namespace(fname: &str) -> String {
-    //  Handle LVGL functions specially.
-    if fname.starts_with("lv_") { return get_namespace_lvgl(fname); }
+    //  Handle `bl_` and `hal_` prefixes
+    if fname.starts_with("bl_") || fname.starts_with("hal_") { return get_namespace_hal(fname); }
     //  Get the first part before `_`.
     let fname_split: Vec<&str> = fname.splitn(2, "_").collect();
     let namespace = fname_split[0];
-    //  Match the namespace and ignore if it's not a known namespace.
+    //  TODO: Match the namespace and ignore if it's not a known namespace.
     match namespace {
         "do"     => { "".to_string() }   //  `do` is not a valid namespace e.g. `do_server_post()`
-        "get"    => { "".to_string() }   //  `get` is not a valid namespace e.g. `get_device_id()`
-        "init"   => { "".to_string() }   //  `init` is not a valid namespace e.g. `init_server_post()`
-        "start"  => { "".to_string() }   //  `start` is not a valid namespace e.g. `start_server_transport()`
         "sensor" => {
-            //  If it matches `sensor_network`, return `sensor_network`.
+            //  TODO: If it matches `sensor_network`, return `sensor_network`.
             if fname.starts_with("sensor_network_") { "sensor_network".to_string() }
             else { "sensor".to_string() }
         }
@@ -84,18 +81,19 @@ fn get_namespace(fname: &str) -> String {
     }
 }
 
-/// Given an LVGL function name like `lv_obj_create`, return the namespace (`lv_obj`). Used to strip namespace from function names, leaving `create` as the stripped name.
-fn get_namespace_lvgl(fname: &str) -> String {
+/// Given a HAL function name like `bl_gpio_output_set`, return the namespace (`bl_gpio`). Used to strip namespace from function names, leaving `create` as the stripped name.
+fn get_namespace_hal(fname: &str) -> String {
     //  println!("get_namespace {}", fname);
     //  Get the first 2 parts between `_`.
     let fname_split: Vec<&str> = fname.splitn(3, "_").collect();
-    if fname_split.len() < 3 { return "".to_string(); }  //  Not a valid namspace if doesn't follow pattern like `lv_obj_create`
+    if fname_split.len() < 3 { return "".to_string(); }  //  Not a valid namespace if doesn't follow pattern like `bl_gpio`
     let namespace1 = fname_split[0];
     let namespace2 = fname_split[1];
     //  Match the namespace and ignore if it's not a known namespace.
     match namespace1 {
-        "lv" => format!("{}_{}", namespace1, namespace2),  //  If function is `lv_namespace2_...`, return namespace `lv_namespace2`
-        _    => "".to_string()                             //  Otherwise not a valid namspace
+        "bl"  => format!("{}_{}", namespace1, namespace2),  //  If function is `bl_namespace2_...`, return namespace `bl_namespace2`
+        "hal" => format!("{}_{}", namespace1, namespace2),  //  If function is `hal_namespace2_...`, return namespace `hal_namespace2`
+        _     => "".to_string()                             //  Otherwise not a valid namspace
     }
 }
 
