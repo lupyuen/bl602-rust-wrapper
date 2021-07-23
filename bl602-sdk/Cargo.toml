@@ -1,7 +1,7 @@
 # Info about this package
 [package]
 name          = "bl602-sdk"
-version       = "0.0.2"
+version       = "0.0.3"
 authors       = ["Lee Lup Yuen <luppy@appkaki.com>"]
 edition       = "2018"
 description   = "Rust Wrapper for BL602 IoT SDK"
