@@ -35,9 +35,11 @@ for i in 0..10 {  //  Iterates 10 times from 0 to 9 (`..` excludes 10)
 
 [From `bl602-sdk/src/lib.rs`](bl602-sdk/src/lib.rs)
 
-## Build Instructions
+Build the BL602 Firmware with the [`run.sh` script](https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_rust_gpio/run.sh)
 
-To generate the Rust Wrapper and build the project...
+## Generate Rust Wrapper
+
+To generate the Rust Wrapper...
 
 ```bash
 #  Install bindgen and clang: https://rust-lang.github.io/rust-bindgen/requirements.html 
@@ -48,7 +50,7 @@ sudo apt install llvm-dev libclang-dev clang
 git clone --recursive https://github.com/lupyuen/bl602-rust-wrapper
 git clone --recursive https://github.com/lupyuen/bl_iot_sdk
 
-#  Generate the wrapper
+#  Generate the Rust Bindings for BL602 IoT SDK
 cd bl602-rust-wrapper
 scripts/gen-bindings.sh
 

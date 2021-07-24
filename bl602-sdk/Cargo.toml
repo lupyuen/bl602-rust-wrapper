@@ -1,7 +1,7 @@
 # Info about this package
 [package]
 name          = "bl602-sdk"
-version       = "0.0.5"
+version       = "0.0.6"
 authors       = ["Lee Lup Yuen <luppy@appkaki.com>"]
 edition       = "2018"
 description   = "Rust Wrapper for BL602 IoT SDK"
@@ -14,7 +14,7 @@ license       = "Apache-2.0"
 
 # External Rust libraries used by this module
 [dependencies]
-bl602-macros = { version = "0.0.1", path = "../bl602-macros" }  # Wrapper Macros
+bl602-macros = { version = "0.0.2", path = "../bl602-macros" }  # Wrapper Macros
 heapless     = "0.7.3"  # `static` friendly data structures that don't require dynamic memory allocation: https://crates.io/crates/heapless
 cty          = "0.2.1"  # String utilities: https://crates.io/crates/cty
 
