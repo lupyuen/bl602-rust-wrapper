@@ -345,6 +345,9 @@
 <span id="345">345</span>
 <span id="346">346</span>
 <span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
 </pre><pre class="rust">
 <span class="doccomment">//!  Rust Wrapper for BL602 IoT SDK. See &quot;The RISC-V BL602 Book&quot; &lt;https://lupyuen.github.io/articles/book&gt;</span>
 <span class="attribute">#![<span class="ident">no_std</span>]</span>  <span class="comment">//  Use the Rust Core Library instead of the Rust Standard Library, which is not compatible with embedded systems</span>
@@ -489,9 +492,12 @@
     <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">PartialEq</span>)]</span>
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_camel_case_types</span>)]</span>    <span class="comment">//  Allow type names to have non-camel case</span>
     <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">BlError</span> {
-        <span class="doccomment">/// Error code 0 means no error.</span>
+        <span class="doccomment">/// Error code 0 means no error</span>
         <span class="ident">SYS_EOK</span>         <span class="op">=</span> <span class="number">0</span>,
+        <span class="doccomment">/// HAL returned an unknown error code</span>
         <span class="ident">SYS_UNKNOWN</span>     <span class="op">=</span> <span class="op">-</span><span class="number">1</span>,
+        <span class="doccomment">/// HAL returned a null pointer</span>
+        <span class="ident">SYS_NULLPOINTER</span> <span class="op">=</span> <span class="op">-</span><span class="number">2</span>,
     }
 
     <span class="doccomment">/// Cast `BlError` to `i32`</span>

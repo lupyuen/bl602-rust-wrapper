@@ -514,7 +514,9 @@ pub mod dma {
             "----------Call----------";
             let res = bl_dma_find_node_by_channel(channel as ::cty::c_int);
             "----------Result----------";
-            Ok(res)
+            if res.is_null() {
+                Err(BlError::SYS_NULLPOINTER)
+            } else { Ok(res) }
         }
     }
     #[doc =
@@ -531,7 +533,9 @@ pub mod dma {
             "----------Call----------";
             let res = bl_dma_find_ctx_by_channel(channel as ::cty::c_int);
             "----------Result----------";
-            Ok(res)
+            if res.is_null() {
+                Err(BlError::SYS_NULLPOINTER)
+            } else { Ok(res) }
         }
     }
     pub fn mem_malloc(size: u32) -> BlResult<*mut ::cty::c_void> {
@@ -545,7 +549,9 @@ pub mod dma {
             "----------Call----------";
             let res = bl_dma_mem_malloc(size as u32);
             "----------Result----------";
-            Ok(res)
+            if res.is_null() {
+                Err(BlError::SYS_NULLPOINTER)
+            } else { Ok(res) }
         }
     }
     pub fn mem_free(ptr: Ptr) -> BlResult<()> {
@@ -14454,9 +14460,14 @@ pub mod result {
     #[allow(non_camel_case_types)]
     pub enum BlError {
 
-        /// Error code 0 means no error.
+        /// Error code 0 means no error
         SYS_EOK = 0,
+
+        /// HAL returned an unknown error code
         SYS_UNKNOWN = -1,
+
+        /// HAL returned a null pointer
+        SYS_NULLPOINTER = -2,
     }
     #[allow(non_camel_case_types)]
     impl ::core::marker::StructuralPartialEq for BlError { }

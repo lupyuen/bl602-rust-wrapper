@@ -141,9 +141,12 @@ pub mod result {
     #[derive(PartialEq)]
     #[allow(non_camel_case_types)]    //  Allow type names to have non-camel case
     pub enum BlError {
-        /// Error code 0 means no error.
+        /// Error code 0 means no error
         SYS_EOK         = 0,
+        /// HAL returned an unknown error code
         SYS_UNKNOWN     = -1,
+        /// HAL returned a null pointer
+        SYS_NULLPOINTER = -2,
     }
 
     /// Cast `BlError` to `i32`

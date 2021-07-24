@@ -452,6 +452,13 @@ fn transform_return_type(fname: &TransformedFunctionName, output: &ReturnType) -
                     Ok(Strn::from_cstr(res as *const u8))
                 } 
             }
+            //  Return `void *` pointers with null checking
+            "* mut :: cty :: c_void" => {
+                quote! {
+                    if res.is_null() { Err(BlError::SYS_NULLPOINTER) }
+                    else { Ok(res) }
+                }
+            }
             //  Return specified type e.g. `* mut os_eventq`
             _ => { quote! { Ok(res) } }
         };
