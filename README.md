@@ -33,7 +33,7 @@ for i in 0..10 {  //  Iterates 10 times from 0 to 9 (`..` excludes 10)
     ).expect("GPIO output failed");  //  Halt on error
 ```
 
-[From `bl602-sdk/src/lib.rs`](bl602-sdk/src/lib.rs)
+[From `sdk_app_rust_gpio/rust/src/lib.rs`](https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_rust_gpio/rust/src/lib.rs)
 
 Build the BL602 Firmware with the [`run.sh` script](https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_rust_gpio/run.sh)
 
@@ -144,7 +144,7 @@ Links to ["The RISC-V BL602 Book"](https://lupyuen.github.io/articles/book) are 
 
 ## Build Log
 
-Build the project with this script...
+Build the docs and the test project with this script...
 
 -   [`scripts/build.sh`](scripts/build.sh)
 
@@ -156,77 +156,68 @@ Build the project with this script...
 /mnt/c/pinecone/bl602-rust-wrapper/bl602-macros /mnt/c/pinecone/bl602-rust-wrapper
 + cargo build
    Compiling proc-macro2 v1.0.27
-   Compiling memchr v2.4.0
    Compiling unicode-xid v0.2.2
+   Compiling memchr v2.4.0
    Compiling syn v1.0.73
    Compiling cty v0.2.1
    Compiling rustc-serialize v0.3.24
    Compiling lazy_static v1.4.0
    Compiling cstr_core v0.2.4
    Compiling quote v1.0.9
-   Compiling bl602-macros v2.0.0 (/mnt/c/pinecone/bl602-rust-wrapper/bl602-macros)
-    Finished dev [unoptimized + debuginfo] target(s) in 52.87s
+   Compiling bl602-macros v0.0.2 (/mnt/c/pinecone/bl602-rust-wrapper/bl602-macros)
+    Finished dev [unoptimized + debuginfo] target(s) in 50.67s
 + popd
 /mnt/c/pinecone/bl602-rust-wrapper
++ cp bl602-sdk/doclinks.md .
 + pushd bl602-sdk
-/mnt/c/pinecone/bl602-rust-wrapper/bl602-sdk /mnt/c/pinecone/bl602-rust-wrapper+ cargo rustc --target riscv32imacf-unknown-none-elf.json -Z build-std=core -- -Z unstable-options --pretty expanded
+/mnt/c/pinecone/bl602-rust-wrapper/bl602-sdk /mnt/c/pinecone/bl602-rust-wrapper
++ cargo rustc --target riscv32imacf-unknown-none-elf.json -Z build-std=core -- -Z unstable-options --pretty expanded
    Compiling compiler_builtins v0.1.47
    Compiling core v0.0.0 (/home/user/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core)
-   Compiling typenum v1.13.0
-   Compiling version_check v0.9.3
-   Compiling heapless v0.6.1
-   Compiling generic-array v0.14.4
+   Compiling heapless v0.7.3
    Compiling rustc-std-workspace-core v1.99.0 (/home/user/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/rustc-std-workspace-core)
    Compiling byteorder v1.4.3
    Compiling stable_deref_trait v1.2.0
    Compiling cty v0.2.1
-   Compiling hash32 v0.1.1
-   Compiling generic-array v0.13.3
-   Compiling generic-array v0.12.4
-   Compiling as-slice v0.1.5
-   Compiling app v0.0.1 (/mnt/c/pinecone/bl602-rust-wrapper/bl602-sdk)
-    Finished dev [unoptimized + debuginfo] target(s) in 35.17s
+   Compiling hash32 v0.2.1
+   Compiling bl602-sdk v0.0.6 (/mnt/c/pinecone/bl602-rust-wrapper/bl602-sdk)
+    Finished dev [unoptimized + debuginfo] target(s) in 33.50s
 + cargo build --target riscv32imacf-unknown-none-elf.json -Z build-std=core
-   Compiling app v0.0.1 (/mnt/c/pinecone/bl602-rust-wrapper/bl602-sdk)
-    Finished dev [unoptimized + debuginfo] target(s) in 3.36s
+   Compiling bl602-sdk v0.0.6 (/mnt/c/pinecone/bl602-rust-wrapper/bl602-sdk)
+    Finished dev [unoptimized + debuginfo] target(s) in 7.85s
 + cargo doc --target riscv32imacf-unknown-none-elf.json -Z build-std=core
     Checking unicode-xid v0.2.2
  Documenting unicode-xid v0.2.2
     Checking cty v0.2.1
  Documenting cty v0.2.1
     Checking lazy_static v1.4.0
+ Documenting rustc-serialize v0.3.24
     Checking rustc-serialize v0.3.24
  Documenting lazy_static v1.4.0
- Documenting rustc-serialize v0.3.24
     Checking memchr v2.4.0
  Documenting memchr v2.4.0
-    Checking typenum v1.13.0
-    Checking stable_deref_trait v1.2.0
-    Checking byteorder v1.4.3
- Documenting typenum v1.13.0
- Documenting stable_deref_trait v1.2.0
- Documenting byteorder v1.4.3
     Checking proc-macro2 v1.0.27
+    Checking byteorder v1.4.3
+ Documenting byteorder v1.4.3
+    Checking stable_deref_trait v1.2.0
+ Documenting stable_deref_trait v1.2.0
     Checking cstr_core v0.2.4
  Documenting proc-macro2 v1.0.27
-    Checking hash32 v0.1.1
- Documenting cstr_core v0.2.4
-    Checking generic-array v0.13.3
-    Checking generic-array v0.12.4
-    Checking generic-array v0.14.4
- Documenting hash32 v0.1.1
     Checking quote v1.0.9
+ Documenting cstr_core v0.2.4
+    Checking hash32 v0.2.1
     Checking syn v1.0.73
-    Checking as-slice v0.1.5
+    Checking heapless v0.7.3
+ Documenting hash32 v0.2.1
  Documenting quote v1.0.9
-    Checking heapless v0.6.1
+ Documenting heapless v0.7.3
  Documenting syn v1.0.73
- Documenting bl602-macros v2.0.0 (/mnt/c/pinecone/bl602-rust-wrapper/bl602-macros)
- Documenting generic-array v0.14.4
- Documenting as-slice v0.1.5
- Documenting heapless v0.6.1
- Documenting app v0.0.1 (/mnt/c/pinecone/bl602-rust-wrapper/bl602-sdk)
-    Finished dev [unoptimized + debuginfo] target(s) in 2m 07s
+ Documenting bl602-macros v0.0.2 (/mnt/c/pinecone/bl602-rust-wrapper/bl602-macros)
+ Documenting bl602-sdk v0.0.6 (/mnt/c/pinecone/bl602-rust-wrapper/bl602-sdk)
+    Finished dev [unoptimized + debuginfo] target(s) in 48.79s
 + popd
 /mnt/c/pinecone/bl602-rust-wrapper
++ echo 'Moved to [`bl602-sdk/doclinks.md`](bl602-sdk/doclinks.md)'
++ cp -r target/riscv32imacf-unknown-none-elf/doc/bl602_sdk docs    
++ cp -r target/riscv32imacf-unknown-none-elf/doc/src docs
 ```
