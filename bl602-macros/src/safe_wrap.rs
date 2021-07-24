@@ -148,7 +148,7 @@ pub fn wrap_function(foreign_fn: &ForeignItemFn) -> proc_macro2::TokenStream {
         without_namespace_token: fname_without_namespace_token, 
         doc_tokens,
         .. 
-    } = transformed_fname;
+    } = transformed_fname.clone();
 
     //  If function name is not allowlisted, return the extern tokens without wrapping.
     if !function_is_allowlisted(&fname) { 
@@ -172,7 +172,7 @@ pub fn wrap_function(foreign_fn: &ForeignItemFn) -> proc_macro2::TokenStream {
     //  let extern_decl_tokens = quote_spanned!(extern_decl_span => #extern_decl);
 
     //  Transform the return type.
-    let transformed_ret = transform_return_type(&sig.output);
+    let transformed_ret = transform_return_type(&transformed_fname, &sig.output);
     let TransformedReturnType{ 
         declare_result_tokens, get_result_tokens, return_result_tokens, .. 
     } = transformed_ret;
@@ -381,7 +381,7 @@ fn transform_arg(arg: &PatType) -> TransformedArg {
 }
 
 /// Transform the extern return type e.g. `:: cty :: c_int` becomes `BlResult< () >`
-fn transform_return_type(output: &ReturnType) -> TransformedReturnType {
+fn transform_return_type(fname: &TransformedFunctionName, output: &ReturnType) -> TransformedReturnType {
     let extern_type = quote! { output }.to_string();
     let type_span = output.span();
     let wrap_type =
@@ -391,6 +391,9 @@ fn transform_return_type(output: &ReturnType) -> TransformedReturnType {
         }
         else { "".to_string() };  //  No return type
     //  println!("wrap_type: {:#?}", wrap_type);
+
+    //  If Function Name (without namespace) starts with `get_`, we return as Int instead of Error Code (e.g. `bl_adc_get_channel_by_gpio`)
+    let returns_int = fname.without_namespace.starts_with("get_");  
 
     //  TODO: #[cfg(feature = "mynewt_os")]  //  If building for BL602 IoT SDK...
     let result_token = quote! { BlResult };  //  Result type is BlResult
@@ -403,8 +406,13 @@ fn transform_return_type(output: &ReturnType) -> TransformedReturnType {
         match wrap_type.as_str() {
             //  No return type (void)
             ""                          => { quote! { #result_token< () > } }
-            //  Error code
-            ":: cty :: c_int"           => { quote! { #result_token< () > } }
+            //  Int or Error code
+            ":: cty :: c_int"           => { 
+                //  Int
+                if returns_int { quote! { #result_token< ::cty::c_int > } }
+                //  Error code
+                else           { quote! { #result_token< () > } }
+            }
             //  String becomes `Strn<'static>`
             "* const :: cty :: c_char"  => { quote! { #result_token< Strn<'static> > } }
             //  Specified return type e.g. `* mut os_eventq`
@@ -424,13 +432,18 @@ fn transform_return_type(output: &ReturnType) -> TransformedReturnType {
         match wrap_type.as_str() {
             //  If no return type, return nothing
             "" => { quote! { Ok( () ) } }
-            //  Return error code
-            ":: cty :: c_int" => {  
-                quote! {
-                    match res {
-                        0 => Ok(()),
-                        _ => Err(BlError::from(res))
-                    }
+            //  Return Int or Error code
+            ":: cty :: c_int" => {
+                //  Return Int
+                if returns_int { quote! { Ok(res) } }
+                //  Return Error Code
+                else {
+                    quote! {
+                        match res {
+                            0 => Ok(()),
+                            _ => Err(BlError::from(res))
+                        }
+                    }    
                 }
             }
             //  Return string wrapped as `Strn`
@@ -589,16 +602,17 @@ struct TransformedReturnType {
 
 /// Extern function name transformed
 #[allow(dead_code)]  //  TODO
+#[derive(Clone)]
 struct TransformedFunctionName {
-    /// Identifier e.g. `os_task_init`
+    /// Identifier e.g. `bl_gpio_enable_output`
     ident: Box<String>,
-    /// Namespace e.g. `os`. Or empty if no namespace.
+    /// Namespace e.g. `bl_gpio`. Or empty if no namespace.
     namespace: Box<String>,
-    /// Function name without namespace e.g. `task_init`
+    /// Function name without namespace e.g. `enable_output`
     without_namespace: Box<String>,
-    /// Token of function name e.g. `os_task_init`
+    /// Token of function name e.g. `bl_gpio_enable_output`
     token: Box<Ident>,
-    /// Token of function name without namespace e.g. `task_init`
+    /// Token of function name without namespace e.g. `enable_output`
     without_namespace_token: Box<Ident>,
     /// Span of the identifier (file location)
     ident_span: Box<Span>,

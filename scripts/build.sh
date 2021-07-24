@@ -14,6 +14,9 @@ pushd bl602-macros
 cargo build
 popd
 
+#  Copy the temp doclinks
+cp bl602-sdk/doclinks.md .
+
 pushd bl602-sdk
 
 #  Expand the safe wrapper macros
@@ -33,6 +36,9 @@ cargo doc \
     $rust_build_options
 
 popd
+
+#  Remove the temp doclinks
+echo 'Moved to [`bl602-sdk/doclinks.md`](bl602-sdk/doclinks.md)' >doclinks.md
 
 #  Copy the docs
 cp -r target/riscv32imacf-unknown-none-elf/doc/bl602_sdk docs

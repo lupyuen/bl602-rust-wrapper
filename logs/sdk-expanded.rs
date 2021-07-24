@@ -28,7 +28,6 @@ pub mod adc {
 
 
     //  Import the Rust Core Library
-    //  For `PanicInfo` type used by `panic` function
     //  For converting `str` to `String`
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -112,7 +111,7 @@ pub mod adc {
 
     //  Don't mangle the function name
     //  Declare `extern "C"` because it will be called by BL602 firmware
-    //  Result to be returned to command-line interface
+    //  Result to be returned to command-line interface (char *)
     //  Length of command line (int)
     //  Number of command line args (int)
     //  Array of command line args (char **)
@@ -139,14 +138,6 @@ pub mod adc {
     //  Convert 1,000 milliseconds to ticks (from NimBLE Porting Layer)
 
     //  Return to the BL602 command-line interface
-
-    //  `!` means that panic handler will never return
-    //  TODO: Implement the complete panic handler like this:
-    //  https://github.com/lupyuen/pinetime-rust-BL602/blob/master/rust/app/src/lib.rs#L115-L146
-
-    //  For now we display a message
-
-    //  Loop forever, do not pass go, do not collect $200
     use super::*;
     pub const ADC_DMA_CHANNEL: u32 = 1;
     pub const ADC_CHANNEL_MAX: u32 = 12;
@@ -257,7 +248,8 @@ pub mod adc {
     }
     #[doc =
       "Get the ADC Channel Number for the GPIO Pin. See `bl_adc_get_channel_by_gpio` in \"init_adc\" <https://github.com/lupyuen/bl_iot_sdk/blob/adc/customer_app/sdk_app_adc2/sdk_app_adc2/demo.c>"]
-    pub fn get_channel_by_gpio(gpio_num: ::cty::c_int) -> BlResult<()> {
+    pub fn get_channel_by_gpio(gpio_num: ::cty::c_int)
+     -> BlResult<::cty::c_int> {
         "----------Extern Decl----------";
         extern "C" {
             pub fn bl_adc_get_channel_by_gpio(gpio_num: ::cty::c_int)
@@ -268,7 +260,7 @@ pub mod adc {
             "----------Call----------";
             let res = bl_adc_get_channel_by_gpio(gpio_num as ::cty::c_int);
             "----------Result----------";
-            match res { 0 => Ok(()), _ => Err(BlError::from(res)), }
+            Ok(res)
         }
     }
     #[doc =
@@ -14414,10 +14406,10 @@ pub mod wifi {
         }
     }
 }
-use core::{panic::PanicInfo, str::FromStr};
+use core::{str::FromStr};
 /// Print a message to the serial console.
 /// TODO: Auto-generate this wrapper with `bindgen` from the C declaration
-fn puts(s: &str) -> i32 {
+pub fn puts(s: &str) -> i32 {
     extern "C" {
         /// Print a message to the serial console (from C stdio library)
         fn puts(s: *const u8)
@@ -14432,7 +14424,7 @@ fn puts(s: &str) -> i32 {
 /// Convert milliseconds to system ticks.
 /// TODO: Auto-generate this wrapper with `bindgen` from the C declaration:
 /// `ble_npl_time_t ble_npl_time_ms_to_ticks32(uint32_t ms)`
-fn time_ms_to_ticks32(ms: u32) -> u32 {
+pub fn time_ms_to_ticks32(ms: u32) -> u32 {
     extern "C" {
         /// Convert milliseconds to system ticks (from NimBLE Porting Layer)
         fn ble_npl_time_ms_to_ticks32(ms: u32)
@@ -14443,7 +14435,7 @@ fn time_ms_to_ticks32(ms: u32) -> u32 {
 /// Sleep for the specified number of system ticks.
 /// TODO: Auto-generate this wrapper with `bindgen` from the C declaration:
 /// `void ble_npl_time_delay(ble_npl_time_t ticks)`
-fn time_delay(ticks: u32) {
+pub fn time_delay(ticks: u32) {
     extern "C" {
         /// Sleep for the specified number of system ticks (from NimBLE Porting Layer)
         fn ble_npl_time_delay(ticks: u32);
@@ -14451,7 +14443,7 @@ fn time_delay(ticks: u32) {
     unsafe { ble_npl_time_delay(ticks); }
 }
 /// Limit Strings to 64 chars, similar to `char[64]` in C
-type String = heapless::String<64>;
+pub type String = heapless::String<64>;
 /// HAL return type and error codes
 pub mod result {
     /// Common return type for BL602 HAL.  If no error, returns `Ok(val)` where val has type T.
@@ -14756,10 +14748,4 @@ extern "C" fn test_rust(_result: *mut u8, _len: i32, _argc: i32,
         gpio::output_set(LED_GPIO, i % 2).expect("GPIO output failed");
         time_delay(time_ms_to_ticks32(1000));
     }
-}
-/// For Testing: This function is called on panic, like an assertion failure
-#[panic_handler]
-fn test_panic(_info: &PanicInfo) -> ! {
-    puts("TODO: Test Rust panic");
-    loop { }
 }
