@@ -2,6 +2,8 @@
 
 Read the article and docs...
 
+-   ["Rust on RISC-V BL602: Is It Sunny?"](https://lupyuen.github.io/articles/adc)
+
 -   ["Run Rust RISC-V Firmware with BL602 IoT SDK"](https://lupyuen.github.io/articles/rust)
 
 -   [Rust Docs](https://lupyuen.github.io/bl602-rust-wrapper/)
